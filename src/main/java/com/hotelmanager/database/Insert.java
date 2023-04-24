@@ -15,7 +15,7 @@ public class Insert
     public void insert(String name, String phoneNumber)
     {
         String sql = "INSERT INTO customers(name,phoneNumber) VALUES(?,?)";
-        try (Connection conn = Connect.connectDatabase("sample.db");
+        try (Connection conn = Connect.connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
             pstmt.setString(1, name);

@@ -10,7 +10,7 @@ public class Update
     {
         String sql = "UPDATE customers SET phoneNumber = ? " + "WHERE name = ?";
 
-        try (Connection conn = Connect.connectDatabase("sample.db");
+        try (Connection conn = Connect.connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
             // set the corresponding param

@@ -10,7 +10,7 @@ public class Delete
     {
         String sql = "DELETE FROM customers WHERE phoneNumber = ?";
 
-        try (Connection conn = Connect.connectDatabase("sample.db");
+        try (Connection conn = Connect.connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
             // set the corresponding param
@@ -27,7 +27,7 @@ public class Delete
     {
         String sql = "DELETE FROM customers WHERE name = ?";
 
-        try (Connection conn = Connect.connectDatabase("sample.db");
+        try (Connection conn = Connect.connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
             // set the corresponding param

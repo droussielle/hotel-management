@@ -7,9 +7,9 @@ import java.sql.SQLException;
 public class Connect
 {
     /* Connect to a sample database */
-    public static Connection connectDatabase(String fileName)
+    public static Connection connectDatabase()
     {
-        String url = "jdbc:sqlite:" + fileName;
+        String url = "jdbc:sqlite:src/main/data/sample.db";
         Connection conn = null;
         try
         {
@@ -43,7 +43,7 @@ public class Connect
      */
     public static void main(String[] args)
     {
-        Connection conn = connectDatabase("sample.db");
+        Connection conn = connectDatabase();
         detachDatabase(conn);
     }
 }

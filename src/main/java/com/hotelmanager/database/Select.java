@@ -10,7 +10,7 @@ public class Select
 {
     public void selectAll(String sql)
     {
-        try (Connection conn = Connect.connectDatabase("sample.db");
+        try (Connection conn = Connect.connectDatabase();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
         {
@@ -19,7 +19,6 @@ public class Select
             {
                 System.out.println(rs.getString("name") + "\t" + rs.getString("phoneNumber"));
             }
-            Connect.detachDatabase(conn);
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
@@ -28,7 +27,7 @@ public class Select
 
     public void getCapacityGreaterThan(double capacity, String sql)
     {
-        try (Connection conn = Connect.connectDatabase("sample.db");
+        try (Connection conn = Connect.connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
 

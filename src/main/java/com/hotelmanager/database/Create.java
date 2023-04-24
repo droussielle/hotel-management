@@ -8,12 +8,9 @@ import java.sql.Statement;
 
 public class Create
 {
-    public static void createNewDatabase(String fileName)
+    public static void createNewDatabase()
     {
-
-        String url = "jdbc:sqlite:" + fileName;
-
-        try (Connection conn = DriverManager.getConnection(url))
+        try (Connection conn = Connect.connectDatabase())
         {
             if (conn != null)
             {
@@ -28,12 +25,10 @@ public class Create
         }
     }
 
-    public static void createNewTable(String fileName, String sql)
+    public static void createNewTable(String sql)
     {
         // SQLite connection string
-        String url = "jdbc:sqlite:" + fileName;
-
-        try (Connection conn = DriverManager.getConnection(url); Statement stmt = conn.createStatement())
+        try (Connection conn = Connect.connectDatabase(); Statement stmt = conn.createStatement())
         {
             // create a new table
             stmt.execute(sql);
@@ -55,6 +50,6 @@ public class Create
                 + "	name text NOT NULL,\n"
                 + "	capacity real\n"
                 + ");";
-        createNewTable("sample.db", sql);
+        createNewTable(sql);
     }
 }
