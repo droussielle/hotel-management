@@ -1,21 +1,19 @@
-package com.hotelmanager.data;
-
 public class Receipt {
-    private int receiptId;
+    // private int receiptId;
     private ReceiptDetails receiptDetails;
 
-    public Receipt(int receiptId, ReceiptDetails receiptDetails) {
-        this.receiptId = receiptId;
+    public Receipt(ReceiptDetails receiptDetails) {
+        // this.receiptId = receiptId;
         this.receiptDetails = receiptDetails;
     }
 
-    public int getRecreiptId() {
-        return receiptId;
-    }
+    // public int getRecreiptId() {
+    // return receiptId;
+    // }
 
-    public void setRecreiptId(int receiptId) {
-        this.receiptId = receiptId;
-    }
+    // public void setRecreiptId(int receiptId) {
+    // this.receiptId = receiptId;
+    // }
 
     public ReceiptDetails getRecreiptDetails() {
         return receiptDetails;

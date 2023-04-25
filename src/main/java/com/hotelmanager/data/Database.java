@@ -1,205 +1,174 @@
 package com.hotelmanager.data;
 
-public class Database {
-    private Customer[] customerDB;
-    private Room[] roomDB;
-    private Extra[] extraDB;
-    private Receipt[] receiptDB;
+import java.util.List;
+import java.util.Map;
 
-    public Database(Customer[] customerDB, Room[] roomDB, Extra[] extraDB, Receipt[] receiptsDB) {
-        this.customerDB = customerDB;
-        this.roomDB = roomDB;
-        this.extraDB = extraDB;
-        this.receiptDB = receiptsDB;
+public class Database {
+    private List<Customer> customerList;
+    private List<FreeRoom> freeRoomList;
+    private List<BookedRoom> bookedRoomList;
+    private List<Extra> extraList;
+    // private Map<Integer, Receipt> receiptMap;
+
+    public Database(List<Customer> customerList, List<FreeRoom> freeRoomList, List<Extra> extraList,
+            List<BookedRoom> bookedRoomList) {
+        this.customerList = customerList;
+        this.freeRoomList = freeRoomList;
+        this.extraList = extraList;
+        this.bookedRoomList = bookedRoomList;
     }
 
     // Customer
-    public Customer[] getCustomerDB() {
-        return this.customerDB;
-    }
-
-    public void setCustomerDB(Customer[] customerDB) {
-        this.customerDB = customerDB;
+    public List<Customer> getCustomerList() {
+        return customerList;
     }
 
     public void addCustomer(Customer customer) {
-        Customer[] temp = new Customer[this.customerDB.length + 1];
-        for (int i = 0; i < this.customerDB.length; i++) {
-            temp[i] = customerDB[i];
-        }
-        temp[this.customerDB.length] = customer;
-        customerDB = temp;
+        customerList.add(customer);
     }
 
     public void editCustomer(int index, Customer customer) {
-        customerDB[index - 1] = customer;
+        customerList.set(index, customer);
     }
 
     public void removeCustomer(Customer customer) {
-        Customer[] temp = new Customer[this.customerDB.length - 1];
-        for (int i = 0; i < this.customerDB.length; i++) {
-            if (customerDB[i].getCustomerId() == customer.getCustomerId()) {
-                for (int j = i; j < this.customerDB.length; j++) {
-                    temp[j] = customerDB[j + 1];
-                }
-                break;
-            }
-            temp[i] = customerDB[i];
-        }
+        customerList.remove(customer);
     }
 
     public Customer getCustomer(int index) {
-        return customerDB[index - 1];
+        if (index >= customerList.size()) {
+            return null;
+        }
+        return customerList.get(index);
     }
 
     public Customer searchCustomer(String name) {
-        for (Customer i : this.customerDB) {
-            if (name == i.getName()) {
-                return i;
+        for (Customer customer : customerList) {
+            if (name.equals(customer.getName())) {
+                return customer;
             }
         }
         return null;
     }
 
-    // Room
-    public Room[] getRoomDB() {
-        return this.roomDB;
+    // FreeRoom
+    public List<FreeRoom> getFreeRoomList() {
+        return freeRoomList;
     }
 
-    public void setRoomDB(Room[] roomDB) {
-        this.roomDB = roomDB;
+    public void addFreeRoom(FreeRoom room) {
+        freeRoomList.add(room);
     }
 
-    public void addRoom(Room room) {
-        Room[] temp = new Room[this.roomDB.length + 1];
-        for (int i = 0; i < this.roomDB.length; i++) {
-            temp[i] = roomDB[i];
-        }
-        temp[this.roomDB.length] = room;
-        roomDB = temp;
+    public void editFreeRoom(int index, FreeRoom room) {
+        freeRoomList.set(index, room);
     }
 
-    public void editRoom(int index, Room room) {
-        roomDB[index - 1] = room;
-    }
-
-    public void removeRoom(Room room) {
-        Room[] temp = new Room[this.roomDB.length - 1];
-        for (int i = 0; i < this.roomDB.length; i++) {
-            if (roomDB[i].getProperty().getId() == room.getProperty().getId()) {
-                for (int j = i; j < this.roomDB.length; j++) {
-                    temp[j] = roomDB[j + 1];
-                }
-                break;
+    public void removeFreeRoom(Room room) {
+        for (FreeRoom i : freeRoomList) {
+            if (i.getRoom().equals(room)) {
+                freeRoomList.remove(i);
             }
-            temp[i] = roomDB[i];
         }
     }
 
-    public Room getRoom(int index) {
-        return roomDB[index - 1];
+    public FreeRoom getFreeRoom(int index) {
+        if (index >= freeRoomList.size()) {
+            return null;
+        }
+        return freeRoomList.get(index);
     }
 
-    public Room searchRoom(String name) {
-        for (Room i : this.roomDB) {
-            if (name == i.getProperty().getName()) {
-                return i;
+    public Room searchFreeRoom(String name) {
+        for (FreeRoom room : freeRoomList) {
+            if (name.equals(room.getRoom().getName())) {
+                return room.getRoom();
             }
         }
         return null;
     }
 
     // Extra
-    public Extra[] getExtraDB() {
-        return this.extraDB;
-    }
-
-    public void setExtraDB(Extra[] extraDB) {
-        this.extraDB = extraDB;
+    public List<Extra> getExtraList() {
+        return extraList;
     }
 
     public void addExtra(Extra extra) {
-        Extra[] temp = new Extra[this.extraDB.length + 1];
-        for (int i = 0; i < this.extraDB.length; i++) {
-            temp[i] = extraDB[i];
-        }
-        temp[this.extraDB.length] = extra;
-        extraDB = temp;
+        extraList.add(extra);
     }
 
     public void editExtra(int index, Extra extra) {
-        extraDB[index - 1] = extra;
+        extraList.set(index, extra);
     }
 
     public void removeExtra(Extra extra) {
-        Extra[] temp = new Extra[this.extraDB.length - 1];
-        for (int i = 0; i < this.extraDB.length; i++) {
-            if (extraDB[i].getName() == extra.getName()) {
-                for (int j = i; j < this.extraDB.length; j++) {
-                    temp[j] = extraDB[j + 1];
-                }
-                break;
-            }
-            temp[i] = extraDB[i];
-        }
+        extraList.remove(extra);
     }
 
     public Extra getExtra(int index) {
-        return extraDB[index - 1];
+        if (index >= extraList.size()) {
+            return null;
+        }
+        return extraList.get(index);
     }
 
     public Extra searchExtra(String name) {
-        for (Extra i : this.extraDB) {
-            if (name == i.getName()) {
-                return i;
+        for (Extra extra : extraList) {
+            if (name.equals(extra.getName())) {
+                return extra;
             }
         }
         return null;
     }
 
     // Receipt
-    public Receipt[] getReceiptDB() {
-        return this.receiptDB;
+    // public Map<Integer, Receipt> getReceiptMap() {
+    // return receiptMap;
+    // }
+
+    // public void addReceipt(Receipt receipt) {
+    // receiptMap.put(receipt);
+    // }
+
+    // public void editReceipt(int id, Receipt receipt) {
+    // receiptMap.put(id, receipt);
+    // }
+
+    // public void removeReceipt(Receipt receipt) {
+    // receiptMap.remove(receipt.getReceiptId());
+    // }
+
+    // public Receipt getReceipt(int id) {
+    // return receiptMap.get(id);
+    // }
+
+    public List<BookedRoom> getBookedRoomList() {
+        return bookedRoomList;
     }
 
-    public void setreceiptDB(Receipt[] receiptDB) {
-        this.receiptDB = receiptDB;
+    public void addBookedRoom(BookedRoom bookedRoom) {
+        bookedRoomList.add(bookedRoom);
     }
 
-    public void addreceipt(Receipt receipt) {
-        Receipt[] temp = new Receipt[this.receiptDB.length + 1];
-        for (int i = 0; i < this.receiptDB.length; i++) {
-            temp[i] = receiptDB[i];
+    public void editBookedRoom(int index, BookedRoom bookedRoom) {
+        bookedRoomList.set(index, bookedRoom);
+    }
+
+    public void removeBookedRoom(BookedRoom BookedRoom) {
+        bookedRoomList.remove(BookedRoom);
+    }
+
+    public BookedRoom getBookedRoom(int index) {
+        if (index >= bookedRoomList.size()) {
+            return null;
         }
-        temp[this.receiptDB.length] = receipt;
-        receiptDB = temp;
+        return bookedRoomList.get(index);
     }
 
-    public void editreceipt(int index, Receipt receipt) {
-        receiptDB[index - 1] = receipt;
-    }
-
-    public void removereceipt(Receipt receipt) {
-        Receipt[] temp = new Receipt[this.receiptDB.length - 1];
-        for (int i = 0; i < this.receiptDB.length; i++) {
-            if (receiptDB[i].getRecreiptId() == receipt.getRecreiptId()) {
-                for (int j = i; j < this.receiptDB.length; j++) {
-                    temp[j] = receiptDB[j + 1];
-                }
-                break;
-            }
-            temp[i] = receiptDB[i];
-        }
-    }
-
-    public Receipt getreceipt(int index) {
-        return receiptDB[index - 1];
-    }
-
-    public Receipt searchreceipt(int id) {
-        for (Receipt i : this.receiptDB) {
-            if (id == i.getRecreiptId()) {
-                return i;
+    public BookedRoom searchBookedRoom(String roomID) {
+        for (BookedRoom BookedRoom : bookedRoomList) {
+            if (roomID.equals(BookedRoom.getRoom().getName())) {
+                return BookedRoom;
             }
         }
         return null;

@@ -1,25 +1,24 @@
 package com.hotelmanager.data;
-
 public class Customer {
-    private int customerId;
+    // private int customerId;
     private String name;
     private String phoneNumber;
     private String governmentId;
 
-    public Customer(int customerId, String name, String phoneNumber, String governmentId) {
-        this.customerId = customerId;
+    public Customer(String name, String phoneNumber, String governmentId) {
+        // this.customerId = customerId;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.governmentId = governmentId;
     }
 
-    public int getCustomerId() {
-        return customerId;
-    }
+    // public int getCustomerId() {
+    // return customerId;
+    // }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
+    // public void setCustomerId(int customerId) {
+    // this.customerId = customerId;
+    // }
 
     public String getName() {
         return name;

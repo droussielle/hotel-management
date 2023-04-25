@@ -1,5 +1,3 @@
-package com.hotelmanager.data;
-
 public class AdminController {
 
     private String name;
@@ -38,8 +36,8 @@ public class AdminController {
     public void getAvailableRoom() {
         if (login) {
             System.out.println("Available rooms:");
-            for (Room i : this.database.getRoomDB()) {
-                if (i.getStatus() == 1) {
+            for (Room i : this.database.getRoomList()) {
+                if (i.getStatus() == checkAvailable.Available) {
                     System.out.println("Room: " + i.getProperty().getName());
                 }
             }

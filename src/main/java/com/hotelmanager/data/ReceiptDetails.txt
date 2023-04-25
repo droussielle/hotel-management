@@ -1,10 +1,13 @@
-package com.hotelmanager.data;
-
 public class ReceiptDetails {
-    private Booking booking;
+    private BookedRoom bookedRoom;
     private Extra[] extra;
 
-    public Booking getBooking() {
+    public ReceiptDetails(BookedRoom bookedRoom, Extra[] extra) {
+        this.bookedRoom = bookedRoom;
+        this.extra = extra;
+    }
+
+    public BookedRoom getBookedRoom() {
         return booking;
     }
 

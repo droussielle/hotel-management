@@ -1,27 +1,52 @@
 package com.hotelmanager.data;
 
 public class Room {
-    private Property property;
-    private int status;
+    // private int id;
+    private String name;
+    private RoomType type;
+    private int price;
 
-    public Room(Property property, int status) {
-        this.property = property;
-        this.status = status;
+    public enum RoomType {
+        Single, Double
+    };
+
+    public Room(String name, RoomType type, int price) {
+        // this.id = id;
+        this.type = type;
+        this.name = name;
+        this.type = type;
     }
 
-    public Property getProperty() {
-        return property;
+    // public int getId() {
+    // return id;
+    // }
+
+    // public void setId(int id) {
+    // this.id = id;
+    // }
+
+    public RoomType getType() {
+        return type;
     }
 
-    public void setRoom(Property property) {
-        this.property = property;
+    public void setType(RoomType type) {
+        this.type = type;
     }
 
-    public int getStatus() {
-        return status;
+    public String getName() {
+        return name;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setName(String name) {
+        this.name = name;
     }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
 }

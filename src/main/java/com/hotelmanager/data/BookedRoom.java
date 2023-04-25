@@ -1,20 +1,20 @@
 package com.hotelmanager.data;
-
-public class Booking {
+public class BookedRoom {
     private Customer customer;
     private Room room;
+    private boolean checkAvailable = false;
 
-    public Booking(Customer customer, Room room) {
+    public BookedRoom(Customer customer, Room room) {
         this.customer = customer;
         this.room = room;
+        checkAvailable = false;
     }
+
     public Customer getCustomer() {
         return customer;
     }
-    public Room getRoom(){
+
+    public Room getRoom() {
         return room;
-    }
-    public static void bookRoom(Customer customer, Room room) {
-        Booking booking = new Booking(customer, room);
     }
 }

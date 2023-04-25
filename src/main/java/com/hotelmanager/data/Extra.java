@@ -1,5 +1,4 @@
 package com.hotelmanager.data;
-
 public class Extra {
     private String name;
     private int price;
