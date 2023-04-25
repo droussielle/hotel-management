@@ -881,7 +881,7 @@ public class Home {
                         DefaultTableModel model = (DefaultTableModel) tableSrch.getModel();
                         Object[] newRowData = { dropdown_Type_search.getSelectedItem().toString(), "Bun bo",
                                 searchField.getText() };
-                        // model.addRow(newRowData);
+                        model.addRow(newRowData);
                         tableSrch.repaint();
                     }
                 });
