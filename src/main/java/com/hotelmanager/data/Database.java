@@ -153,8 +153,12 @@ public class Database {
         bookedRoomList.set(index, bookedRoom);
     }
 
-    public void removeBookedRoom(BookedRoom BookedRoom) {
-        bookedRoomList.remove(BookedRoom);
+    public void removeBookedRoom(Room room) {
+        for (BookedRoom i : bookedRoomList) {
+            if (i.getRoom().equals(room)) {
+                bookedRoomList.remove(i);
+            }
+        }
     }
 
     public BookedRoom getBookedRoom(int index) {

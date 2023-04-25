@@ -52,10 +52,10 @@ public class Receipt {
         for (Extra extra : receiptDetails.getExtra()) {
             sb.append(extra.getName()).append("\t")
                     .append(format.format(extra.getDateBuy())).append("\t")
-                    .append("$").append(extra.getPrice()).append("\n");
+                    .append("VND").append(extra.getPrice()).append("\n");
         }
         sb.append("-------------------------------------------------\n");
-        sb.append("Total:\t\t\t\t\t").append("$").append(receiptDetails.calculatePrice()).append("\n");
+        sb.append("Total:\t\t\t\t\t").append("VND").append(receiptDetails.calculatePrice()).append("\n");
         return sb.toString();
     }
     // public void printReceipt(int receiptId, ReceiptDetails receiptDetails) {
