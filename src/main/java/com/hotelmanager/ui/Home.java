@@ -1,4 +1,4 @@
-package com.hotelmanager.UI;
+package com.hotelmanager.ui;
 
 import java.awt.*;
 import java.util.Date;

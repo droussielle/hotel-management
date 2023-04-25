@@ -1,4 +1,4 @@
-package com.hotelmanager.UI;
+package com.hotelmanager.ui;
 import javax.swing.SwingUtilities;
 public class HotelManagementSystemUI {
 

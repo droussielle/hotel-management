@@ -1,4 +1,6 @@
-package com.hotelmanager.data;
+package com.hotelmanager.controller;
+
+import com.hotelmanager.data.*;
 
 public class AdminController {
 

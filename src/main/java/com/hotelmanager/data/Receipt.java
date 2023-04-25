@@ -1,5 +1,7 @@
 package com.hotelmanager.data;
 
+import com.hotelmanager.controller.ReceiptController;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
@@ -7,10 +9,10 @@ public class Receipt {
     private String hotelName = "Khach san";
     private LocalDate date;
     private int receiptId;
-    private ReceiptDetails receiptDetails;
+    private ReceiptController.ReceiptDetails receiptDetails;
     private SimpleDateFormat format;
 
-    public Receipt(int receiptId, ReceiptDetails receiptDetails, SimpleDateFormat format) {
+    public Receipt(int receiptId, ReceiptController.ReceiptDetails receiptDetails, SimpleDateFormat format) {
         this.receiptId = receiptId;
         this.receiptDetails = receiptDetails;
         this.date = LocalDate.now();
@@ -25,7 +27,7 @@ public class Receipt {
         this.receiptId = receiptId;
     }
 
-    public ReceiptDetails getRecreiptDetails() {
+    public ReceiptController.ReceiptDetails getRecreiptDetails() {
         return receiptDetails;
     }
 

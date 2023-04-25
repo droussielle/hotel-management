@@ -1,4 +1,4 @@
-package com.hotelmanager.database;
+package com.hotelmanager.storage;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
