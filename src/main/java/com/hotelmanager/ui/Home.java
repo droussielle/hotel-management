@@ -11,6 +11,15 @@ import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 
+
+import com.hotelmanager.model.Customer;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.hotelmanager.util.Storage.*;
+
 public class Home {
     private JFrame frame;
     public boolean flagClose = true;
@@ -215,6 +224,7 @@ public class Home {
                 addMoreButton.setHorizontalTextPosition(SwingConstants.CENTER);
                 addMoreButton.setVerticalTextPosition(SwingConstants.BOTTOM);
 
+
                 Object[] columnNames_dataExtras = { "Type", "Name", "Qty" };
                 Object[][] dataExtras = {
                         // {"Food", "Bun", "2"},
@@ -350,14 +360,26 @@ public class Home {
                 roomAlbLabel.setFont(new Font("Arial", Font.BOLD, 16));
                 bookPanel_right.add(roomAlbLabel, BorderLayout.NORTH);
 
+                List<Customer> csList = new ArrayList<Customer>();
+                csList.add(new Customer(1, "Chuong", "02039020101", "20201929292"));
+                csList.add(new Customer(2, "Rang", "0980988891", "219829232"));
+                csList.add(new Customer(3, "Tuan", "09831933245", "29992392"));
+
                 Object[] columnNames_dataRoomAlb = { "Type", "Name", "Price" };
-                Object[][] dataRoomAlb = {
-                        { "Single", "101", "200 000" },
-                        { "Double", "221", "300 000" },
-                        { "Single", "217", "150 000" },
-                        { "Single", "602", "180 000" },
-                        { "Double", "779", "350 000" }
-                };
+                Object[][] dataRoomAlb = new Object[csList.size()][3];
+                //= csList;
+                //  {
+                //         { "Single", "101", "200 000" },
+                //         { "Double", "221", "300 000" },
+                //         { "Single", "217", "150 000" },
+                //         { "Single", "602", "180 000" },
+                //         { "Double", "779", "350 000" }
+                // };
+                for (int i = 0; i < csList.size(); i++) {
+                    dataRoomAlb[i][0] = csList.get(i).getName();
+                    dataRoomAlb[i][1] = csList.get(i).getPhoneNumber();
+                    dataRoomAlb[i][2] = csList.get(i).getGovernmentId();
+                }
 
                 DefaultTableModel model_dataRoomAlb = new DefaultTableModel(dataRoomAlb, columnNames_dataRoomAlb);
                 JTable table_dataRoomAlb = new JTable(model_dataRoomAlb);
