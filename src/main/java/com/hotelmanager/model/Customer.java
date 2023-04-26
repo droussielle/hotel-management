@@ -1,4 +1,4 @@
-package com.hotelmanager.data;
+package com.hotelmanager.model;
 public class Customer {
     // private int customerId;
     private String name;

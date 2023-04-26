@@ -1,12 +1,16 @@
-package com.hotelmanager.storage;
+package com.hotelmanager.util;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Create
+public final class Create
 {
+    private Create()
+    {
+    }
+
     public static void createNewDatabase()
     {
         try (Connection conn = Connect.connectDatabase())
@@ -35,20 +39,5 @@ public class Create
         {
             System.out.println(e.getMessage());
         }
-    }
-
-    /*
-     * @param args the command line arguments
-     */
-    public static void main(String[] args)
-    {
-//        createNewDatabase("test.db");
-        // SQL statement for creating a new table
-        String sql = "CREATE TABLE IF NOT EXISTS orders (\n"
-                + "	id integer PRIMARY KEY,\n"
-                + "	name text NOT NULL,\n"
-                + "	capacity real\n"
-                + ");";
-        createNewTable(sql);
     }
 }

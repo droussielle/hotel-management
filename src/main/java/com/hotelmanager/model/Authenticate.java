@@ -1,4 +1,4 @@
-package com.hotelmanager.data;
+package com.hotelmanager.model;
 
 public class Authenticate {
     private String username = "admin";
@@ -9,9 +9,6 @@ public class Authenticate {
     }
 
     public boolean checkLogin(String username, String password) {
-        if (this.username.equals(username) && this.password.equals(password)) {
-            return true;
-        }
-        return false;
+        return this.username.equals(username) && this.password.equals(password);
     }
 }

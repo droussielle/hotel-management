@@ -1,16 +1,16 @@
-package com.hotelmanager.data;
+package com.hotelmanager.model;
 
 import java.util.List;
 
 public class Database {
     private List<Customer> customerList;
-    private List<FreeRoom> freeRoomList;
-    private List<BookedRoom> bookedRoomList;
+    private List<Room> freeRoomList;
+    private List<Room> bookedRoomList;
     private List<Extra> extraList;
     // private Map<Integer, Receipt> receiptMap;
 
-    public Database(List<Customer> customerList, List<FreeRoom> freeRoomList, List<Extra> extraList,
-            List<BookedRoom> bookedRoomList) {
+    public Database(List<Customer> customerList, List<Room> freeRoomList, List<Extra> extraList,
+            List<Room> bookedRoomList) {
         this.customerList = customerList;
         this.freeRoomList = freeRoomList;
         this.extraList = extraList;

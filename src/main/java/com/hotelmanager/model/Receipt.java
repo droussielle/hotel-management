@@ -1,4 +1,4 @@
-package com.hotelmanager.data;
+package com.hotelmanager.model;
 
 import com.hotelmanager.controller.ReceiptController;
 

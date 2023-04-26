@@ -1,7 +1,7 @@
 package com.hotelmanager.controller;
 
-import com.hotelmanager.data.BookedRoom;
-import com.hotelmanager.data.Extra;
+import com.hotelmanager.model.BookedRoom;
+import com.hotelmanager.model.Extra;
 
 import java.util.List;
 

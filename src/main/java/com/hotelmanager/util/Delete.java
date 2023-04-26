@@ -1,11 +1,12 @@
-package com.hotelmanager.storage;
+package com.hotelmanager.util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class Delete
+public final class Delete
 {
+    private Delete() {}
     public void delete(int phoneNumber)
     {
         String sql = "DELETE FROM customers WHERE phoneNumber = ?";
@@ -38,12 +39,5 @@ public class Delete
         {
             System.out.println(e.getMessage());
         }
-    }
-
-    public static void main(String[] args)
-    {
-        Delete app = new Delete();
-        // delete the row with id 3
-        app.delete("pepega clap");
     }
 }

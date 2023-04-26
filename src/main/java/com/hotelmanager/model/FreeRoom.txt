@@ -1,4 +1,4 @@
-package com.hotelmanager.data;
+package com.hotelmanager.model;
 public class FreeRoom {
 
     private Room room;

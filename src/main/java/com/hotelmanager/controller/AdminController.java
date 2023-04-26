@@ -1,6 +1,6 @@
 package com.hotelmanager.controller;
 
-import com.hotelmanager.data.*;
+import com.hotelmanager.model.*;
 
 public class AdminController {
 

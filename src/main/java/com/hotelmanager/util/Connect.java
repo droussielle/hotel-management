@@ -1,4 +1,4 @@
-package com.hotelmanager.storage;
+package com.hotelmanager.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,21 +6,15 @@ import java.sql.SQLException;
 
 public class Connect
 {
-    /* Connect to a sample database */
-
-
-    /*
-     * @param args the command line arguments
-     */
-    public static void main(String[] args)
+    private Connect()
     {
-        Connection conn = connectDatabase();
-        detachDatabase(conn);
     }
+
+    static String fileName = "hotel.db";
 
     public static Connection connectDatabase()
     {
-        String url = "jdbc:sqlite:src/main/data/hotel.db";
+        String url = "jdbc:sqlite:src/main/data/" + fileName;
         Connection conn = null;
         try
         {

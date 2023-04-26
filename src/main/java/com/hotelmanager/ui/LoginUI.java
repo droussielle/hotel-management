@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import com.hotelmanager.data.Authenticate;
+import com.hotelmanager.model.Authenticate;
 
 //import javax.swing.table.*;
 public class LoginUI {
