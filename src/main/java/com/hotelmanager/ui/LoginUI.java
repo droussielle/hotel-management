@@ -23,26 +23,48 @@ public class LoginUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints constraints_Main = new GridBagConstraints();
+        constraints_Main.fill = GridBagConstraints.CENTER;
+
+
+        constraints_Main.gridx = 0;
+        constraints_Main.gridy = 0;
+        JPanel panel_image = new JPanel(new BorderLayout());
+        ImageIcon hotelIcon = new ImageIcon("src/main/resources/hotel_Image.png"); 
+        Image image = hotelIcon.getImage().getScaledInstance(170, 50, Image.SCALE_SMOOTH);
+        Icon newIcon = new ImageIcon(image);
+        JLabel hotLabel = new JLabel(newIcon);
+        //panel_image.setSize(150, 50);
+        panel_image.add(hotLabel,BorderLayout.CENTER);   
+        panel.add(panel_image, constraints_Main);
+
+        constraints_Main.gridx = 0;
+        constraints_Main.gridy = 1;
+        panel.add(new Label(null, 0), constraints_Main);
+
+        constraints_Main.gridx = 0;
+        constraints_Main.gridy = 2;
+        JPanel panel_Main = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.CENTER;
 
         constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.fill = GridBagConstraints.CENTER;
-        panel.add(new JLabel("User Name: "), constraints);
+        constraints.gridy = 1;
+        panel_Main.add(new JLabel("User Name: "), constraints);
 
         JTextField userNameField = new JTextField(10);
         constraints.gridx = 1;
-        constraints.gridy = 0;
-        panel.add(userNameField, constraints);
+        constraints.gridy = 1;
+        panel_Main.add(userNameField, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 1;
-        panel.add(new JLabel("Password: "), constraints);
+        constraints.gridy = 2;
+        panel_Main.add(new JLabel("Password: "), constraints);
 
         JTextField passwordField = new JPasswordField(10);
         constraints.gridx = 1;
-        constraints.gridy = 1;
-        panel.add(passwordField, constraints);
+        constraints.gridy = 2;
+        panel_Main.add(passwordField, constraints);
 
         JButton addButton_Login = new JButton("Log In");
         addButton_Login.addActionListener(new ActionListener() {
@@ -63,12 +85,10 @@ public class LoginUI {
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.gridwidth = 10;
-        panel.add(addButton_Login, constraints);
-
-        // JScrollPane scrollPane = new JScrollPane(table);
+        panel_Main.add(addButton_Login, constraints);
+        panel.add(panel_Main,constraints_Main);        
 
         frame.add(panel, BorderLayout.CENTER);
-        // frame.add(scrollPane, BorderLayout.CENTER);
 
         frame.setSize(new Dimension(800, 600));
         frame.setLocationRelativeTo(null);

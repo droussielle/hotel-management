@@ -1,16 +1,19 @@
 package com.hotelmanager.ui;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.awt.event.*;
+import java.awt.font.TextAttribute;
+
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 
 public class Home {
     private JFrame frame;
-
+    public boolean flagClose = true;
     // private JTable table;
     // private DefaultTableModel model;
     public Home() {
@@ -19,7 +22,7 @@ public class Home {
 
     private void createHomeUI() {
         frame = new JFrame("Hotel Manager - Home");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         JPanel contentPanel = new JPanel(new BorderLayout());
 
         JPanel NORTHpanel = new JPanel(new BorderLayout());
@@ -83,7 +86,7 @@ public class Home {
         bookButton.setFocusPainted(false);
 
         ImageIcon editButton_icon = new ImageIcon("src/main/resources/edit_icon.png");
-        JButton editButton = new JButton("Edit", editButton_icon);
+        JButton editButton = new JButton("Receipt ", editButton_icon);
         editButton.setContentAreaFilled(false);
         editButton.setFocusPainted(false);
 
@@ -484,6 +487,188 @@ public class Home {
                             JOptionPane.showMessageDialog(null, "Please select 1 item");
                             return;
                         }
+                        int result = JOptionPane.showConfirmDialog(frame, 
+                        "Are you sure to checkout?" + 
+                        "\nName: " + tableEdit.getValueAt(rowtableEdit,1) +"\nRoom: " + tableEdit.getValueAt(rowtableEdit,2) + "\nTotal: 200000" ,
+                        "Check-out confirmation", JOptionPane.YES_NO_OPTION);
+                        if (result == JOptionPane.YES_OPTION) {
+                            JDialog subFrame_Checkout = new JDialog(frame, "Checkout", true);
+
+                            JPanel contentPanel_checkOut = new JPanel(new BorderLayout());
+
+                            MyPanel checkout_Main = new MyPanel();
+                            checkout_Main.setLayout(new BorderLayout());
+
+                            
+                            MyPanel checkout_Main_top = new MyPanel();
+                            checkout_Main_top.setLayout(new GridLayout(0,1));
+                            checkout_Main_top.setBorder(BorderFactory.createCompoundBorder(
+                                new EmptyBorder(0, 10, 0, 10), // Thêm viền trái và phải
+                                BorderFactory.createLineBorder(new Color(0, 0, 0, 0)) // Viền trong suốt
+                            ));
+
+                            ImageIcon hotelIcon = new ImageIcon("src/main/resources/hotel_Image.png"); 
+                            Image image = hotelIcon.getImage().getScaledInstance(170, 50, Image.SCALE_SMOOTH);
+                            Icon newIcon = new ImageIcon(image);
+                            JLabel hotLabel = new JLabel(newIcon);
+
+                            checkout_Main_top.add(new JLabel());
+                            checkout_Main_top.add(hotLabel);
+                            
+                            JLabel title_checkout = new JLabel("Hóa đơn");
+                            title_checkout.setHorizontalAlignment(JLabel.CENTER);
+                            title_checkout.setVerticalAlignment(JLabel.CENTER);
+                            title_checkout.setFont(new Font(title_checkout.getFont().getName(), Font.BOLD, 24));
+                            checkout_Main_top.add(title_checkout);
+
+                            JLabel name = new JLabel("Tên:" + "Chuỗi cần được gán vào");
+                            Font font = name.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
+                            font = font.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm độ đậm của chữ
+                            name.setFont(font);
+                            checkout_Main_top.add(name);
+
+                            JLabel Phone = new JLabel("SĐT:" + "Chuỗi cần được gán vào");
+                            font = Phone.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
+                            font = font.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm độ đậm của chữ
+                            Phone.setFont(font);
+                            Phone.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+                            checkout_Main_top.add(Phone);
+
+                            JLabel room = new JLabel("Phòng:" + "Chuỗi cần được gán vào");
+                            font = room.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
+                            font = font.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm độ đậm của chữ
+                            room.setFont(font);
+                            checkout_Main_top.add(room);
+
+                            JLabel datein = new JLabel("Ngày đặt phòng:" + "Chuỗi cần được gán vào");
+                            font = datein.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
+                            font = font.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm độ đậm của chữ
+                            datein.setFont(font);
+                            checkout_Main_top.add(datein);
+
+                            JLabel dateout = new JLabel("Ngày trả phòng:" + "Chuỗi cần được gán vào");
+                            font = dateout.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
+                            font = font.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm độ đậm của chữ
+                            dateout.setFont(font);
+                            dateout.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+                            checkout_Main_top.add(dateout);
+
+                            JLabel extras = new JLabel("Phụ thu:");
+                            font = extras.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
+                            font = font.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm độ đậm của chữ
+                            extras.setFont(font);
+                            checkout_Main_top.add(extras);
+                            //if nếu có extras thì thêm extras vô theo cấu trúc như figma hoặc như tôi đã làm ở trên
+                            // dưới đây tôi sẽ giả sử là có extras
+                            // Tôi nghĩ nên 
+                            //else thì không làm gì cả
+
+                            if (true) {
+                                JPanel extras_checkout = new JPanel(new GridLayout(1, 3));
+                                // for (mảng extras) {
+                                JLabel nameExtras = new JLabel("Tên món");
+                                font = nameExtras.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
+                                font = font.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm độ đậm của chữ
+                                nameExtras.setFont(font);
+                                extras_checkout.add(nameExtras);
+
+                                JLabel quantity = new JLabel("Số lượng");
+                                font = quantity.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
+                                font = font.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm độ đậm của chữ
+                                quantity.setFont(font);
+                                extras_checkout.add(quantity);
+
+                                JLabel total_extra = new JLabel("Tổng tiền");
+                                font = total_extra.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
+                                font = font.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm độ đậm của chữ
+                                total_extra.setFont(font);
+                                extras_checkout.add(total_extra);
+                                //}
+                                checkout_Main_top.add(extras_checkout);
+                            }
+
+                            JPanel total_checkout = new JPanel(new GridLayout(1, 2));
+                            total_checkout.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
+                            JPanel total_checkout_left = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                            JPanel total_checkout_right = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+                            JLabel title_total = new JLabel("Thành tiền:");
+                            font = title_total.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
+                            font = font.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm độ đậm của chữ
+                            title_total.setFont(font);
+                            total_checkout_left.add(title_total);
+
+                            JLabel title_number = new JLabel("Ghi số tiền");
+                            font = title_number.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
+                            //font = font.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm độ đậm của chữ
+                            title_number.setFont(font);
+                            total_checkout_right.add(title_number);
+                            
+                            total_checkout.add(total_checkout_left);
+                            total_checkout.add(total_checkout_right);
+
+                            checkout_Main_top.add(total_checkout);
+
+                            checkout_Main.add(checkout_Main_top,BorderLayout.NORTH);
+
+
+                            JPanel checkout_Footer_Panel = new JPanel(new GridLayout(1,2));
+                            checkout_Footer_Panel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
+
+                            JPanel checkout_Footer_Panel_Left = new JPanel(new FlowLayout(FlowLayout.LEFT)); 
+                            JPanel checkout_Footer_Panel_Right = new JPanel(new FlowLayout(FlowLayout.RIGHT)); 
+
+
+                            JButton cancelButton = new JButton("Cancel");
+                            checkout_Footer_Panel_Left.add(cancelButton);
+
+
+                            JButton printButton = new JButton("Print");
+                            checkout_Footer_Panel_Right.add(printButton);
+
+
+                            JButton saveButton = new JButton("Save");
+                            checkout_Footer_Panel_Right.add(saveButton);
+
+                            checkout_Footer_Panel.add(checkout_Footer_Panel_Left);
+                            checkout_Footer_Panel.add(checkout_Footer_Panel_Right);                            
+
+                            contentPanel_checkOut.add(checkout_Main,BorderLayout.CENTER);
+                            contentPanel_checkOut.add(checkout_Footer_Panel,BorderLayout.SOUTH);
+
+                            cancelButton.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    subFrame_Checkout.setVisible(false);
+                                }
+                            });
+
+                            saveButton.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    subFrame_Checkout.setVisible(false);
+                                }
+                            });
+
+                            printButton.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    checkout_Main_top.printPanel();
+                                    //checkout_Main_top.setBorder(BorderFactory.createCompoundBorder(
+                                    //    new EmptyBorder(0, 50, 0, 50), // Thêm viền trái và phải
+                                    //    BorderFactory.createLineBorder(new Color(0, 0, 0, 0)) // Viền trong suốt
+                                    //));
+                                    //subFrame_Checkout.setVisible(false);
+                                }
+                            });
+                            
+                            subFrame_Checkout.add(contentPanel_checkOut);
+                            subFrame_Checkout.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                            subFrame_Checkout.setSize(500, 800);
+                            subFrame_Checkout.setLocationRelativeTo(null);
+                            subFrame_Checkout.setResizable(false);
+                            subFrame_Checkout.setVisible(true);
+                        }
                     }
                 });
                 editEditButton.addActionListener(new ActionListener() {
@@ -638,8 +823,7 @@ public class Home {
                                 contentPanel_addMore_Main.add(quantity_addMoreField, constraints);
 
                                 JPanel contentPanel_addMore_Footer = new JPanel(new GridLayout(1, 2));
-                                contentPanel_addMore_Footer
-                                        .setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
+                                contentPanel_addMore_Footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
 
                                 JPanel contentPanel_addMore_Footer_Left = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
@@ -673,6 +857,7 @@ public class Home {
 
                                 subFrame_addMore.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                                 subFrame_addMore.getContentPane().add(contentPanel_addMore);
+                                subFrame_addMore.setResizable(false);
                                 subFrame_addMore.setVisible(true);
                             }
                         });
@@ -1043,18 +1228,20 @@ public class Home {
 
     public boolean close() {
         frame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 // xử lý sự kiện khi đóng cửa sổ
-                int result = JOptionPane.showConfirmDialog(frame, "Bạn có chắc muốn đóng ứng dụng?",
-                        "Xác nhận đóng ứng dụng", JOptionPane.YES_NO_OPTION);
+                int result = JOptionPane.showConfirmDialog(frame, "Are you sure you want to close the app?",
+                        "Confirm to close the application", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
                     // giải phóng các tài nguyên của cửa sổ
-                    System.exit(0); // kết thúc ứng dụng
-                } else
-                    return;
+                    System.exit(0);
+                     // kết thúc ứng dụng                   
+                }
+                else flagClose = false;
             }
         });
-        return true;
+        return flagClose;
     }
 
 }
