@@ -25,17 +25,16 @@ public class LoginUI {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints_Main = new GridBagConstraints();
         constraints_Main.fill = GridBagConstraints.CENTER;
-
-
         constraints_Main.gridx = 0;
         constraints_Main.gridy = 0;
+
         JPanel panel_image = new JPanel(new BorderLayout());
-        ImageIcon hotelIcon = new ImageIcon("src/main/resources/hotel_Image.png"); 
+        ImageIcon hotelIcon = new ImageIcon("src/main/resources/hotel_Image.png");
         Image image = hotelIcon.getImage().getScaledInstance(170, 50, Image.SCALE_SMOOTH);
         Icon newIcon = new ImageIcon(image);
         JLabel hotLabel = new JLabel(newIcon);
-        //panel_image.setSize(150, 50);
-        panel_image.add(hotLabel,BorderLayout.CENTER);   
+        // panel_image.setSize(150, 50);
+        panel_image.add(hotLabel, BorderLayout.CENTER);
         panel.add(panel_image, constraints_Main);
 
         constraints_Main.gridx = 0;
@@ -46,8 +45,8 @@ public class LoginUI {
         constraints_Main.gridy = 2;
         JPanel panel_Main = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(5, 5, 5, 5);
         constraints.fill = GridBagConstraints.CENTER;
-
         constraints.gridx = 0;
         constraints.gridy = 1;
         panel_Main.add(new JLabel("User Name: "), constraints);
@@ -86,7 +85,11 @@ public class LoginUI {
         constraints.gridy = 3;
         constraints.gridwidth = 10;
         panel_Main.add(addButton_Login, constraints);
-        panel.add(panel_Main,constraints_Main);        
+        panel.add(panel_Main, constraints_Main);
+
+        userNameField.setToolTipText("Enter your username");
+        passwordField.setToolTipText("Enter your password");
+        addButton_Login.setMnemonic(KeyEvent.VK_ENTER);
 
         frame.add(panel, BorderLayout.CENTER);
 
