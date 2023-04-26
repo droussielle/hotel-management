@@ -258,11 +258,21 @@ public class Home {
 
                         constraints.gridx = 0;
                         constraints.gridy = 4;
+                        JLabel name_addMore = new JLabel("Name:");
+                        contentPanel_addMore_Main.add(name_addMore, constraints);
+
+                        constraints.gridx = 1;
+                        constraints.gridy = 4;
+                        JTextField name_addMoreField = new JTextField(10);
+                        contentPanel_addMore_Main.add(name_addMoreField, constraints);
+
+                        constraints.gridx = 0;
+                        constraints.gridy = 5;
                         JLabel quantity_addMore = new JLabel("Quantity:");
                         contentPanel_addMore_Main.add(quantity_addMore, constraints);
 
                         constraints.gridx = 1;
-                        constraints.gridy = 4;
+                        constraints.gridy = 5;
                         JTextField quantity_addMoreField = new JTextField(10);
                         contentPanel_addMore_Main.add(quantity_addMoreField, constraints);
 
@@ -291,7 +301,7 @@ public class Home {
                                     return;
                                 }
                                 DefaultTableModel model = (DefaultTableModel) table_dataExtras.getModel();
-                                Object[] newRowData = { dropdown_Type_addMore.getSelectedItem().toString(), "Bun bo",
+                                Object[] newRowData = { dropdown_Type_addMore.getSelectedItem().toString(), name_addMoreField.getText(),
                                         quantity_addMoreField.getText() };
                                 model.addRow(newRowData);
                                 table_dataExtras.repaint();
@@ -596,11 +606,21 @@ public class Home {
 
                                 constraints.gridx = 0;
                                 constraints.gridy = 4;
+                                JLabel name_addMore = new JLabel("Name:");
+                                contentPanel_addMore_Main.add(name_addMore, constraints);
+
+                                constraints.gridx = 1;
+                                constraints.gridy = 4;
+                                JTextField name_addMoreField = new JTextField(10);
+                                contentPanel_addMore_Main.add(name_addMoreField, constraints);
+
+                                constraints.gridx = 0;
+                                constraints.gridy = 5;
                                 JLabel quantity_addMore = new JLabel("Quantity:");
                                 contentPanel_addMore_Main.add(quantity_addMore, constraints);
 
                                 constraints.gridx = 1;
-                                constraints.gridy = 4;
+                                constraints.gridy = 5;
                                 JTextField quantity_addMoreField = new JTextField(10);
                                 contentPanel_addMore_Main.add(quantity_addMoreField, constraints);
 
@@ -626,7 +646,7 @@ public class Home {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         // Cập nhật dữ liệu tại đây
-                                        JOptionPane.showMessageDialog(frame, "??? added successfully!");
+                                        JOptionPane.showMessageDialog(frame, "Extras added successfully!");
                                         subFrame_addMore.setVisible(false);
                                     }
                                 });
