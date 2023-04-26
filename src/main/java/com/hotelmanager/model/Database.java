@@ -51,129 +51,129 @@ public class Database {
     }
 
     // FreeRoom
-    public List<FreeRoom> getFreeRoomList() {
-        return freeRoomList;
-    }
-
-    public void addFreeRoom(FreeRoom room) {
-        freeRoomList.add(room);
-    }
-
-    public void editFreeRoom(int index, FreeRoom room) {
-        freeRoomList.set(index, room);
-    }
-
-    public void removeFreeRoom(Room room) {
-        for (FreeRoom i : freeRoomList) {
-            if (i.getRoom().equals(room)) {
-                freeRoomList.remove(i);
-            }
-        }
-    }
-
-    public FreeRoom getFreeRoom(int index) {
-        if (index >= freeRoomList.size()) {
-            return null;
-        }
-        return freeRoomList.get(index);
-    }
-
-    public Room searchFreeRoom(String name) {
-        for (FreeRoom room : freeRoomList) {
-            if (name.equals(room.getRoom().getName())) {
-                return room.getRoom();
-            }
-        }
-        return null;
-    }
-
-    // Extra
-    public List<Extra> getExtraList() {
-        return extraList;
-    }
-
-    public void addExtra(Extra extra) {
-        extraList.add(extra);
-    }
-
-    public void editExtra(int index, Extra extra) {
-        extraList.set(index, extra);
-    }
-
-    public void removeExtra(Extra extra) {
-        extraList.remove(extra);
-    }
-
-    public Extra getExtra(int index) {
-        if (index >= extraList.size()) {
-            return null;
-        }
-        return extraList.get(index);
-    }
-
-    public Extra searchExtra(String name) {
-        for (Extra extra : extraList) {
-            if (name.equals(extra.getName())) {
-                return extra;
-            }
-        }
-        return null;
-    }
-
-    // Receipt
-    // public Map<Integer, Receipt> getReceiptMap() {
-    // return receiptMap;
-    // }
-
-    // public void addReceipt(Receipt receipt) {
-    // receiptMap.put(receipt);
-    // }
-
-    // public void editReceipt(int id, Receipt receipt) {
-    // receiptMap.put(id, receipt);
-    // }
-
-    // public void removeReceipt(Receipt receipt) {
-    // receiptMap.remove(receipt.getReceiptId());
-    // }
-
-    // public Receipt getReceipt(int id) {
-    // return receiptMap.get(id);
-    // }
-
-    public List<BookedRoom> getBookedRoomList() {
-        return bookedRoomList;
-    }
-
-    public void addBookedRoom(BookedRoom bookedRoom) {
-        bookedRoomList.add(bookedRoom);
-    }
-
-    public void editBookedRoom(int index, BookedRoom bookedRoom) {
-        bookedRoomList.set(index, bookedRoom);
-    }
-
-    public void removeBookedRoom(Room room) {
-        for (BookedRoom i : bookedRoomList) {
-            if (i.getRoom().equals(room)) {
-                bookedRoomList.remove(i);
-            }
-        }
-    }
-
-    public BookedRoom getBookedRoom(int index) {
-        if (index >= bookedRoomList.size()) {
-            return null;
-        }
-        return bookedRoomList.get(index);
-    }
-
-    public BookedRoom searchBookedRoom(String roomID) {
-        for (BookedRoom BookedRoom : bookedRoomList) {
-            if (roomID.equals(BookedRoom.getRoom().getName())) {
-                return BookedRoom;
-            }
-        }
-        return null;
-    }
+//    public List<FreeRoom> getFreeRoomList() {
+//        return freeRoomList;
+//    }
+//
+//    public void addFreeRoom(FreeRoom room) {
+//        freeRoomList.add(room);
+//    }
+//
+//    public void editFreeRoom(int index, FreeRoom room) {
+//        freeRoomList.set(index, room);
+//    }
+//
+//    public void removeFreeRoom(Room room) {
+//        for (FreeRoom i : freeRoomList) {
+//            if (i.getRoom().equals(room)) {
+//                freeRoomList.remove(i);
+//            }
+//        }
+//    }
+//
+//    public FreeRoom getFreeRoom(int index) {
+//        if (index >= freeRoomList.size()) {
+//            return null;
+//        }
+//        return freeRoomList.get(index);
+//    }
+//
+//    public Room searchFreeRoom(String name) {
+//        for (FreeRoom room : freeRoomList) {
+//            if (name.equals(room.getRoom().getName())) {
+//                return room.getRoom();
+//            }
+//        }
+//        return null;
+//    }
+//
+//    // Extra
+//    public List<Extra> getExtraList() {
+//        return extraList;
+//    }
+//
+//    public void addExtra(Extra extra) {
+//        extraList.add(extra);
+//    }
+//
+//    public void editExtra(int index, Extra extra) {
+//        extraList.set(index, extra);
+//    }
+//
+//    public void removeExtra(Extra extra) {
+//        extraList.remove(extra);
+//    }
+//
+//    public Extra getExtra(int index) {
+//        if (index >= extraList.size()) {
+//            return null;
+//        }
+//        return extraList.get(index);
+//    }
+//
+//    public Extra searchExtra(String name) {
+//        for (Extra extra : extraList) {
+//            if (name.equals(extra.getName())) {
+//                return extra;
+//            }
+//        }
+//        return null;
+//    }
+//
+//    // Receipt
+//    // public Map<Integer, Receipt> getReceiptMap() {
+//    // return receiptMap;
+//    // }
+//
+//    // public void addReceipt(Receipt receipt) {
+//    // receiptMap.put(receipt);
+//    // }
+//
+//    // public void editReceipt(int id, Receipt receipt) {
+//    // receiptMap.put(id, receipt);
+//    // }
+//
+//    // public void removeReceipt(Receipt receipt) {
+//    // receiptMap.remove(receipt.getReceiptId());
+//    // }
+//
+//    // public Receipt getReceipt(int id) {
+//    // return receiptMap.get(id);
+//    // }
+//
+//    public List<BookedRoom> getBookedRoomList() {
+//        return bookedRoomList;
+//    }
+//
+//    public void addBookedRoom(BookedRoom bookedRoom) {
+//        bookedRoomList.add(bookedRoom);
+//    }
+//
+//    public void editBookedRoom(int index, BookedRoom bookedRoom) {
+//        bookedRoomList.set(index, bookedRoom);
+//    }
+//
+//    public void removeBookedRoom(Room room) {
+//        for (BookedRoom i : bookedRoomList) {
+//            if (i.getRoom().equals(room)) {
+//                bookedRoomList.remove(i);
+//            }
+//        }
+//    }
+//
+//    public BookedRoom getBookedRoom(int index) {
+//        if (index >= bookedRoomList.size()) {
+//            return null;
+//        }
+//        return bookedRoomList.get(index);
+//    }
+//
+//    public BookedRoom searchBookedRoom(String roomID) {
+//        for (BookedRoom BookedRoom : bookedRoomList) {
+//            if (roomID.equals(BookedRoom.getRoom().getName())) {
+//                return BookedRoom;
+//            }
+//        }
+//        return null;
+//    }
 }
