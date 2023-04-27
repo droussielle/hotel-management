@@ -23,6 +23,8 @@ public class LoginUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
         GridBagConstraints constraints_Main = new GridBagConstraints();
         constraints_Main.fill = GridBagConstraints.CENTER;
         constraints_Main.gridx = 0;
@@ -60,7 +62,7 @@ public class LoginUI {
         constraints.gridy = 2;
         panel_Main.add(new JLabel("Password: "), constraints);
 
-        JTextField passwordField = new JPasswordField(10);
+        JPasswordField passwordField = new JPasswordField(10);
         constraints.gridx = 1;
         constraints.gridy = 2;
         panel_Main.add(passwordField, constraints);
@@ -87,16 +89,15 @@ public class LoginUI {
         panel_Main.add(addButton_Login, constraints);
         panel.add(panel_Main, constraints_Main);
 
-        userNameField.setToolTipText("Enter your username");
-        passwordField.setToolTipText("Enter your password");
-        addButton_Login.setMnemonic(KeyEvent.VK_ENTER);
-
         frame.add(panel, BorderLayout.CENTER);
 
         frame.setSize(new Dimension(800, 600));
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setResizable(false);
+        userNameField.setToolTipText("Enter your username");
+        passwordField.setToolTipText("Enter your password");
+        frame.getRootPane().setDefaultButton(addButton_Login);
     }
 
     public void refresh() {
