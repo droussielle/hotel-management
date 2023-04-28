@@ -848,26 +848,34 @@ public class Home {
 
                         constraints.gridx = 0;
                         constraints.gridy = 4;
-                        bookPanel_left_top.add(new JLabel("ID"), constraints);
+                        bookPanel_left_top.add(new JLabel("Card Number"), constraints);
 
-                        JTextField IDField = new JTextField(20);
-                        IDField.setText(modelEdit.getValueAt(rowtableEdit, 0).toString());
+                        JTextField cardNumber = new JTextField(20);
                         constraints.gridx = 1;
                         constraints.gridy = 4;
-                        bookPanel_left_top.add(IDField, constraints);
+                        bookPanel_left_top.add(cardNumber, constraints);
 
                         constraints.gridx = 0;
                         constraints.gridy = 5;
                         bookPanel_left_top.add(new JLabel("Room"), constraints);
 
                         JTextField roomField = new JTextField(20);
-                        roomField.setText(modelEdit.getValueAt(rowtableEdit, 2).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 5;
                         bookPanel_left_top.add(roomField, constraints);
 
                         constraints.gridx = 0;
                         constraints.gridy = 6;
+                        bookPanel_left_top.add(new JLabel("Payment Method "), constraints);
+
+                        String[] options_paymentMethod = { "Cash", "Credit Card" };
+                        JComboBox<String> dropdown_paymentMethod = new JComboBox<>(options_paymentMethod);
+                        constraints.gridx = 1;
+                        constraints.gridy = 6;
+                        bookPanel_left_top.add(dropdown_paymentMethod, constraints);
+
+                        constraints.gridx = 0;
+                        constraints.gridy = 7;
                         bookPanel_left_top.add(new JLabel("Extras"), constraints);
 
                         JButton addMoreButton = new JButton("Add..");
@@ -976,7 +984,7 @@ public class Home {
 
                         JPanel addMorePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
                         constraints.gridx = 1;
-                        constraints.gridy = 6;
+                        constraints.gridy = 7;
                         addMorePanel.add(addMoreButton);
                         bookPanel_left_top.add(addMorePanel, constraints);
 
@@ -1059,7 +1067,7 @@ public class Home {
                                 // Lấy dữ liệu ở đây
                                 String customerName = customerNameField.getText();
                                 String phoneNumber = phoneNumberField.getText();
-                                String ID = IDField.getText();
+                                String ID = cardNumber.getText();
                                 String room = roomField.getText();
                                 if (customerName.isEmpty() || phoneNumber.isEmpty() || ID.isEmpty() ||
                                         room.isEmpty()) {
