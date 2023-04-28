@@ -40,4 +40,17 @@ public class PropertyController
         }
         return availableRoomsObject;
     }
+
+    public Object[][] getLogsObject()
+    {
+        List<Logs> logsList = getLogs();
+        Object[][] logsObject = new Object[logsList.size()][3];
+        for(int i = 0; i<logsList.size(); i++)
+        {
+            logsObject[i][0] = logsList.get(i).getId();
+            logsObject[i][1] = logsList.get(i).getDetails();
+            logsObject[i][2] = logsList.get(i).getTimeString();
+        }
+        return logsObject;
+    }
 }

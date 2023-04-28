@@ -1006,14 +1006,9 @@ public class Home {
                         roomAlbLabel.setFont(new Font("Arial", Font.BOLD, 16));
                         bookPanel_right.add(roomAlbLabel, BorderLayout.NORTH);
 
-                        Object[] columnNames_dataRoomAlb = { "Type", "Name", "Price" };
-                        Object[][] dataRoomAlb = {
-                                { "Single", "101", "200 000" },
-                                { "Double", "221", "300 000" },
-                                { "Single", "217", "150 000" },
-                                { "Single", "602", "180 000" },
-                                { "Double", "779", "350 000" }
-                        };
+                        PropertyController prCtrl = new PropertyController();
+                        Object[] columnNames_dataRoomAlb = {"Room no.", "Type", "Price"};
+                        Object[][] dataRoomAlb = prCtrl.getAvailableRoomsObject();
 
                         DefaultTableModel model_dataRoomAlb = new DefaultTableModel(dataRoomAlb,
                                 columnNames_dataRoomAlb);
@@ -1277,12 +1272,9 @@ public class Home {
                 JPanel SOUTH_left_logPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JPanel SOUTH_right_logPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
+                PropertyController prCtrl = new PropertyController();
                 String[] columnslog = { "ID", "Description", "Date" };
-                Object[][] datalog = {
-                        { 1, "Booked a room", "22-11-2022" },
-                        { 2, "Checked out", "23-11-2022" },
-                        { 3, "Checked out", "24-11-2022" }
-                };
+                Object[][] datalog = prCtrl.getLogsObject();
                 DefaultTableModel modellog = new DefaultTableModel(datalog, columnslog);
 
                 JTable tablelog = new JTable(modellog);
