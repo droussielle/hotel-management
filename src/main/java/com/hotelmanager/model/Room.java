@@ -1,34 +1,45 @@
 package com.hotelmanager.model;
 
-public class Room {
+public class Room
+{
     private int id;
     private String type;
     private int price;
 
-    public Room(int id, String type, int price) {
+    public Room(int id, String type, int price)
+    {
         this.id = id;
         this.type = type;
         this.price = price;
     }
 
-    // public int getId() {
-    // return id;
-    // }
+    public int getID()
+    {
+        return this.id;
+    }
 
     // public void setId(int id) {
     // this.id = id;
     // }
 
-    public int getID() {
-        return this.id;
-    }
-
-    public int getPrice() {
+    public int getPrice()
+    {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(int price)
+    {
         this.price = price;
+    }
+
+    public String getType()
+    {
+        return this.type;
+    }
+
+    public void printRoom()
+    {
+        System.out.println(getID() + "\t" + getType() + "\t" + getPrice());
     }
 
 }
