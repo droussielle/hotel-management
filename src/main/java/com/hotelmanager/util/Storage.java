@@ -1,6 +1,6 @@
 package com.hotelmanager.util;
 
-import com.hotelmanager.model.Customer;
+import com.hotelmanager.model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,9 +8,11 @@ import java.util.List;
 
 public final class Storage
 {
-    private Storage() {}
-    
-    public static String fileName = "hotel.db";
+    private Storage()
+    {
+    }
+
+    public static String fileName = "sample.db";
 
     /* Connect -----------------------------------------------------------------------*/
     public static Connection connectDatabase()
@@ -44,7 +46,7 @@ public final class Storage
 
     }
 
-    /* Create */
+    /* Create -----------------------------------------------------------------------*/
     public static void createNewDatabase()
     {
         try (Connection conn = connectDatabase())
@@ -74,17 +76,19 @@ public final class Storage
             System.out.println(e.getMessage());
         }
     }
-    
+
     /* Delete -----------------------------------------------------------------------*/
-    public void deleteCustomer(int phoneNumber)
+
+    public void deleteFromTable_Single(String tableName, int toDel)
     {
-        String sql = "DELETE FROM customers WHERE phoneNumber = ?";
+        String sql = "DELETE FROM ? WHERE id = ?";
 
         try (Connection conn = connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
             // set the corresponding param
-            pstmt.setInt(1, phoneNumber);
+            pstmt.setString(1, tableName);
+            pstmt.setInt(2, toDel);
             // execute the delete statement
             pstmt.executeUpdate();
         } catch (SQLException e)
@@ -93,66 +97,16 @@ public final class Storage
         }
     }
 
-    public void deleteRoom(int roomID)
+    public void deleteFromTable_Single(String tableName, String toDel)
     {
-        String sql = "DELETE FROM rooms WHERE id = ?";
+        String sql = "DELETE FROM ? WHERE id = ?";
 
         try (Connection conn = connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
             // set the corresponding param
-            pstmt.setInt(1, roomID);
-            // execute the delete statement
-            pstmt.executeUpdate();
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void deleteExtra(int extraID)
-    {
-        String sql = "DELETE FROM extras WHERE id = ?";
-
-        try (Connection conn = connectDatabase();
-             PreparedStatement pstmt = conn.prepareStatement(sql))
-        {
-            // set the corresponding param
-            pstmt.setInt(1, extraID);
-            // execute the delete statement
-            pstmt.executeUpdate();
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void deleteReceipts(int receiptID)
-    {
-        String sql = "DELETE FROM receipts WHERE id = ?";
-
-        try (Connection conn = connectDatabase();
-             PreparedStatement pstmt = conn.prepareStatement(sql))
-        {
-            // set the corresponding param
-            pstmt.setInt(1, receiptID);
-            // execute the delete statement
-            pstmt.executeUpdate();
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void deleteReceiptsExtra(int receiptExtraID)
-    {
-        String sql = "DELETE FROM receipts_extra WHERE receiptID = ?";
-
-        try (Connection conn = connectDatabase();
-             PreparedStatement pstmt = conn.prepareStatement(sql))
-        {
-            // set the corresponding param
-            pstmt.setInt(1, receiptExtraID);
+            pstmt.setString(1, tableName);
+            pstmt.setString(2, toDel);
             // execute the delete statement
             pstmt.executeUpdate();
         } catch (SQLException e)
@@ -162,21 +116,6 @@ public final class Storage
     }
 
     /* Insert -----------------------------------------------------------------------*/
-    public static void insertToCustomers(String name, String phoneNumber, String governmentID)
-    {
-        String sql = "INSERT INTO customers (name, phoneNumber, governmentID) VALUES(?,?,?)";
-        try (Connection conn = connectDatabase();
-             PreparedStatement pstmt = conn.prepareStatement(sql))
-        {
-            pstmt.setString(1, name);
-            pstmt.setString(2, phoneNumber);
-            pstmt.setString(3, governmentID);
-            pstmt.executeUpdate();
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }
     public static void insertToRooms(int id, String type, int price)
     {
         String sql = "INSERT INTO rooms (id, type, price) VALUES(?,?,?)";
@@ -195,7 +134,7 @@ public final class Storage
 
     public static void insertToExtras(String type, String name, int price)
     {
-        String sql = "INSERT INTO extras (id, type, price) VALUES(?,?,?)";
+        String sql = "INSERT INTO extras (type, name, price) VALUES(?,?,?)";
         try (Connection conn = connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
@@ -209,14 +148,20 @@ public final class Storage
         }
     }
 
-    public static void insertToReceipts(int customerID, int roomID)
+    public static void insertToReservations(String name, String phoneNumber, String paymentMethod,
+                                            String cardNumber, int roomID, int duration)
     {
-        String sql = "INSERT INTO receipts (customerID, roomID) VALUES(?,?)";
+        String sql = "INSERT INTO reservations (name, phoneNumber, paymentMethod, cardNumber, roomID, duration, time)" +
+                " VALUES(?,?,?,?,?,?,unixepoch())";
         try (Connection conn = connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
-            pstmt.setInt(1, customerID);
-            pstmt.setInt(2, roomID);
+            pstmt.setString(1, name);
+            pstmt.setString(2, phoneNumber);
+            pstmt.setString(3, paymentMethod);
+            pstmt.setString(4, cardNumber);
+            pstmt.setInt(5, roomID);
+            pstmt.setInt(6, duration);
             pstmt.executeUpdate();
         } catch (SQLException e)
         {
@@ -224,13 +169,13 @@ public final class Storage
         }
     }
 
-    public static void insertToReceiptsExtra(int receiptID, int extraID)
+    public static void insertToReservationExtras(int reservationID, int extraID)
     {
-        String sql = "INSERT INTO receipts_extra (receiptID, extraID) VALUES(?,?)";
+        String sql = "INSERT INTO reservation_extras (reservationID, extraID) VALUES(?,?)";
         try (Connection conn = connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
-            pstmt.setInt(1, receiptID);
+            pstmt.setInt(1, reservationID);
             pstmt.setInt(2, extraID);
             pstmt.executeUpdate();
         } catch (SQLException e)
@@ -240,27 +185,13 @@ public final class Storage
     }
 
     /* Select -----------------------------------------------------------------------*/
-    public static ResultSet selectAll(String sql)
-    {
-        ResultSet result = null;
-        try (Connection conn = connectDatabase();
-             Statement stmt = conn.createStatement())
-        {
-            result = stmt.executeQuery(sql);
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
-        return result;
-    }
-
     public static List<Customer> getCustomers()
     {
         List<Customer> customerList = new ArrayList<Customer>();
         String sql = "SELECT * FROM customers";
         try (Connection conn = connectDatabase();
              Statement stmt = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(sql))
+             ResultSet rs = stmt.executeQuery(sql))
         {
             while (rs.next())
             {
@@ -276,49 +207,68 @@ public final class Storage
         return customerList;
     }
 
-    public static ResultSet getAllRooms()
+    public static List<Room> getAllRooms()
     {
+        List<Room> roomList = new ArrayList<Room>();
         String sql = "SELECT * FROM rooms";
-        ResultSet result = null;
         try (Connection conn = connectDatabase();
-             Statement stmt = conn.createStatement())
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql))
         {
-            result = stmt.executeQuery(sql);
+            while (rs.next())
+            {
+                roomList.add(new Room(rs.getInt("id"),
+                        rs.getString("type"),
+                        rs.getInt("price")));
+            }
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
         }
-        return result;
+        return roomList;
     }
 
-    public static ResultSet getAvailableRooms()
+    public static List<Room> getAvailableRooms()
     {
-        String sql = "SELECT * FROM rooms WHERE status = 0";
-        ResultSet result = null;
+        List<Room> roomList = new ArrayList<Room>();
+        String sql = "SELECT * FROM rooms WHERE status = 1";
         try (Connection conn = connectDatabase();
-             PreparedStatement pstmt = conn.prepareStatement(sql))
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql))
         {
-            result = pstmt.executeQuery();
+            while (rs.next())
+            {
+                roomList.add(new Room(rs.getInt("id"),
+                        rs.getString("type"),
+                        rs.getInt("price")));
+            }
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
         }
-        return result;
+        return roomList;
     }
 
-    public static ResultSet getExtras()
+    public static List<Extra> getExtras()
     {
+        List<Extra> extraList = new ArrayList<Extra>();
         String sql = "SELECT * FROM extras";
-        ResultSet result = null;
         try (Connection conn = connectDatabase();
-             Statement stmt = conn.createStatement())
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql))
         {
-            result = stmt.executeQuery(sql);
+            while (rs.next())
+            {
+                extraList.add(new Extra(rs.getInt("id"),
+                        rs.getString("type"),
+                        rs.getString("name"),
+                        rs.getInt("price")));
+            }
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
         }
-        return result;
+        return extraList;
     }
 
     public static ResultSet getReceipts()
@@ -336,9 +286,9 @@ public final class Storage
         return result;
     }
 
-    public static ResultSet getReceiptsExtras()
+    public static ResultSet getReservationExtras()
     {
-        String sql = "SELECT * FROM receipts_extra";
+        String sql = "SELECT * FROM reservation_extras";
         ResultSet result = null;
         try (Connection conn = connectDatabase();
              Statement stmt = conn.createStatement())
@@ -351,33 +301,43 @@ public final class Storage
         return result;
     }
 
-    public static ResultSet getLogs()
+    public static List<Logs> getLogs()
     {
+        List<Logs> logList = new ArrayList<Logs>();
         String sql = "SELECT * FROM logs";
-        ResultSet result = null;
         try (Connection conn = connectDatabase();
-             Statement stmt = conn.createStatement())
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql))
         {
-            result = stmt.executeQuery(sql);
+            while (rs.next())
+            {
+                logList.add(new Logs(rs.getInt("id"),
+                        rs.getString("details"),
+                        rs.getInt("time"),
+                        rs.getString("fileName")));
+            }
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
         }
-        return result;
+        return logList;
     }
 
     /* Update -----------------------------------------------------------------------*/
-    public void updateCustomer(int customerID, String name, String phoneNumber)
+    public void updateSingle(String tableName, String columnName, String newValue,
+                             String condition1, String condition2)
     {
-        String sql = "UPDATE customers SET name = ?, phoneNumber = ? WHERE id = ?";
+        String sql = "UPDATE ? SET ? = ? WHERE ? = ?";
 
         try (Connection conn = connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
             // set the corresponding param
-            pstmt.setString(1, name);
-            pstmt.setString(2, phoneNumber);
-            pstmt.setInt(3, customerID);
+            pstmt.setString(1, tableName);
+            pstmt.setString(2, columnName);
+            pstmt.setString(3, newValue);
+            pstmt.setString(4, condition1);
+            pstmt.setString(5, condition2);
             // update
             pstmt.executeUpdate();
         } catch (SQLException e)
@@ -386,15 +346,20 @@ public final class Storage
         }
     }
 
-    public void checkout(int receiptID)
+    public void updateSingle(String tableName, String columnName, int newValue,
+                             String condition1, int condition2)
     {
-        String sql = "UPDATE receipts SET status = 1 WHERE id = ?";
+        String sql = "UPDATE ? SET ? = ? WHERE ? = ?";
 
         try (Connection conn = connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
             // set the corresponding param
-            pstmt.setInt(1, receiptID);
+            pstmt.setString(1, tableName);
+            pstmt.setString(2, columnName);
+            pstmt.setInt(3, newValue);
+            pstmt.setString(4, condition1);
+            pstmt.setInt(5, condition2);
             // update
             pstmt.executeUpdate();
         } catch (SQLException e)
@@ -403,15 +368,22 @@ public final class Storage
         }
     }
 
-    public void makeRoomAvailable(int roomID)
+    public void updateDouble(String tableName, String columnName1, String newValue1,
+                             String columnName2, String newValue2, String condition1, String condition2)
     {
-        String sql = "UPDATE rooms SET status = 1 WHERE id = ?";
+        String sql = "UPDATE ? SET ? = ?, ? = ? WHERE ? = ?";
 
         try (Connection conn = connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
             // set the corresponding param
-            pstmt.setInt(1, roomID);
+            pstmt.setString(1, tableName);
+            pstmt.setString(2, columnName1);
+            pstmt.setString(3, newValue1);
+            pstmt.setString(4, columnName2);
+            pstmt.setString(5, newValue2);
+            pstmt.setString(6, condition1);
+            pstmt.setString(7, condition2);
             // update
             pstmt.executeUpdate();
         } catch (SQLException e)
@@ -420,15 +392,22 @@ public final class Storage
         }
     }
 
-    public void makeRoomOccupied(int roomID)
+    public void updateDouble(String tableName, String columnName1, int newValue1,
+                             String columnName2, int newValue2, String condition1, int condition2)
     {
-        String sql = "UPDATE rooms SET status = 0 WHERE id = ?";
+        String sql = "UPDATE ? SET ? = ?, ? = ? WHERE ? = ?";
 
         try (Connection conn = connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
             // set the corresponding param
-            pstmt.setInt(1, roomID);
+            pstmt.setString(1, tableName);
+            pstmt.setString(2, columnName1);
+            pstmt.setInt(3, newValue1);
+            pstmt.setString(4, columnName2);
+            pstmt.setInt(5, newValue2);
+            pstmt.setString(6, condition1);
+            pstmt.setInt(7, condition2);
             // update
             pstmt.executeUpdate();
         } catch (SQLException e)

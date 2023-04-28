@@ -2,49 +2,48 @@ package com.hotelmanager.model;
 
 import java.time.LocalDate;
 
-public class Extra {
+public class Extra
+{
+    private int id;
+    private String type;
     private String name;
     private int price;
-    private int quantity;
-    private LocalDate dateBuy;
 
-    public Extra(String name, int price, int quantity,LocalDate dateBuy) {
+    public Extra(int id, String type, String name, int price)
+    {
+        this.id = id;
+        this.type = type;
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
-        this.dateBuy = dateBuy;
+    }
+    public int getID()
+    {
+        return this.id;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public int getPrice() {
+    public int getPrice()
+    {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(int price)
+    {
         this.price = price;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public LocalDate getDateBuy() {
-        return dateBuy;
-    }
-
-    public void setDateBuy(LocalDate dateBuy) {
-        this.dateBuy = dateBuy;
+    public void printExtra()
+    {
+        System.out.println(getID() + "\t" + getName() + "\t" + getPrice());
     }
     // public void setProperty(ArrayList<Property> property) {
     // this.property=property;

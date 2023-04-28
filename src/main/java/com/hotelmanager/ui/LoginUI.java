@@ -31,8 +31,8 @@ public class LoginUI {
         constraints_Main.gridy = 0;
 
         JPanel panel_image = new JPanel(new BorderLayout());
-        ImageIcon hotelIcon = new ImageIcon("src/main/resources/hotel_Image.png");
-        Image image = hotelIcon.getImage().getScaledInstance(170, 50, Image.SCALE_SMOOTH);
+        ImageIcon hotelIcon = new ImageIcon("src/main/resources/hotel_image.png");
+        Image image = hotelIcon.getImage().getScaledInstance(170, 100, Image.SCALE_SMOOTH);
         Icon newIcon = new ImageIcon(image);
         JLabel hotLabel = new JLabel(newIcon);
         // panel_image.setSize(150, 50);

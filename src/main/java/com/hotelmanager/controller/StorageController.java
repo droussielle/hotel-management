@@ -1,14 +1,16 @@
 package com.hotelmanager.controller;
 
-import com.hotelmanager.model.Customer;
 import com.hotelmanager.model.Extra;
-import com.hotelmanager.model.Receipt;
+import com.hotelmanager.model.Reservation;
 import com.hotelmanager.model.Room;
 
-import java.sql.ResultSet;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.hotelmanager.util.Storage.*;
 
 public final class StorageController
 {
@@ -43,9 +45,26 @@ public final class StorageController
         return extraList;
     }
 
-    public static List<Receipt> getReceipts()
+    public static List<Reservation> getReceipts()
     {
-        List<Receipt> receiptList = new ArrayList<Receipt>();
+        List<Reservation> receiptList = new ArrayList<Reservation>();
         return receiptList;
+    }
+
+    public void deleteCustomer(int phoneNumber)
+    {
+        String sql = "DELETE FROM customers WHERE phoneNumber = ?";
+
+        try (Connection conn = connectDatabase();
+             PreparedStatement pstmt = conn.prepareStatement(sql))
+        {
+            // set the corresponding param
+            pstmt.setInt(1, phoneNumber);
+            // execute the delete statement
+            pstmt.executeUpdate();
+        } catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
     }
 }

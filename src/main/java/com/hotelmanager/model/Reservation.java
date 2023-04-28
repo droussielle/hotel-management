@@ -1,11 +1,9 @@
 package com.hotelmanager.model;
 
-import com.hotelmanager.controller.ReceiptController;
-
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
-public class Receipt {
+public class Reservation
+{
     private String hotelName = "Khach san";
     private LocalDate date;
     private int receiptId;

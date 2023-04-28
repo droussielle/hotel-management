@@ -88,19 +88,19 @@ public class Home {
                 BorderFactory.createMatteBorder(0, 1, 1, 1, Color.BLACK),
                 new EmptyBorder(10, 10, 10, 10)));
         bot_NORTHpanel.setLayout(new GridLayout(0, 7));
+
         ImageIcon bookButton_icon = new ImageIcon("src/main/resources/book_icon.png");
         JButton bookButton = new JButton("Book", bookButton_icon);
-
         bookButton.setContentAreaFilled(false);
         bookButton.setFocusPainted(false);
 
         ImageIcon editButton_icon = new ImageIcon("src/main/resources/edit_icon.png");
-        JButton editButton = new JButton("Receipt ", editButton_icon);
+        JButton editButton = new JButton("Edit", editButton_icon);
+//        editButton.setPreferredSize(new Dimension(300,40));
         editButton.setContentAreaFilled(false);
         editButton.setFocusPainted(false);
 
-        // ImageIcon checkoutButton_icon = new
-        // ImageIcon("src/main/resources/checkout_icon.png");
+        // ImageIcon checkoutButton_icon = new ImageIcon("src/main/resources/checkout_icon.png");
         // JButton checkoutButton = new JButton("Checkout", checkoutButton_icon);
         // checkoutButton.setContentAreaFilled(false);
         // checkoutButton.setFocusPainted(false);
@@ -531,8 +531,8 @@ public class Home {
                                     BorderFactory.createLineBorder(new Color(0, 0, 0, 0)) // Viền trong suốt
                             ));
 
-                            ImageIcon hotelIcon = new ImageIcon("src/main/resources/hotel_Image.png");
-                            Image image = hotelIcon.getImage().getScaledInstance(170, 50, Image.SCALE_SMOOTH);
+                            ImageIcon hotelIcon = new ImageIcon("src/main/resources/hotel_image.png");
+                            Image image = hotelIcon.getImage().getScaledInstance(170, 100, Image.SCALE_SMOOTH);
                             Icon newIcon = new ImageIcon(image);
                             JLabel hotLabel = new JLabel(newIcon);
 
