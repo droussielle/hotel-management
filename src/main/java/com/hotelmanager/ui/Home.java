@@ -46,7 +46,7 @@ public class Home {
         top_NORTHpanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         JLabel dateLabel = new JLabel();
-        dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+        dateLabel.setText("Today is: " + new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         dateLabel.setHorizontalAlignment(JLabel.LEFT);
 
         JPanel top_NORTHpanel_Right = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -96,11 +96,12 @@ public class Home {
 
         ImageIcon editButton_icon = new ImageIcon("src/main/resources/edit_icon.png");
         JButton editButton = new JButton("Edit", editButton_icon);
-//        editButton.setPreferredSize(new Dimension(300,40));
+        // editButton.setPreferredSize(new Dimension(300,40));
         editButton.setContentAreaFilled(false);
         editButton.setFocusPainted(false);
 
-        // ImageIcon checkoutButton_icon = new ImageIcon("src/main/resources/checkout_icon.png");
+        // ImageIcon checkoutButton_icon = new
+        // ImageIcon("src/main/resources/checkout_icon.png");
         // JButton checkoutButton = new JButton("Checkout", checkoutButton_icon);
         // checkoutButton.setContentAreaFilled(false);
         // checkoutButton.setFocusPainted(false);
