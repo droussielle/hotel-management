@@ -300,7 +300,7 @@ public final class Storage
     {
         List<ReservationExtras> reservationExtrasList = new ArrayList<ReservationExtras>();
         String sql = "SELECT extraID,type,name,price,COUNT(extraID) FROM reservation_extras " +
-                    "INNER JOIN extras ON extras.id = reservation_extras.extraID" +
+                    "INNER JOIN extras ON extras.id = reservation_extras.extraID " +
                     "WHERE reservationID = ? GROUP BY extraID";
         try (Connection conn = connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))

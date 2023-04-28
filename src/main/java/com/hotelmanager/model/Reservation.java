@@ -138,7 +138,7 @@ public class Reservation
 //        this.receiptId = receiptId;
 //    }
 //
-//    public ReceiptController.ReceiptDetails getRecreiptDetails() {
+//    public ReservationController.ReceiptDetails getRecreiptDetails() {
 //        return receiptDetails;
 //    }
 //

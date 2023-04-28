@@ -45,6 +45,11 @@ public class Extra
     {
         System.out.println(getID() + "\t" + getName() + "\t" + getPrice());
     }
+
+    public String getType()
+    {
+        return type;
+    }
     // public void setProperty(ArrayList<Property> property) {
     // this.property=property;
     // }
