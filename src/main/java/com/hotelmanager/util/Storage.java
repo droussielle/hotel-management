@@ -12,7 +12,7 @@ public final class Storage
     {
     }
 
-    public static String fileName = "sample.db";
+    public static String fileName = "hotel.db";
 
     /* Connect -----------------------------------------------------------------------*/
     public static Connection connectDatabase()
@@ -188,17 +188,15 @@ public final class Storage
     public static List<Customer> getCustomers()
     {
         List<Customer> customerList = new ArrayList<Customer>();
-        String sql = "SELECT * FROM customers";
+        String sql = "SELECT DISTINCT name, phoneNumber FROM reservations";
         try (Connection conn = connectDatabase();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
         {
             while (rs.next())
             {
-                customerList.add(new Customer(rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("phoneNumber"),
-                        rs.getString("governmentID")));
+                customerList.add(new Customer(rs.getString("name"),
+                        rs.getString("phoneNumber")));
             }
         } catch (SQLException e)
         {
@@ -271,34 +269,59 @@ public final class Storage
         return extraList;
     }
 
-    public static ResultSet getReceipts()
+    public static List<Reservation> getReservations()
     {
-        String sql = "SELECT * FROM receipts";
-        ResultSet result = null;
+        List<Reservation> reservationList =  new ArrayList<Reservation>();
+        String sql = "SELECT * FROM reservations";
         try (Connection conn = connectDatabase();
-             Statement stmt = conn.createStatement())
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql))
         {
-            result = stmt.executeQuery(sql);
+            while(rs.next())
+            {
+                reservationList.add(new Reservation(rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("phoneNumber"),
+                        rs.getString("paymentMethod"),
+                        rs.getString("cardNumber"),
+                        rs.getInt("roomID"),
+                        rs.getInt("duration"),
+                        rs.getInt("time"),
+                        rs.getInt("status")));
+            }
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
         }
-        return result;
+        return reservationList;
     }
 
-    public static ResultSet getReservationExtras()
+    public static List<ReservationExtras> getReservationExtras(int reservationID)
     {
-        String sql = "SELECT * FROM reservation_extras";
-        ResultSet result = null;
+        List<ReservationExtras> reservationExtrasList = new ArrayList<ReservationExtras>();
+        String sql = "SELECT extraID,type,name,price,COUNT(extraID) FROM reservation_extras " +
+                    "INNER JOIN extras ON extras.id = reservation_extras.extraID " +
+                    "WHERE reservationID = ? GROUP BY extraID";
         try (Connection conn = connectDatabase();
-             Statement stmt = conn.createStatement())
+             PreparedStatement pstmt = conn.prepareStatement(sql))
         {
-            result = stmt.executeQuery(sql);
+            pstmt.setInt(1, reservationID);
+            try (ResultSet rs = pstmt.executeQuery())
+            {
+                while (rs.next())
+                {
+                    reservationExtrasList.add(new ReservationExtras(rs.getInt("extraID"),
+                            rs.getString("type"),
+                            rs.getString("name"),
+                            rs.getInt("price"),
+                            rs.getInt("COUNT(extraID)")));
+                }
+            }
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
         }
-        return result;
+        return reservationExtrasList;
     }
 
     public static List<Logs> getLogs()

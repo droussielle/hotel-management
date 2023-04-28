@@ -1,11 +1,8 @@
 package com.hotelmanager.controller;
 
 //import com.hotelmanager.model.BookedRoom;
-import com.hotelmanager.model.Extra;
 
-import java.util.List;
-
-public class ReceiptController
+public class ReservationController
 {
 //    public static class ReceiptDetails {
 //        private BookedRoom bookedRoom;

@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 public class Extra
 {
-    private int id;
-    private String type;
+    int id;
+    String type;
     private String name;
     private int price;
 
@@ -44,6 +44,11 @@ public class Extra
     public void printExtra()
     {
         System.out.println(getID() + "\t" + getName() + "\t" + getPrice());
+    }
+
+    public String getType()
+    {
+        return type;
     }
     // public void setProperty(ArrayList<Property> property) {
     // this.property=property;

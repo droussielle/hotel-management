@@ -2,28 +2,13 @@ package com.hotelmanager.model;
 
 public class Customer
 {
-    // private int customerId;
-    private int id;
     private String name;
     private String phoneNumber;
-    private String governmentId;
 
-    public Customer(int id, String name, String phoneNumber, String governmentId)
+    public Customer(String name, String phoneNumber)
     {
-        this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.governmentId = governmentId;
-    }
-
-    public int getCustomerId()
-    {
-        return this.id;
-    }
-
-    public void setCustomerId(int customerId)
-    {
-        this.id = customerId;
     }
 
     public String getName()
@@ -45,14 +30,8 @@ public class Customer
     {
         this.phoneNumber = phoneNumber;
     }
-
-    public String getGovernmentId()
+    public void printCustomer()
     {
-        return governmentId;
-    }
-
-    public void setGovernmentId(String governmentId)
-    {
-        this.governmentId = governmentId;
+        System.out.println(getName() + "\t" + getPhoneNumber());
     }
 }
