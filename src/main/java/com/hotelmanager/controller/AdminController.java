@@ -5,7 +5,7 @@ import com.hotelmanager.model.*;
 public class AdminController {
 
     private String name;
-    Authenticate authentication;
+    Admin authentication;
     private boolean login;
 
     public AdminController(String name) {

@@ -13,7 +13,7 @@ import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 
-import com.hotelmanager.model.Customer;
+import com.hotelmanager.controller.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -375,13 +375,16 @@ public class Home {
                 roomAlbLabel.setFont(new Font("Arial", Font.BOLD, 16));
                 bookPanel_right.add(roomAlbLabel, BorderLayout.NORTH);
 
-                List<Customer> csList = new ArrayList<Customer>();
-                csList.add(new Customer("Chuong", "02039020101"));
-                csList.add(new Customer("Rang", "0980988891"));
-                csList.add(new Customer("Tuan", "09831933245"));
+//                List<Customer> csList = new ArrayList<Customer>();
+//                csList.add(new Customer("Chuong", "02039020101"));
+//                csList.add(new Customer("Rang", "0980988891"));
+//                csList.add(new Customer("Tuan", "09831933245"));
+                PropertyController prCtrl = new PropertyController();
 
-                Object[] columnNames_dataRoomAlb = { "Type", "Name", "Price" };
-                Object[][] dataRoomAlb = new Object[csList.size()][2];
+//                Object[] columnNames_dataRoomAlb = {"ID", "Name", "Phone number", "Payment method", "Card no.", "Room",
+//                                                    "Duration (days)", "Time booked", "Status"};
+                Object[] columnNames_dataRoomAlb = {"Room no.", "Type", "Price"};
+                Object[][] dataRoomAlb = prCtrl.getAvailableRoomsObject();
                 // = csList;
                 // {
                 // { "Single", "101", "200 000" },
@@ -390,10 +393,6 @@ public class Home {
                 // { "Single", "602", "180 000" },
                 // { "Double", "779", "350 000" }
                 // };
-                for (int i = 0; i < csList.size(); i++) {
-                    dataRoomAlb[i][0] = csList.get(i).getName();
-                    dataRoomAlb[i][1] = csList.get(i).getPhoneNumber();
-                }
 
                 DefaultTableModel model_dataRoomAlb = new DefaultTableModel(dataRoomAlb, columnNames_dataRoomAlb);
                 JTable table_dataRoomAlb = new JTable(model_dataRoomAlb);
@@ -471,12 +470,11 @@ public class Home {
                 JPanel SOUTH_left_editPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JPanel SOUTH_right_editPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-                String[] columnsEdit = { "ID", "Customer Name", "Room", "Checkin Date" };
-                Object[][] dataEdit = {
-                        { 1, "John", 25, "11" },
-                        { 2, "Sarah", 30, "12" },
-                        { 3, "Tom", 20, "13" }
-                };
+                PropertyController prCtrl = new PropertyController();
+                Object[] columnsEdit = {"ID", "Name", "Phone number", "Payment method", "Card no.", "Room",
+                        "Duration", "Time booked", "Status"};
+                Object[][] dataEdit = prCtrl.getReservationsObject();
+
                 DefaultTableModel modelEdit = new DefaultTableModel(dataEdit, columnsEdit);
 
                 JTable tableEdit = new JTable(modelEdit);
@@ -1016,14 +1014,9 @@ public class Home {
                         roomAlbLabel.setFont(new Font("Arial", Font.BOLD, 16));
                         bookPanel_right.add(roomAlbLabel, BorderLayout.NORTH);
 
-                        Object[] columnNames_dataRoomAlb = { "Type", "Name", "Price" };
-                        Object[][] dataRoomAlb = {
-                                { "Single", "101", "200 000" },
-                                { "Double", "221", "300 000" },
-                                { "Single", "217", "150 000" },
-                                { "Single", "602", "180 000" },
-                                { "Double", "779", "350 000" }
-                        };
+                        PropertyController prCtrl = new PropertyController();
+                        Object[] columnNames_dataRoomAlb = {"Room no.", "Type", "Price"};
+                        Object[][] dataRoomAlb = prCtrl.getAvailableRoomsObject();
 
                         DefaultTableModel model_dataRoomAlb = new DefaultTableModel(dataRoomAlb,
                                 columnNames_dataRoomAlb);
@@ -1287,12 +1280,9 @@ public class Home {
                 JPanel SOUTH_left_logPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JPanel SOUTH_right_logPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
+                PropertyController prCtrl = new PropertyController();
                 String[] columnslog = { "ID", "Description", "Date" };
-                Object[][] datalog = {
-                        { 1, "Booked a room", "22-11-2022" },
-                        { 2, "Checked out", "23-11-2022" },
-                        { 3, "Checked out", "24-11-2022" }
-                };
+                Object[][] datalog = prCtrl.getLogsObject();
                 DefaultTableModel modellog = new DefaultTableModel(datalog, columnslog);
 
                 JTable tablelog = new JTable(modellog);

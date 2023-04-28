@@ -2,12 +2,9 @@ package com.hotelmanager.model;
 
 import java.time.LocalDate;
 
-public class Extra
+public class Extra extends Property
 {
-    int id;
-    String type;
     private String name;
-    private int price;
 
     public Extra(int id, String type, String name, int price)
     {
@@ -16,9 +13,15 @@ public class Extra
         this.name = name;
         this.price = price;
     }
+
     public int getID()
     {
         return this.id;
+    }
+
+    public void setID(int id)
+    {
+        this.id = id;
     }
 
     public String getName()
@@ -49,6 +52,11 @@ public class Extra
     public String getType()
     {
         return type;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
     }
     // public void setProperty(ArrayList<Property> property) {
     // this.property=property;
