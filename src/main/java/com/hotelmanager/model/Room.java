@@ -1,21 +1,47 @@
 package com.hotelmanager.model;
 
-public class Room
+public class Room extends Property
 {
-    private int id;
-    private String type;
-    private int price;
+    private int status;
 
     public Room(int id, String type, int price)
     {
         this.id = id;
         this.type = type;
         this.price = price;
+        this.status = 1;
+    }
+    public Room(int id, String type, int price, int status)
+    {
+        this.id = id;
+        this.type = type;
+        this.price = price;
+        this.status = status;
     }
 
     public int getID()
     {
-        return this.id;
+        return id;
+    }
+
+    public void setID(int id)
+    {
+        this.id = id;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    public int getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(int status)
+    {
+        this.status = status;
     }
 
     // public void setId(int id) {

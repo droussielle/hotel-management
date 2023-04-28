@@ -120,6 +120,11 @@ public class Reservation
         return status;
     }
 
+    public String getStatusString()
+    {
+        String s;
+        return s = (status == 0) ? "Staying" : "Checked out";
+    }
     public void setStatus(int status)
     {
         this.status = status;

@@ -4,17 +4,17 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import com.hotelmanager.model.Authenticate;
+import com.hotelmanager.model.Admin;
 
 //import javax.swing.table.*;
 public class LoginUI {
     private JFrame frame;
-    private Authenticate auth;
+    private Admin auth;
 
     // private JTable table;
     // private DefaultTableModel model;
     public LoginUI() {
-        auth = new Authenticate();
+        auth = new Admin();
         createLoginUI();
     }
 

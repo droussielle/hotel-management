@@ -217,7 +217,8 @@ public final class Storage
             {
                 roomList.add(new Room(rs.getInt("id"),
                         rs.getString("type"),
-                        rs.getInt("price")));
+                        rs.getInt("price"),
+                        rs.getInt(("status"))));
             }
         } catch (SQLException e)
         {
