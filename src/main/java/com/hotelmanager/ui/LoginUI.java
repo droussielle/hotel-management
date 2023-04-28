@@ -72,7 +72,7 @@ public class LoginUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String username = userNameField.getText();
-                String password = new String(passwordField.getText());
+                String password = new String(passwordField.getPassword());
                 boolean isAuthenticated = auth.checkLogin(username, password);
                 if (!isAuthenticated) {
                     JOptionPane.showMessageDialog(null, "Invalid username or password.");
