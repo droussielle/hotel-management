@@ -87,7 +87,7 @@ public class Home {
         bot_NORTHpanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 1, 1, 1, Color.BLACK),
                 new EmptyBorder(10, 10, 10, 10)));
-        bot_NORTHpanel.setLayout(new GridLayout(0, 7));
+        bot_NORTHpanel.setLayout(new GridLayout(0, 6));
 
         ImageIcon bookButton_icon = new ImageIcon("src/main/resources/book_icon.png");
         JButton bookButton = new JButton("Book", bookButton_icon);
@@ -95,7 +95,7 @@ public class Home {
         bookButton.setFocusPainted(false);
 
         ImageIcon editButton_icon = new ImageIcon("src/main/resources/edit_icon.png");
-        JButton editButton = new JButton("Edit", editButton_icon);
+        JButton editButton = new JButton("Reservations", editButton_icon);
         // editButton.setPreferredSize(new Dimension(300,40));
         editButton.setContentAreaFilled(false);
         editButton.setFocusPainted(false);
@@ -126,7 +126,6 @@ public class Home {
         bot_NORTHpanel.add(editButton);
         // bot_NORTHpanel.add(checkoutButton);
         bot_NORTHpanel.add(searchButton);
-        bot_NORTHpanel.add(new JLabel());
         bot_NORTHpanel.add(new JLabel());
         bot_NORTHpanel.add(new JLabel());
         // bot_NORTHpanel.add(propertybButton);
@@ -525,6 +524,9 @@ public class Home {
                             MyPanel checkout_Main = new MyPanel();
                             checkout_Main.setLayout(new BorderLayout());
 
+                            JPanel checkout_Main_top_image = new JPanel(new GridLayout(0, 1));
+                            JPanel checkout_Main_top_content = new JPanel(new GridLayout(0, 1));
+
                             MyPanel checkout_Main_top = new MyPanel();
                             checkout_Main_top.setLayout(new GridLayout(0, 1));
                             checkout_Main_top.setBorder(BorderFactory.createCompoundBorder(
@@ -537,14 +539,14 @@ public class Home {
                             Icon newIcon = new ImageIcon(image);
                             JLabel hotLabel = new JLabel(newIcon);
 
-                            checkout_Main_top.add(new JLabel());
-                            checkout_Main_top.add(hotLabel);
+                            checkout_Main_top_image.add(new JLabel());
+                            checkout_Main_top_image.add(hotLabel);
 
                             JLabel title_checkout = new JLabel("Hóa đơn");
                             title_checkout.setHorizontalAlignment(JLabel.CENTER);
                             title_checkout.setVerticalAlignment(JLabel.CENTER);
                             title_checkout.setFont(new Font(title_checkout.getFont().getName(), Font.BOLD, 24));
-                            checkout_Main_top.add(title_checkout);
+                            checkout_Main_top_content.add(title_checkout);
 
                             JLabel name = new JLabel("Tên:" + "Chuỗi cần được gán vào");
                             Font font = name.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước
@@ -556,7 +558,7 @@ public class Home {
                                                                                                                  // của
                                                                                                                  // chữ
                             name.setFont(font);
-                            checkout_Main_top.add(name);
+                            checkout_Main_top_content.add(name);
 
                             JLabel Phone = new JLabel("SĐT:" + "Chuỗi cần được gán vào");
                             font = Phone.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
@@ -568,7 +570,7 @@ public class Home {
                                                                                                                  // chữ
                             Phone.setFont(font);
                             Phone.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
-                            checkout_Main_top.add(Phone);
+                            checkout_Main_top_content.add(Phone);
 
                             JLabel room = new JLabel("Phòng:" + "Chuỗi cần được gán vào");
                             font = room.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
@@ -579,7 +581,7 @@ public class Home {
                                                                                                                  // của
                                                                                                                  // chữ
                             room.setFont(font);
-                            checkout_Main_top.add(room);
+                            checkout_Main_top_content.add(room);
 
                             JLabel datein = new JLabel("Ngày đặt phòng:" + "Chuỗi cần được gán vào");
                             font = datein.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
@@ -590,7 +592,7 @@ public class Home {
                                                                                                                  // của
                                                                                                                  // chữ
                             datein.setFont(font);
-                            checkout_Main_top.add(datein);
+                            checkout_Main_top_content.add(datein);
 
                             JLabel dateout = new JLabel("Ngày trả phòng:" + "Chuỗi cần được gán vào");
                             font = dateout.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
@@ -602,7 +604,7 @@ public class Home {
                                                                                                                  // chữ
                             dateout.setFont(font);
                             dateout.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
-                            checkout_Main_top.add(dateout);
+                            checkout_Main_top_content.add(dateout);
 
                             JLabel extras = new JLabel("Phụ thu:");
                             font = extras.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích thước mới
@@ -613,7 +615,7 @@ public class Home {
                                                                                                                  // của
                                                                                                                  // chữ
                             extras.setFont(font);
-                            checkout_Main_top.add(extras);
+                            checkout_Main_top_content.add(extras);
                             // if nếu có extras thì thêm extras vô theo cấu trúc như figma hoặc như tôi đã
                             // làm ở trên
                             // dưới đây tôi sẽ giả sử là có extras
@@ -659,7 +661,7 @@ public class Home {
                                 total_extra.setFont(font);
                                 extras_checkout.add(total_extra);
                                 // }
-                                checkout_Main_top.add(extras_checkout);
+                                checkout_Main_top_content.add(extras_checkout);
                             }
 
                             JPanel total_checkout = new JPanel(new GridLayout(1, 2));
@@ -690,9 +692,12 @@ public class Home {
                             total_checkout.add(total_checkout_left);
                             total_checkout.add(total_checkout_right);
 
-                            checkout_Main_top.add(total_checkout);
+                            checkout_Main_top_content.add(total_checkout);
 
-                            checkout_Main.add(checkout_Main_top, BorderLayout.NORTH);
+                            checkout_Main_top.add(checkout_Main_top_image);
+                            checkout_Main_top.add(checkout_Main_top_content);
+
+                            checkout_Main.add(checkout_Main_top, BorderLayout.CENTER);
 
                             JPanel checkout_Footer_Panel = new JPanel(new GridLayout(1, 2));
                             checkout_Footer_Panel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
@@ -712,7 +717,7 @@ public class Home {
                             checkout_Footer_Panel.add(checkout_Footer_Panel_Left);
                             checkout_Footer_Panel.add(checkout_Footer_Panel_Right);
 
-                            contentPanel_checkOut.add(checkout_Main, BorderLayout.CENTER);
+                            contentPanel_checkOut.add(checkout_Main, BorderLayout.NORTH);
                             contentPanel_checkOut.add(checkout_Footer_Panel, BorderLayout.SOUTH);
 
                             cancelButton.addActionListener(new ActionListener() {
