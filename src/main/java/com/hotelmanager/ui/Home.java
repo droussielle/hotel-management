@@ -1282,7 +1282,7 @@ public class Home {
 
                 PropertyController prCtrl = new PropertyController();
                 String[] columnslog = { "ID", "Description", "Date" };
-                Object[][] datalog = prCtrl.getLogsObject();
+                Object[][] datalog = prCtrl.getLogsObject(); //hello
                 DefaultTableModel modellog = new DefaultTableModel(datalog, columnslog);
 
                 JTable tablelog = new JTable(modellog);
