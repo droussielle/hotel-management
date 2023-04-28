@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 public class Extra
 {
-    private int id;
-    private String type;
+    int id;
+    String type;
     private String name;
     private int price;
 

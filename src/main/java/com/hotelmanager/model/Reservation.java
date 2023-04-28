@@ -1,22 +1,135 @@
 package com.hotelmanager.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Reservation
 {
-    private String hotelName = "Khach san";
-    private LocalDate date;
-    private int receiptId;
-//    private ReceiptController.ReceiptDetails receiptDetails;
-//    private SimpleDateFormat format;
-//
-//    public Receipt(int receiptId, ReceiptController.ReceiptDetails receiptDetails, SimpleDateFormat format) {
-//        this.receiptId = receiptId;
-//        this.receiptDetails = receiptDetails;
-//        this.date = LocalDate.now();
-//        this.format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-//    }
-//
+    private int id;
+    private String name;
+    private String phoneNumber;
+    private String paymentMethod;
+    private String cardNumber;
+    private int roomID;
+    private int duration;
+    private LocalDateTime time;
+    private int status;
+
+    public Reservation(int id, String name, String phoneNumber, String paymentMethod, String cardNumber,
+                       int roomID, int duration, long time, int status)
+    {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.paymentMethod = paymentMethod;
+        this.cardNumber = cardNumber;
+        this.roomID = roomID;
+        this.duration = duration;
+        this.time = LocalDateTime.ofEpochSecond(time, 0, OffsetDateTime.now().getOffset());
+        this.status = status;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public String getPhoneNumber()
+    {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber)
+    {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPaymentMethod()
+    {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod)
+    {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getCardNumber()
+    {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber)
+    {
+        this.cardNumber = cardNumber;
+    }
+
+    public int getRoomID()
+    {
+        return roomID;
+    }
+
+    public void setRoomID(int roomID)
+    {
+        this.roomID = roomID;
+    }
+
+    public int getDuration()
+    {
+        return duration;
+    }
+
+    public void setDuration(int duration)
+    {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getTime()
+    {
+        return time;
+    }
+
+    public String getTimeString()
+    {
+        return this.time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+    public void setTime(LocalDateTime time)
+    {
+        this.time = time;
+    }
+
+    public int getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(int status)
+    {
+        this.status = status;
+    }
+
+    public void printReservation()
+    {
+        System.out.println(getId() + "\t" + getName() + "\t" + getPhoneNumber() + "\t" + getPaymentMethod()
+                + "\t" + getCardNumber() + "\t" + getRoomID() + "\t" + getDuration() + "\t" + getTimeString() + "\t" + getStatus());
+    }
 //    public int getRecreiptId() {
 //        return receiptId;
 //    }

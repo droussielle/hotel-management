@@ -6,7 +6,6 @@ public class AdminController {
 
     private String name;
     Authenticate authentication;
-    private Database database;
     private boolean login;
 
     public AdminController(String name) {
@@ -53,17 +52,5 @@ public class AdminController {
 //            }
 //        }
 //    }
-
-    public void addCustomer(Customer customer) {
-        if (login) {
-            database.addCustomer(customer);
-        }
-    }
-
-    public void removeCustomer(Customer customer) {
-        if (login) {
-            database.removeCustomer(customer);
-        }
-    }
 
 }

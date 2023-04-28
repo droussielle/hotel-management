@@ -363,12 +363,12 @@ public class Home {
                 bookPanel_right.add(roomAlbLabel, BorderLayout.NORTH);
 
                 List<Customer> csList = new ArrayList<Customer>();
-                csList.add(new Customer(1, "Chuong", "02039020101", "20201929292"));
-                csList.add(new Customer(2, "Rang", "0980988891", "219829232"));
-                csList.add(new Customer(3, "Tuan", "09831933245", "29992392"));
+                csList.add(new Customer("Chuong", "02039020101"));
+                csList.add(new Customer("Rang", "0980988891"));
+                csList.add(new Customer("Tuan", "09831933245"));
 
                 Object[] columnNames_dataRoomAlb = { "Type", "Name", "Price" };
-                Object[][] dataRoomAlb = new Object[csList.size()][3];
+                Object[][] dataRoomAlb = new Object[csList.size()][2];
                 // = csList;
                 // {
                 // { "Single", "101", "200 000" },
@@ -380,7 +380,6 @@ public class Home {
                 for (int i = 0; i < csList.size(); i++) {
                     dataRoomAlb[i][0] = csList.get(i).getName();
                     dataRoomAlb[i][1] = csList.get(i).getPhoneNumber();
-                    dataRoomAlb[i][2] = csList.get(i).getGovernmentId();
                 }
 
                 DefaultTableModel model_dataRoomAlb = new DefaultTableModel(dataRoomAlb, columnNames_dataRoomAlb);
