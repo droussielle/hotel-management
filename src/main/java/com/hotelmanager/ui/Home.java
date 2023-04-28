@@ -6,6 +6,8 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.awt.event.*;
 import java.awt.font.TextAttribute;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
@@ -744,7 +746,7 @@ public class Home {
                                 }
                             });
 
-                            printButton.addActionListener(new ActionListener() {
+                            saveButton.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     checkout_Main_top.printPanel();
@@ -753,6 +755,21 @@ public class Home {
                                     // BorderFactory.createLineBorder(new Color(0, 0, 0, 0)) // Viền trong suốt
                                     // ));
                                     // subFrame_Checkout.setVisible(false);
+                                }
+                            });
+                            printButton.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    // Create a PrinterJob and display the print dialog
+                                    PrinterJob job = PrinterJob.getPrinterJob();
+                                    if (job.printDialog()) {
+                                        try {
+                                            // Call the print() method of the Printable object to print the content
+                                            job.print();
+                                        } catch (PrinterException ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    }
                                 }
                             });
 
