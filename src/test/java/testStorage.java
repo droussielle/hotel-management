@@ -23,10 +23,13 @@ public class testStorage
 //        Reservation test = getSingleReservation(2);
 //        test.printReservation();
 
-        PropertyController hotelProperty = new PropertyController();
-        Object[][] avroomobj = hotelProperty.getAvailableRoomsObject();
-        int a = 1;
-        System.out.println(hotelProperty.validateRoom(a, avroomobj));
+        try
+        {
+            updateRoomsStatus(203,1);
+        } catch (Exception e)
+        {
+//            System.out.println(e.getMessage());
+        }
         System.out.println("Hello, World!");
 
     }

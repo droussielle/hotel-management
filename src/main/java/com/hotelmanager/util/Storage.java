@@ -184,7 +184,7 @@ public final class Storage
             pstmt.executeUpdate();
         } catch (SQLException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Exception during insert to reservations: " + e.getMessage());
         }
     }
 
@@ -392,20 +392,15 @@ public final class Storage
     }
 
     /* Update -----------------------------------------------------------------------*/
-    public static void updateSingle(String tableName, String columnName, String newValue,
-                             String condition1, String condition2)
+    public static void updateRoomsStatus(int roomID, int newValue)
     {
-        String sql = "UPDATE ? SET ? = ? WHERE ? = ?";
-
+        String sql = "UPDATE rooms SET status = ? WHERE id = ?";
         try (Connection conn = connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
             // set the corresponding param
-            pstmt.setString(1, tableName);
-            pstmt.setString(2, columnName);
-            pstmt.setString(3, newValue);
-            pstmt.setString(4, condition1);
-            pstmt.setString(5, condition2);
+            pstmt.setInt(1, newValue);
+            pstmt.setInt(2, roomID);
             // update
             pstmt.executeUpdate();
         } catch (SQLException e)
@@ -414,73 +409,18 @@ public final class Storage
         }
     }
 
-    public static void updateSingle(String tableName, String columnName, int newValue,
-                             String condition1, int condition2)
+    public static void updateExtras()
     {
-        String sql = "UPDATE ? SET ? = ? WHERE ? = ?";
 
-        try (Connection conn = connectDatabase();
-             PreparedStatement pstmt = conn.prepareStatement(sql))
-        {
-            // set the corresponding param
-            pstmt.setString(1, tableName);
-            pstmt.setString(2, columnName);
-            pstmt.setInt(3, newValue);
-            pstmt.setString(4, condition1);
-            pstmt.setInt(5, condition2);
-            // update
-            pstmt.executeUpdate();
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
     }
 
-    public static void updateDouble(String tableName, String columnName1, String newValue1,
-                             String columnName2, String newValue2, String condition1, String condition2)
+    public static void updateReservationExtras()
     {
-        String sql = "UPDATE ? SET ? = ?, ? = ? WHERE ? = ?";
 
-        try (Connection conn = connectDatabase();
-             PreparedStatement pstmt = conn.prepareStatement(sql))
-        {
-            // set the corresponding param
-            pstmt.setString(1, tableName);
-            pstmt.setString(2, columnName1);
-            pstmt.setString(3, newValue1);
-            pstmt.setString(4, columnName2);
-            pstmt.setString(5, newValue2);
-            pstmt.setString(6, condition1);
-            pstmt.setString(7, condition2);
-            // update
-            pstmt.executeUpdate();
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
     }
 
-    public static void updateDouble(String tableName, String columnName1, int newValue1,
-                             String columnName2, int newValue2, String condition1, int condition2)
+    public static void updateReservations()
     {
-        String sql = "UPDATE ? SET ? = ?, ? = ? WHERE ? = ?";
 
-        try (Connection conn = connectDatabase();
-             PreparedStatement pstmt = conn.prepareStatement(sql))
-        {
-            // set the corresponding param
-            pstmt.setString(1, tableName);
-            pstmt.setString(2, columnName1);
-            pstmt.setInt(3, newValue1);
-            pstmt.setString(4, columnName2);
-            pstmt.setInt(5, newValue2);
-            pstmt.setString(6, condition1);
-            pstmt.setInt(7, condition2);
-            // update
-            pstmt.executeUpdate();
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
     }
 }

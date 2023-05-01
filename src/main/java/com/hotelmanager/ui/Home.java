@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 
 import com.hotelmanager.controller.*;
+import com.hotelmanager.model.Admin;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -407,24 +408,11 @@ public class Home
                 roomAlbLabel.setFont(new Font("Arial", Font.BOLD, 16));
                 bookPanel_right.add(roomAlbLabel, BorderLayout.NORTH);
 
-//                List<Customer> csList = new ArrayList<Customer>();
-//                csList.add(new Customer("Chuong", "02039020101"));
-//                csList.add(new Customer("Rang", "0980988891"));
-//                csList.add(new Customer("Tuan", "09831933245"));
                 PropertyController hotelProperty = new PropertyController();
+                AdminController admin = new AdminController();
 
-//                Object[] columnNames_dataRoomAlb = {"ID", "Name", "Phone number", "Payment method", "Card no.", "Room",
-//                                                    "Duration (days)", "Time booked", "Status"};
                 Object[] columnNames_dataRoomAlb = {"Room no.", "Type", "Price"};
                 Object[][] dataRoomAlb = hotelProperty.getAvailableRoomsObject();
-                // = csList;
-                // {
-                // { "Single", "101", "200 000" },
-                // { "Double", "221", "300 000" },
-                // { "Single", "217", "150 000" },
-                // { "Single", "602", "180 000" },
-                // { "Double", "779", "350 000" }
-                // };
 
                 DefaultTableModel model_dataRoomAlb = new DefaultTableModel(dataRoomAlb, columnNames_dataRoomAlb);
                 JTable table_dataRoomAlb = new JTable(model_dataRoomAlb);
@@ -470,12 +458,12 @@ public class Home
                         String cardNumberString = cardNumberField.getText();
                         String roomString = roomField.getText();
                         String paymentMethod = (String) dropdown_paymentMethod.getSelectedItem();
-                        int phoneNumber, cardNumber, roomID;
+                        String durationString = durationField.getText();
+                        int roomID, duration;
                         try
                         {
-                            phoneNumber = Integer.parseInt(phoneNumberString);
-                            cardNumber = Integer.parseInt("0" + cardNumberString);
                             roomID = Integer.parseInt(roomString);
+                            duration = Integer.parseInt(durationString);
                         }
                         catch (NumberFormatException exception)
                         {
@@ -497,6 +485,16 @@ public class Home
                         if (paymentMethod == "Cash" && !cardNumberString.isEmpty())
                         {
                             JOptionPane.showMessageDialog(frame, "Please clear credit card number!");
+                            return;
+                        }
+                        try
+                        {
+                            admin.bookRoom(customerName, phoneNumberString, paymentMethod, cardNumberString,
+                                    roomID, duration);
+                        }
+                        catch (Exception javaex)
+                        {
+                            JOptionPane.showMessageDialog(frame, "" + javaex.getMessage());
                             return;
                         }
                         contentPanel.remove(SOUTHpanel);

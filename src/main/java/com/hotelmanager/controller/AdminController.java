@@ -6,27 +6,20 @@ import static com.hotelmanager.util.Storage.*;
 
 public class AdminController
 {
-
-    private String name;
-    Admin authentication;
-    private boolean login;
-
-    public AdminController(String name)
+    public AdminController()
     {
-        this.name = name;
-        this.login = false;
     }
 
     public void bookRoom(String name, String phoneNumber, String paymentMethod,
-                         String cardNumber, int roomID, int duration)
+                         String cardNumber, int roomID, int duration) throws Exception
     {
         insertToReservations(name, phoneNumber, paymentMethod, cardNumber, roomID, duration);
-        updateSingle("rooms", "status", 0, "id", roomID);
+        updateRoomsStatus(roomID, 0);
     }
 
-    public void checkout(int reservationID)
+    public void checkout(int reservationID) throws Exception
     {
         Reservation reservation = getSingleReservation(reservationID);
-        updateSingle("rooms", "status", 1, "id", reservation.getRoomID());
+        updateRoomsStatus(reservation.getRoomID(), 1);
     }
 }
