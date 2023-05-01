@@ -2,6 +2,7 @@ package com.hotelmanager.ui;
 
 import java.awt.*;
 import java.net.URL;
+import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,6 +20,7 @@ import javax.swing.*;
 
 import com.hotelmanager.controller.*;
 import com.hotelmanager.model.Admin;
+import com.hotelmanager.model.Reservation;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -890,7 +892,6 @@ public class Home
                             JOptionPane.showMessageDialog(null, "Please select 1 item");
                             return;
                         }
-
                         frame.getContentPane().removeAll();
                         contentPanel.remove(SOUTHpanel);
                         SOUTHpanel.removeAll();
@@ -941,7 +942,7 @@ public class Home
 
                         JTextField phoneNumberField = new JTextField(20);
                         // Phần lấy số đth từ BE
-                        phoneNumberField.setText("Số điện thoại");
+                        phoneNumberField.setText(modelEdit.getValueAt(rowtableEdit, 2).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 3;
                         bookPanel_left_top.add(phoneNumberField, constraints);
@@ -950,16 +951,18 @@ public class Home
                         constraints.gridy = 4;
                         bookPanel_left_top.add(new JLabel("Card Number"), constraints);
 
-                        JTextField cardNumber = new JTextField(20);
+                        JTextField cardNumberField = new JTextField(20);
+                        cardNumberField.setText(modelEdit.getValueAt(rowtableEdit, 4).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 4;
-                        bookPanel_left_top.add(cardNumber, constraints);
+                        bookPanel_left_top.add(cardNumberField, constraints);
 
                         constraints.gridx = 0;
                         constraints.gridy = 5;
                         bookPanel_left_top.add(new JLabel("Room"), constraints);
 
                         JTextField roomField = new JTextField(20);
+                        roomField.setText(modelEdit.getValueAt(rowtableEdit, 5).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 5;
                         bookPanel_left_top.add(roomField, constraints);
@@ -979,6 +982,7 @@ public class Home
                         bookPanel_left_top.add(new JLabel("Duration "), constraints);
 
                         JTextField durationField = new JTextField(20);
+                        durationField.setText(modelEdit.getValueAt(rowtableEdit, 6).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 7;
                         bookPanel_left_top.add(durationField, constraints);
@@ -1181,9 +1185,9 @@ public class Home
                                 // Lấy dữ liệu ở đây
                                 String customerName = customerNameField.getText();
                                 String phoneNumber = phoneNumberField.getText();
-                                String ID = cardNumber.getText();
+                                String cardNumber = cardNumberField.getText();
                                 String room = roomField.getText();
-                                if (customerName.isEmpty() || phoneNumber.isEmpty() || ID.isEmpty() ||
+                                if (customerName.isEmpty() || phoneNumber.isEmpty() || cardNumber.isEmpty() ||
                                         room.isEmpty())
                                 {
                                     JOptionPane.showMessageDialog(frame, "Please fill in all fields!");
@@ -1264,8 +1268,7 @@ public class Home
                             JOptionPane.showMessageDialog(frame, "Please enter what you want to search");
                             return;
                         }
-                        PropertyController prCtrl = new PropertyController();
-                        Object[][] searchData = prCtrl.getAvailableRoomsObject();
+                        Object[][] searchData = hotelProperty.getAvailableRoomsObject();
                         Object[][] newSearchData = new Object[1][3];
                         newSearchData[0][0] = searchData[0][0];
                         newSearchData[0][1] = searchData[0][1];
