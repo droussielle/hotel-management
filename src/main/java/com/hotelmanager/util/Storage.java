@@ -17,7 +17,7 @@ public final class Storage
     /* Connect -----------------------------------------------------------------------*/
     public static Connection connectDatabase()
     {
-        String url = "jdbc:sqlite:src/main/data/" + fileName;
+        String url = "jdbc:sqlite:" + fileName;
         Connection conn = null;
         try
         {
@@ -55,7 +55,7 @@ public final class Storage
             {
                 DatabaseMetaData meta = conn.getMetaData();
                 System.out.println("The driver name is " + meta.getDriverName());
-                System.out.println("A new database has been created.");
+                System.out.println("A new database has been created at fileDirectory/" + fileName);
             }
 
         } catch (SQLException e)
@@ -67,7 +67,8 @@ public final class Storage
     public static void createNewTable(String sql)
     {
         // SQLite connection string
-        try (Connection conn = connectDatabase(); Statement stmt = conn.createStatement())
+        try (Connection conn = connectDatabase();
+             Statement stmt = conn.createStatement())
         {
             // create a new table
             stmt.execute(sql);
@@ -77,9 +78,27 @@ public final class Storage
         }
     }
 
+    public static void createNewTableBatch(ArrayList<String> sqlBatch)
+    {
+        // SQLite connection string
+        try (Connection conn = connectDatabase();
+             Statement stmt = conn.createStatement())
+        {
+            for(String s : sqlBatch)
+            {
+                stmt.addBatch(s);
+            }
+            // create a new table
+            stmt.executeBatch();
+        } catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
     /* Delete -----------------------------------------------------------------------*/
 
-    public void deleteFromTable_Single(String tableName, int toDel)
+    public static void deleteFromTable_Single(String tableName, int toDel)
     {
         String sql = "DELETE FROM ? WHERE id = ?";
 
@@ -97,7 +116,7 @@ public final class Storage
         }
     }
 
-    public void deleteFromTable_Single(String tableName, String toDel)
+    public static void deleteFromTable_Single(String tableName, String toDel)
     {
         String sql = "DELETE FROM ? WHERE id = ?";
 
@@ -187,7 +206,7 @@ public final class Storage
     /* Select -----------------------------------------------------------------------*/
     public static List<Customer> getCustomers()
     {
-        List<Customer> customerList = new ArrayList<Customer>();
+        List<Customer> customerList = new ArrayList<>();
         String sql = "SELECT DISTINCT name, phoneNumber FROM reservations";
         try (Connection conn = connectDatabase();
              Statement stmt = conn.createStatement();
@@ -207,7 +226,7 @@ public final class Storage
 
     public static List<Room> getAllRooms()
     {
-        List<Room> roomList = new ArrayList<Room>();
+        List<Room> roomList = new ArrayList<>();
         String sql = "SELECT * FROM rooms";
         try (Connection conn = connectDatabase();
              Statement stmt = conn.createStatement();
@@ -229,7 +248,7 @@ public final class Storage
 
     public static List<Room> getAvailableRooms()
     {
-        List<Room> roomList = new ArrayList<Room>();
+        List<Room> roomList = new ArrayList<>();
         String sql = "SELECT * FROM rooms WHERE status = 1";
         try (Connection conn = connectDatabase();
              Statement stmt = conn.createStatement();
@@ -250,7 +269,7 @@ public final class Storage
 
     public static List<Extra> getExtras()
     {
-        List<Extra> extraList = new ArrayList<Extra>();
+        List<Extra> extraList = new ArrayList<>();
         String sql = "SELECT * FROM extras";
         try (Connection conn = connectDatabase();
              Statement stmt = conn.createStatement();
@@ -272,7 +291,7 @@ public final class Storage
 
     public static List<Reservation> getReservations()
     {
-        List<Reservation> reservationList =  new ArrayList<Reservation>();
+        List<Reservation> reservationList =  new ArrayList<>();
         String sql = "SELECT * FROM reservations";
         try (Connection conn = connectDatabase();
              Statement stmt = conn.createStatement();
@@ -297,9 +316,34 @@ public final class Storage
         return reservationList;
     }
 
+    public static Reservation getSingleReservation(int reservationID)
+    {
+        Reservation reservation = null;
+        String sql = "SELECT * FROM reservations WHERE id = ?";
+        try (Connection conn = connectDatabase();
+             PreparedStatement pstmt = conn.prepareStatement(sql))
+        {
+            pstmt.setInt(1, reservationID);
+            ResultSet rs = pstmt.executeQuery();
+            reservation = new Reservation(rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getString("phoneNumber"),
+                    rs.getString("paymentMethod"),
+                    rs.getString("cardNumber"),
+                    rs.getInt("roomID"),
+                    rs.getInt("duration"),
+                    rs.getInt("time"),
+                    rs.getInt("status"));
+        } catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        return reservation;
+    }
+
     public static List<ReservationExtras> getReservationExtras(int reservationID)
     {
-        List<ReservationExtras> reservationExtrasList = new ArrayList<ReservationExtras>();
+        List<ReservationExtras> reservationExtrasList = new ArrayList<>();
         String sql = "SELECT extraID,type,name,price,COUNT(extraID) FROM reservation_extras " +
                     "INNER JOIN extras ON extras.id = reservation_extras.extraID " +
                     "WHERE reservationID = ? GROUP BY extraID";
@@ -327,7 +371,7 @@ public final class Storage
 
     public static List<Logs> getLogs()
     {
-        List<Logs> logList = new ArrayList<Logs>();
+        List<Logs> logList = new ArrayList<>();
         String sql = "SELECT * FROM logs";
         try (Connection conn = connectDatabase();
              Statement stmt = conn.createStatement();
@@ -348,7 +392,7 @@ public final class Storage
     }
 
     /* Update -----------------------------------------------------------------------*/
-    public void updateSingle(String tableName, String columnName, String newValue,
+    public static void updateSingle(String tableName, String columnName, String newValue,
                              String condition1, String condition2)
     {
         String sql = "UPDATE ? SET ? = ? WHERE ? = ?";
@@ -370,7 +414,7 @@ public final class Storage
         }
     }
 
-    public void updateSingle(String tableName, String columnName, int newValue,
+    public static void updateSingle(String tableName, String columnName, int newValue,
                              String condition1, int condition2)
     {
         String sql = "UPDATE ? SET ? = ? WHERE ? = ?";
@@ -392,7 +436,7 @@ public final class Storage
         }
     }
 
-    public void updateDouble(String tableName, String columnName1, String newValue1,
+    public static void updateDouble(String tableName, String columnName1, String newValue1,
                              String columnName2, String newValue2, String condition1, String condition2)
     {
         String sql = "UPDATE ? SET ? = ?, ? = ? WHERE ? = ?";
@@ -416,7 +460,7 @@ public final class Storage
         }
     }
 
-    public void updateDouble(String tableName, String columnName1, int newValue1,
+    public static void updateDouble(String tableName, String columnName1, int newValue1,
                              String columnName2, int newValue2, String condition1, int condition2)
     {
         String sql = "UPDATE ? SET ? = ?, ? = ? WHERE ? = ?";

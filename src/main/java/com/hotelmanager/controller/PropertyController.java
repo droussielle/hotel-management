@@ -3,6 +3,7 @@ package com.hotelmanager.controller;
 import com.hotelmanager.model.*;
 import com.hotelmanager.util.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.hotelmanager.util.Storage.*;
@@ -52,5 +53,32 @@ public class PropertyController
             logsObject[i][2] = logsList.get(i).getTimeString();
         }
         return logsObject;
+    }
+
+    public ArrayList<Integer> getAvailableRoomsList()
+    {
+        List<Room> availableRoomsList = getAvailableRooms();
+        ArrayList<Integer> availableRooms = new ArrayList<>();
+        for(Room r:availableRoomsList)
+        {
+            availableRooms.add(r.getID());
+        }
+        return availableRooms;
+    }
+
+    public ArrayList<Integer> getAvailableRoomsListFromObject(Object[][] availableRoomsObject)
+    {
+        ArrayList<Integer> availableRooms = new ArrayList<>();
+        for(int i = 0; i<availableRoomsObject.length; i++)
+        {
+            availableRooms.add((Integer) availableRoomsObject[i][0]);
+        }
+        return availableRooms;
+    }
+
+    public boolean validateRoom(int roomID, Object[][] availableRoomsObject)
+    {
+        ArrayList<Integer> availableRooms = getAvailableRoomsListFromObject(availableRoomsObject);
+        return availableRooms.contains(roomID);
     }
 }

@@ -1,6 +1,7 @@
 package com.hotelmanager.ui;
 
 import java.awt.*;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -65,7 +66,9 @@ public class Home
         userNameLabel.setVerticalAlignment(JLabel.CENTER);
         top_NORTHpanel_Right.add(userNameLabel);
 
-        ImageIcon logOutButton_icon = new ImageIcon("src/main/resources/logOut_icon.png");
+        ClassLoader cldr = Thread.currentThread().getContextClassLoader();
+        URL logout_icon = cldr.getResource("logOut_icon.png");
+        ImageIcon logOutButton_icon = new ImageIcon(logout_icon);
         JButton logOutButton = new JButton("LogOut", logOutButton_icon);
         logOutButton.setPreferredSize(new Dimension(102, 20));
         logOutButton.setContentAreaFilled(false);
@@ -100,35 +103,39 @@ public class Home
                 new EmptyBorder(10, 10, 10, 10)));
         bot_NORTHpanel.setLayout(new GridLayout(0, 6));
 
-        ImageIcon bookButton_icon = new ImageIcon("src/main/resources/book_icon.png");
+        URL book_icon = cldr.getResource("book_icon.png");
+        ImageIcon bookButton_icon = new ImageIcon(book_icon);
         JButton bookButton = new JButton("Book", bookButton_icon);
         bookButton.setContentAreaFilled(false);
         bookButton.setFocusPainted(false);
 
-        ImageIcon editButton_icon = new ImageIcon("src/main/resources/edit_icon.png");
+        URL edit_icon = cldr.getResource("edit_icon.png");
+        ImageIcon editButton_icon = new ImageIcon(edit_icon);
         JButton editButton = new JButton("Reservations", editButton_icon);
         // editButton.setPreferredSize(new Dimension(300,40));
         editButton.setContentAreaFilled(false);
         editButton.setFocusPainted(false);
 
         // ImageIcon checkoutButton_icon = new
-        // ImageIcon("src/main/resources/checkout_icon.png");
+        // ImageIcon("resources/checkout_icon.png");
         // JButton checkoutButton = new JButton("Checkout", checkoutButton_icon);
         // checkoutButton.setContentAreaFilled(false);
         // checkoutButton.setFocusPainted(false);
 
-        ImageIcon searchButton_icon = new ImageIcon("src/main/resources/search_icon.png");
+        URL search_icon = cldr.getResource("search_icon.png");
+        ImageIcon searchButton_icon = new ImageIcon(search_icon);
         JButton searchButton = new JButton("Search", searchButton_icon);
         searchButton.setContentAreaFilled(false);
         searchButton.setFocusPainted(false);
 
         // ImageIcon propertyButton_icon = new
-        // ImageIcon("src/main/resources/property_icon.png");
-        // JButton propertybButton = new JButton("Property", propertyButton_icon);
-        // propertybButton.setContentAreaFilled(false);
-        // propertybButton.setFocusPainted(false);
+        // ImageIcon("resources/property_icon.png");
+        // JButton propertyButton = new JButton("Property", propertyButton_icon);
+        // propertyButton.setContentAreaFilled(false);
+        // propertyButton.setFocusPainted(false);
 
-        ImageIcon logButton_icon = new ImageIcon("src/main/resources/log_icon.png");
+        URL log_icon = cldr.getResource("log_icon.png");
+        ImageIcon logButton_icon = new ImageIcon(log_icon);
         JButton logButton = new JButton("Log", logButton_icon);
         logButton.setContentAreaFilled(false);
         logButton.setFocusPainted(false);
@@ -139,7 +146,7 @@ public class Home
         bot_NORTHpanel.add(searchButton);
         bot_NORTHpanel.add(new JLabel());
         bot_NORTHpanel.add(new JLabel());
-        // bot_NORTHpanel.add(propertybButton);
+        // bot_NORTHpanel.add(propertyButton);
         bot_NORTHpanel.add(logButton);
 
         NORTHpanel.add(bot_NORTHpanel, BorderLayout.SOUTH);
@@ -148,7 +155,6 @@ public class Home
         contentPanel.add(SOUTHpanel, BorderLayout.CENTER);
 
         frame.add(contentPanel, BorderLayout.CENTER);
-
         ActionListener bookButtonActionListener = new ActionListener()
         {
             @Override
@@ -210,10 +216,10 @@ public class Home
                 constraints.gridy = 4;
                 bookPanel_left_top.add(new JLabel("Card Number "), constraints);
 
-                JTextField cardNumber = new JTextField(20);
+                JTextField cardNumberField = new JTextField(20);
                 constraints.gridx = 1;
                 constraints.gridy = 4;
-                bookPanel_left_top.add(cardNumber, constraints);
+                bookPanel_left_top.add(cardNumberField, constraints);
 
                 constraints.gridx = 0;
                 constraints.gridy = 5;
@@ -397,12 +403,12 @@ public class Home
 //                csList.add(new Customer("Chuong", "02039020101"));
 //                csList.add(new Customer("Rang", "0980988891"));
 //                csList.add(new Customer("Tuan", "09831933245"));
-                PropertyController prCtrl = new PropertyController();
+                PropertyController hotelProperty = new PropertyController();
 
 //                Object[] columnNames_dataRoomAlb = {"ID", "Name", "Phone number", "Payment method", "Card no.", "Room",
 //                                                    "Duration (days)", "Time booked", "Status"};
                 Object[] columnNames_dataRoomAlb = {"Room no.", "Type", "Price"};
-                Object[][] dataRoomAlb = prCtrl.getAvailableRoomsObject();
+                Object[][] dataRoomAlb = hotelProperty.getAvailableRoomsObject();
                 // = csList;
                 // {
                 // { "Single", "101", "200 000" },
@@ -452,27 +458,47 @@ public class Home
                     {
                         // Lấy dữ liệu ở đây
                         String customerName = customerNameField.getText();
-                        String phoneNumber = phoneNumberField.getText();
-                        String ID = cardNumber.getText();
-                        String room = roomField.getText();
-                        if (customerName.isEmpty() || phoneNumber.isEmpty() || ID.isEmpty() ||
-                                room.isEmpty())
+                        String phoneNumberString = phoneNumberField.getText();
+                        String cardNumberString = cardNumberField.getText();
+                        String roomString = roomField.getText();
+                        String paymentMethod = (String) dropdown_paymentMethod.getSelectedItem();
+                        int phoneNumber, cardNumber, roomID;
+                        try
+                        {
+                            phoneNumber = Integer.parseInt(phoneNumberString);
+                            cardNumber = Integer.parseInt("0" + cardNumberString);
+                            roomID = Integer.parseInt(roomString);
+                        }
+                        catch (NumberFormatException exception)
+                        {
+                            JOptionPane.showMessageDialog(frame, "Non-number characters in field: \n" +
+                                    exception.getMessage());
+                            return;
+                        }
+                        if (!hotelProperty.validateRoom(roomID, dataRoomAlb))
+                        {
+                            JOptionPane.showMessageDialog(frame, "Please fill in a valid available room!");
+                            return;
+                        }
+                        if (customerName.isEmpty() || phoneNumberString.isEmpty() || roomString.isEmpty() ||
+                                (paymentMethod == "Credit card" && cardNumberString.isEmpty()))
                         {
                             JOptionPane.showMessageDialog(frame, "Please fill in all fields!");
                             return;
-                        } else
+                        }
+                        if (paymentMethod == "Cash" && !cardNumberString.isEmpty())
                         {
+                            JOptionPane.showMessageDialog(frame, "Please clear credit card number!");
+                            return;
                         }
                         contentPanel.remove(SOUTHpanel);
                         SOUTHpanel.removeAll();
                         contentPanel.add(SOUTHpanel, BorderLayout.CENTER);
-
-                        JOptionPane.showMessageDialog(frame, "Customer added successfully!");
+                        JOptionPane.showMessageDialog(frame, "Book successful!");
                         contentPanel.revalidate();
                         contentPanel.repaint();
                     }
                 });
-
                 frame.add(contentPanel, BorderLayout.CENTER);
                 frame.revalidate(); // Cập nhật lại giao diện
                 frame.repaint();
@@ -576,7 +602,8 @@ public class Home
                                     BorderFactory.createLineBorder(new Color(0, 0, 0, 0)) // Viền trong suốt
                             ));
 
-                            ImageIcon hotelIcon = new ImageIcon("src/main/resources/hotel_image.png");
+                            URL hotel_image = cldr.getResource("hotel_image.png");
+                            ImageIcon hotelIcon = new ImageIcon(hotel_image);
                             Image image = hotelIcon.getImage().getScaledInstance(170, 100, Image.SCALE_SMOOTH);
                             Icon newIcon = new ImageIcon(image);
                             JLabel hotLabel = new JLabel(newIcon);

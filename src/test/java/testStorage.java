@@ -1,3 +1,4 @@
+import com.hotelmanager.controller.PropertyController;
 import com.hotelmanager.model.*;
 
 import java.sql.Connection;
@@ -15,10 +16,23 @@ public class testStorage
 {
     public static void main(String[] args) throws SQLException
     {
-        Connection conn = connectDatabase();
-        LocalDateTime local = LocalDateTime.ofEpochSecond(System.currentTimeMillis()/1000, 0, OffsetDateTime.now().getOffset());
-        System.out.println(local.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+//        LocalDateTime local = LocalDateTime.ofEpochSecond(System.currentTimeMillis()/1000, 0, OffsetDateTime.now().getOffset());
+//        System.out.println(local.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
+//        printStorage();
+//        Reservation test = getSingleReservation(2);
+//        test.printReservation();
+
+        PropertyController hotelProperty = new PropertyController();
+        Object[][] avroomobj = hotelProperty.getAvailableRoomsObject();
+        int a = 1;
+        System.out.println(hotelProperty.validateRoom(a, avroomobj));
+        System.out.println("Hello, World!");
+
+    }
+
+    public static void printStorage()
+    {
         System.out.println("CUSTOMER LIST -----------------");
         List<Customer> customerList = getCustomers();
         for(Customer cs : customerList)
@@ -67,11 +81,6 @@ public class testStorage
         {
             rextra.printExtra();
         }
-        System.out.println("Hello, World!");
-
-//        List<Customer> csList = new ArrayList<Customer>();
-//        csList.add(new Customer("Chuong", "02039020101"));
-//        csList.add(new Customer("Rang", "0980988891"));
-//        csList.add(new Customer("Tuan", "09831933245"));
     }
 }
+

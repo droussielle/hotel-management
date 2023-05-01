@@ -2,6 +2,7 @@ package com.hotelmanager.ui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URL;
 import javax.swing.*;
 
 import com.hotelmanager.model.Admin;
@@ -30,8 +31,10 @@ public class LoginUI {
         constraints_Main.gridx = 0;
         constraints_Main.gridy = 0;
 
+        ClassLoader cldr = Thread.currentThread().getContextClassLoader();
+        URL hotel_image = cldr.getResource("hotel_image.png");
         JPanel panel_image = new JPanel(new BorderLayout());
-        ImageIcon hotelIcon = new ImageIcon("src/main/resources/hotel_image.png");
+        ImageIcon hotelIcon = new ImageIcon(hotel_image);
         Image image = hotelIcon.getImage().getScaledInstance(170, 100, Image.SCALE_SMOOTH);
         Icon newIcon = new ImageIcon(image);
         JLabel hotLabel = new JLabel(newIcon);
