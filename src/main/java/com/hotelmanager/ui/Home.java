@@ -242,6 +242,14 @@ public class Home
 
                 constraints.gridx = 0;
                 constraints.gridy = 7;
+                bookPanel_left_top.add(new JLabel("Duration"), constraints);
+                JTextField durationField = new JTextField(20);
+                constraints.gridx = 1;
+                constraints.gridy = 7;
+                bookPanel_left_top.add(durationField, constraints);
+
+                constraints.gridx = 0;
+                constraints.gridy = 8;
                 bookPanel_left_top.add(new JLabel("Extras"), constraints);
 
                 JButton addMoreButton = new JButton("Add..");
@@ -381,7 +389,7 @@ public class Home
 
                 JPanel addMorePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
                 constraints.gridx = 1;
-                constraints.gridy = 7;
+                constraints.gridy = 8;
                 addMorePanel.add(addMoreButton);
                 bookPanel_left_top.add(addMorePanel, constraints);
 
@@ -949,6 +957,15 @@ public class Home
 
                         constraints.gridx = 0;
                         constraints.gridy = 7;
+                        bookPanel_left_top.add(new JLabel("Duration "), constraints);
+
+                        JTextField durationField = new JTextField(20);
+                        constraints.gridx = 1;
+                        constraints.gridy = 7;
+                        bookPanel_left_top.add(durationField, constraints);
+
+                        constraints.gridx = 0;
+                        constraints.gridy = 8;
                         bookPanel_left_top.add(new JLabel("Extras"), constraints);
 
                         JButton addMoreButton = new JButton("Add..");
@@ -1063,7 +1080,7 @@ public class Home
 
                         JPanel addMorePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
                         constraints.gridx = 1;
-                        constraints.gridy = 7;
+                        constraints.gridy = 8;
                         addMorePanel.add(addMoreButton);
                         bookPanel_left_top.add(addMorePanel, constraints);
 
@@ -1177,80 +1194,7 @@ public class Home
                 frame.repaint();
             }
         });
-        // checkoutButton.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // frame.getContentPane().removeAll();
-        // contentPanel.remove(SOUTHpanel);
-        // SOUTHpanel.removeAll();
-
-        // JPanel editPanel = new JPanel(new BorderLayout());
-        // JPanel NORTHdeitPanel = new JPanel(new BorderLayout());
-        // JPanel SOUTHeditPanel = new JPanel(new GridLayout(1, 2));
-        // SOUTHeditPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-        // JPanel SOUTH_left_editPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        // JPanel SOUTH_right_editPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-        // String[] columnsEdit = { "ID", "Customer Name", "Room", "Checkin Date" };
-        // Object[][] dataEdit = {
-        // { 1, "John", 25, "11" },
-        // { 2, "Sarah", 30, "12" },
-        // { 3, "Tom", 20, "13" }
-        // };
-        // DefaultTableModel modelEdit = new DefaultTableModel(dataEdit, columnsEdit);
-
-        // JTable tableEdit = new JTable(modelEdit);
-        // tableEdit.setDefaultEditor(Object.class, null);
-        // tableEdit.getTableHeader().setReorderingAllowed(false);
-        // tableEdit.setRowSelectionAllowed(true);
-        // tableEdit.setColumnSelectionAllowed(false);
-
-        // JScrollPane scrollPaneEdit = new JScrollPane(tableEdit);
-        // scrollPaneEdit.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-
-        // JButton editEditButton = new JButton("Checkout");
-        // JButton cancelEditButton = new JButton("Cancel");
-
-        // NORTHdeitPanel.add(scrollPaneEdit, BorderLayout.NORTH);
-        // SOUTH_right_editPanel.add(editEditButton);
-        // SOUTH_left_editPanel.add(cancelEditButton);
-        // SOUTHeditPanel.add(SOUTH_left_editPanel);
-        // SOUTHeditPanel.add(SOUTH_right_editPanel);
-        // editPanel.add(NORTHdeitPanel, BorderLayout.CENTER);
-        // editPanel.add(SOUTHeditPanel, BorderLayout.SOUTH);
-        // SOUTHpanel.add(editPanel, BorderLayout.CENTER);
-        // contentPanel.add(SOUTHpanel, BorderLayout.CENTER);
-
-        // cancelEditButton.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // contentPanel.remove(SOUTHpanel);
-        // SOUTHpanel.removeAll();
-
-        // contentPanel.add(SOUTHpanel);
-        // contentPanel.revalidate();
-        // contentPanel.repaint();
-
-        // }
-        // });
-
-        // editEditButton.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // int rowtableEdit = tableEdit.getSelectedRow();
-        // if (rowtableEdit == -1) {
-        // JOptionPane.showMessageDialog(null, "Please select 1 item");
-        // return;
-        // }
-        // }
-        // });
-
-        // frame.add(contentPanel, BorderLayout.CENTER);
-        // frame.revalidate(); // Cập nhật lại giao diện
-        // frame.repaint();
-        // }
-        // });
+        
         searchButton.addActionListener(new ActionListener()
         {
             @Override
@@ -1323,12 +1267,6 @@ public class Home
                         DefaultTableModel searchTableModel = new DefaultTableModel(newSearchData,
                                 columnNames);
                         tableSrch.setModel(searchTableModel);
-                        // DefaultTableModel model = (DefaultTableModel) tableSrch.getModel();
-                        // Object[] newRowData = { dropdown_Type_search.getSelectedItem().toString(),
-                        // "Bun bo",
-                        // searchField.getText() };
-                        // model.addRow(newRowData);
-                        // tableSrch.repaint();
                     }
                 });
 
