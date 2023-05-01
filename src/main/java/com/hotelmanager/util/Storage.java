@@ -391,6 +391,23 @@ public final class Storage
         return logList;
     }
 
+    public static int getRoomPrice(int roomID)
+    {
+        int roomPrice = 0;
+        String sql = "SELECT price FROM rooms WHERE id = ?";
+        try (Connection conn = connectDatabase();
+             PreparedStatement pstmt = conn.prepareStatement(sql))
+        {
+            pstmt.setInt(1, roomID);
+            ResultSet rs = pstmt.executeQuery();
+            roomPrice = rs.getInt("price");
+        } catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        return roomPrice;
+    }
+
     /* Update -----------------------------------------------------------------------*/
     public static void updateRoomsStatus(int roomID, int newValue)
     {
@@ -409,6 +426,22 @@ public final class Storage
         }
     }
 
+    public static void updateReservationsStatus(int reservationID, int newValue)
+    {
+        String sql = "UPDATE reservations SET status = ? WHERE id = ?";
+        try (Connection conn = connectDatabase();
+             PreparedStatement pstmt = conn.prepareStatement(sql))
+        {
+            // set the corresponding param
+            pstmt.setInt(1, newValue);
+            pstmt.setInt(2, reservationID);
+            // update
+            pstmt.executeUpdate();
+        } catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
     public static void updateExtras()
     {
 

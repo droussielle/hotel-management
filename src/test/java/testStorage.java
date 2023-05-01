@@ -1,3 +1,4 @@
+import com.hotelmanager.controller.AdminController;
 import com.hotelmanager.controller.PropertyController;
 import com.hotelmanager.model.*;
 
@@ -14,7 +15,7 @@ import static com.hotelmanager.util.Storage.*;
 
 public class testStorage
 {
-    public static void main(String[] args) throws SQLException
+    public static void main(String[] args) throws Exception
     {
 //        LocalDateTime local = LocalDateTime.ofEpochSecond(System.currentTimeMillis()/1000, 0, OffsetDateTime.now().getOffset());
 //        System.out.println(local.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
@@ -31,7 +32,8 @@ public class testStorage
 //            System.out.println(e.getMessage());
         }
         System.out.println("Hello, World!");
-
+        AdminController admin = new AdminController();
+        System.out.println(admin.calculateTotalPrice(2));
     }
 
     public static void printStorage()

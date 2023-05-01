@@ -149,13 +149,14 @@ public class Home
         bot_NORTHpanel.add(new JLabel());
         // bot_NORTHpanel.add(propertyButton);
         bot_NORTHpanel.add(logButton);
-
         NORTHpanel.add(bot_NORTHpanel, BorderLayout.SOUTH);
-
         final JPanel SOUTHpanel = new JPanel(new BorderLayout());
         contentPanel.add(SOUTHpanel, BorderLayout.CENTER);
-
         frame.add(contentPanel, BorderLayout.CENTER);
+
+        PropertyController hotelProperty = new PropertyController();
+        AdminController admin = new AdminController();
+
         ActionListener bookButtonActionListener = new ActionListener()
         {
             @Override
@@ -408,9 +409,6 @@ public class Home
                 roomAlbLabel.setFont(new Font("Arial", Font.BOLD, 16));
                 bookPanel_right.add(roomAlbLabel, BorderLayout.NORTH);
 
-                PropertyController hotelProperty = new PropertyController();
-                AdminController admin = new AdminController();
-
                 Object[] columnNames_dataRoomAlb = {"Room no.", "Type", "Price"};
                 Object[][] dataRoomAlb = hotelProperty.getAvailableRoomsObject();
 
@@ -494,7 +492,7 @@ public class Home
                         }
                         catch (Exception javaex)
                         {
-                            JOptionPane.showMessageDialog(frame, "" + javaex.getMessage());
+                            JOptionPane.showMessageDialog(frame, javaex.getMessage());
                             return;
                         }
                         contentPanel.remove(SOUTHpanel);
@@ -579,6 +577,23 @@ public class Home
                     public void actionPerformed(ActionEvent e)
                     {
                         int rowtableEdit = tableEdit.getSelectedRow();
+                        // get rate -> calculate total price
+                        if(tableEdit.getValueAt(rowtableEdit, 8) == "Checked out")
+                        {
+                            JOptionPane.showMessageDialog(frame, "Already checked out!");
+                            return;
+                        }
+                        int reservationID = Integer.parseInt(String.valueOf(tableEdit.getValueAt(rowtableEdit, 0)));
+                        int totalPrice = 0;
+                        try
+                        {
+                            totalPrice = admin.calculateTotalPrice(reservationID);
+                        } catch (Exception ex)
+                        {
+                            JOptionPane.showMessageDialog(frame, "Failed to calculate total price.");
+                            return;
+                        }
+                        String totalPriceString = String.valueOf(totalPrice);
                         if (rowtableEdit == -1)
                         {
                             JOptionPane.showMessageDialog(null, "Please select 1 item");
@@ -587,10 +602,18 @@ public class Home
                         int result = JOptionPane.showConfirmDialog(frame,
                                 "Are you sure to checkout?" +
                                         "\nName: " + tableEdit.getValueAt(rowtableEdit, 1) + "\nRoom: "
-                                        + tableEdit.getValueAt(rowtableEdit, 5) + "\nTotal: 180000",
+                                        + tableEdit.getValueAt(rowtableEdit, 5) + "\nTotal: " + totalPriceString,
                                 "Check-out confirmation", JOptionPane.YES_NO_OPTION);
                         if (result == JOptionPane.YES_OPTION)
                         {
+                            try
+                            {
+                                admin.checkout(reservationID);
+                            } catch (Exception ex)
+                            {
+                                JOptionPane.showMessageDialog(frame, "Failed to checkout: " + ex.getMessage());
+                                return;
+                            }
                             JDialog subFrame_Checkout = new JDialog(frame, "Checkout", true);
 
                             JPanel contentPanel_checkOut = new JPanel(new BorderLayout());
@@ -758,7 +781,7 @@ public class Home
                             title_total.setFont(font);
                             total_checkout_left.add(title_total);
 
-                            JLabel title_number = new JLabel("180 000 VND");
+                            JLabel title_number = new JLabel(totalPriceString);
                             font = title_number.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích
                             // thước mới
                             // font = font.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT,
@@ -782,8 +805,8 @@ public class Home
                             JPanel checkout_Footer_Panel_Left = new JPanel(new FlowLayout(FlowLayout.LEFT));
                             JPanel checkout_Footer_Panel_Right = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-                            JButton cancelButton = new JButton("Cancel");
-                            checkout_Footer_Panel_Left.add(cancelButton);
+                            JButton closeButton = new JButton("Close");
+                            checkout_Footer_Panel_Left.add(closeButton);
 
                             JButton printButton = new JButton("Print");
                             checkout_Footer_Panel_Right.add(printButton);
@@ -797,7 +820,7 @@ public class Home
                             contentPanel_checkOut.add(checkout_Main, BorderLayout.NORTH);
                             contentPanel_checkOut.add(checkout_Footer_Panel, BorderLayout.SOUTH);
 
-                            cancelButton.addActionListener(new ActionListener()
+                            closeButton.addActionListener(new ActionListener()
                             {
                                 @Override
                                 public void actionPerformed(ActionEvent e)
@@ -805,7 +828,6 @@ public class Home
                                     subFrame_Checkout.setVisible(false);
                                 }
                             });
-
                             saveButton.addActionListener(new ActionListener()
                             {
                                 @Override
@@ -814,7 +836,6 @@ public class Home
                                     subFrame_Checkout.setVisible(false);
                                 }
                             });
-
                             saveButton.addActionListener(new ActionListener()
                             {
                                 @Override
@@ -1192,7 +1213,6 @@ public class Home
                 frame.repaint();
             }
         });
-        
         searchButton.addActionListener(new ActionListener()
         {
             @Override
