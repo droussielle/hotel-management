@@ -68,4 +68,9 @@ public class Room extends Property
         System.out.println(getID() + "\t" + getType() + "\t" + getPrice());
     }
 
+    public String getStatusString()
+    {
+        String s;
+        return s = (status == 0) ? "Occupied" : "Available";
+    }
 }

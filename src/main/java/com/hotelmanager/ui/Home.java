@@ -12,19 +12,11 @@ import java.awt.event.*;
 import java.awt.font.TextAttribute;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 
 import com.hotelmanager.controller.*;
-import com.hotelmanager.model.Admin;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.hotelmanager.util.Storage.*;
 
 public class Home
 {
@@ -52,11 +44,10 @@ public class Home
         JPanel top_NORTHpanel = new JPanel(new GridLayout(1, 2));
         top_NORTHpanel.setPreferredSize(new Dimension(1024, 30));
         top_NORTHpanel.setBackground(Color.LIGHT_GRAY);
-
         top_NORTHpanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         JLabel dateLabel = new JLabel();
-        dateLabel.setText("Today is: " + new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+        dateLabel.setText(" Today is: " + new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         dateLabel.setHorizontalAlignment(JLabel.LEFT);
 
         JPanel top_NORTHpanel_Right = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -70,7 +61,7 @@ public class Home
         ClassLoader cldr = Thread.currentThread().getContextClassLoader();
         URL logout_icon = cldr.getResource("logOut_icon.png");
         ImageIcon logOutButton_icon = new ImageIcon(logout_icon);
-        JButton logOutButton = new JButton("LogOut", logOutButton_icon);
+        JButton logOutButton = new JButton("Log Out", logOutButton_icon);
         logOutButton.setPreferredSize(new Dimension(102, 20));
         logOutButton.setContentAreaFilled(false);
         logOutButton.setFocusPainted(false);
@@ -79,7 +70,8 @@ public class Home
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                int choice = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn đăng xuất?", "Xác nhận",
+                int choice = JOptionPane.showConfirmDialog(null,
+                        "Are you sure you want to log out?", "Log out user",
                         JOptionPane.YES_NO_OPTION);
                 if (choice == JOptionPane.YES_OPTION)
                 {
@@ -106,60 +98,49 @@ public class Home
 
         URL book_icon = cldr.getResource("book_icon.png");
         ImageIcon bookButton_icon = new ImageIcon(book_icon);
-        JButton bookButton = new JButton("Book", bookButton_icon);
-        bookButton.setContentAreaFilled(false);
-        bookButton.setFocusPainted(false);
+        MyButton bookButton = new MyButton("Book", bookButton_icon);
 
         URL edit_icon = cldr.getResource("edit_icon.png");
         ImageIcon editButton_icon = new ImageIcon(edit_icon);
-        JButton editButton = new JButton("Reservations", editButton_icon);
-        // editButton.setPreferredSize(new Dimension(300,40));
-        editButton.setContentAreaFilled(false);
-        editButton.setFocusPainted(false);
-
-        // ImageIcon checkoutButton_icon = new
-        // ImageIcon("resources/checkout_icon.png");
-        // JButton checkoutButton = new JButton("Checkout", checkoutButton_icon);
-        // checkoutButton.setContentAreaFilled(false);
-        // checkoutButton.setFocusPainted(false);
+        MyButton reservationsButton = new MyButton("Reservations", editButton_icon);
+        // reservationsButton.setPreferredSize(new Dimension(300,40));
 
         URL search_icon = cldr.getResource("search_icon.png");
         ImageIcon searchButton_icon = new ImageIcon(search_icon);
-        JButton searchButton = new JButton("Search", searchButton_icon);
-        searchButton.setContentAreaFilled(false);
-        searchButton.setFocusPainted(false);
+        MyButton searchButton = new MyButton("Search", searchButton_icon);
 
-            URL property_icon = cldr.getResource("property_icon.png");
-         ImageIcon propertyButton_icon = new ImageIcon(property_icon);
-         JButton propertyButton = new JButton("Property", propertyButton_icon);
-         propertyButton.setContentAreaFilled(false);
-         propertyButton.setFocusPainted(false);
+        URL property_icon = cldr.getResource("property_icon.png");
+        ImageIcon propertyButton_icon = new ImageIcon(property_icon);
+        MyButton propertyButton = new MyButton("Property", propertyButton_icon);
 
         URL log_icon = cldr.getResource("log_icon.png");
         ImageIcon logButton_icon = new ImageIcon(log_icon);
-        JButton logButton = new JButton("Log", logButton_icon);
-        logButton.setContentAreaFilled(false);
-        logButton.setFocusPainted(false);
+        MyButton logButton = new MyButton("Log", logButton_icon);
 
         bot_NORTHpanel.add(bookButton);
-        bot_NORTHpanel.add(editButton);
-        // bot_NORTHpanel.add(checkoutButton);
+        bot_NORTHpanel.add(reservationsButton);
         bot_NORTHpanel.add(searchButton);
         bot_NORTHpanel.add(new JLabel());
         bot_NORTHpanel.add(propertyButton);
         bot_NORTHpanel.add(logButton);
-
         NORTHpanel.add(bot_NORTHpanel, BorderLayout.SOUTH);
-
         final JPanel SOUTHpanel = new JPanel(new BorderLayout());
         contentPanel.add(SOUTHpanel, BorderLayout.CENTER);
-
         frame.add(contentPanel, BorderLayout.CENTER);
-        ActionListener bookButtonActionListener = new ActionListener()
+
+        AdminController admin = new AdminController();
+        PropertyController hotelProperty = new PropertyController();
+
+        bookButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                bookButton.setStatus(true);
+                reservationsButton.setStatus(false);
+                propertyButton.setStatus(false);
+                logButton.setStatus(false);
+                searchButton.setStatus(false);
                 frame.getContentPane().removeAll();
                 contentPanel.remove(SOUTHpanel);
                 SOUTHpanel.removeAll();
@@ -407,11 +388,16 @@ public class Home
                 roomAlbLabel.setFont(new Font("Arial", Font.BOLD, 16));
                 bookPanel_right.add(roomAlbLabel, BorderLayout.NORTH);
 
-                PropertyController hotelProperty = new PropertyController();
-                AdminController admin = new AdminController();
-
                 Object[] columnNames_dataRoomAlb = {"Room no.", "Type", "Price"};
-                Object[][] dataRoomAlb = hotelProperty.getAvailableRoomsObject();
+                Object[][] dataRoomAlb = null;
+                try
+                {
+                    dataRoomAlb = hotelProperty.getAvailableRoomsObject();
+                } catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(frame, "Failed to get rooms: \n" + ex.getMessage());
+                    return;
+                }
 
                 DefaultTableModel model_dataRoomAlb = new DefaultTableModel(dataRoomAlb, columnNames_dataRoomAlb);
                 JTable table_dataRoomAlb = new JTable(model_dataRoomAlb);
@@ -446,6 +432,7 @@ public class Home
                         contentPanel.repaint();
                     }
                 });
+                Object[][] finalDataRoomAlb = dataRoomAlb;
                 finishBookPanelButton.addActionListener(new ActionListener()
                 {
                     @Override
@@ -463,16 +450,22 @@ public class Home
                         {
                             roomID = Integer.parseInt(roomString);
                             duration = Integer.parseInt(durationString);
-                        }
-                        catch (NumberFormatException exception)
+                        } catch (NumberFormatException exception)
                         {
                             JOptionPane.showMessageDialog(frame, "Non-number characters in field: \n" +
                                     exception.getMessage());
                             return;
                         }
-                        if (!hotelProperty.validateRoom(roomID, dataRoomAlb))
+                        try
                         {
-                            JOptionPane.showMessageDialog(frame, "Please fill in a valid available room!");
+                            if (!hotelProperty.validateRoom(roomID, finalDataRoomAlb))
+                            {
+                                JOptionPane.showMessageDialog(frame, "Please fill in a valid available room!");
+                                return;
+                            }
+                        } catch (Exception ex)
+                        {
+                            JOptionPane.showMessageDialog(frame, "Failed to validate room: \n" + ex.getMessage());
                             return;
                         }
                         if (customerName.isEmpty() || phoneNumberString.isEmpty() || roomString.isEmpty() ||
@@ -490,10 +483,9 @@ public class Home
                         {
                             admin.bookRoom(customerName, phoneNumberString, paymentMethod, cardNumberString,
                                     roomID, duration);
-                        }
-                        catch (Exception javaex)
+                        } catch (Exception javaex)
                         {
-                            JOptionPane.showMessageDialog(frame, "" + javaex.getMessage());
+                            JOptionPane.showMessageDialog(frame, javaex.getMessage());
                             return;
                         }
                         contentPanel.remove(SOUTHpanel);
@@ -508,13 +500,17 @@ public class Home
                 frame.revalidate(); // Cập nhật lại giao diện
                 frame.repaint();
             }
-        };
-        bookButton.addActionListener(bookButtonActionListener);
-        editButton.addActionListener(new ActionListener()
+        });
+        reservationsButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                bookButton.setStatus(false);
+                reservationsButton.setStatus(true);
+                propertyButton.setStatus(false);
+                logButton.setStatus(false);
+                searchButton.setStatus(false);
                 frame.getContentPane().removeAll();
                 contentPanel.remove(SOUTHpanel);
                 SOUTHpanel.removeAll();
@@ -527,10 +523,17 @@ public class Home
                 JPanel SOUTH_left_editPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JPanel SOUTH_right_editPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-                PropertyController prCtrl = new PropertyController();
                 Object[] columnsEdit = {"ID", "Name", "Phone number", "Payment method", "Card no.", "Room",
                         "Duration", "Time booked", "Status"};
-                Object[][] dataEdit = prCtrl.getReservationsObject();
+                Object[][] dataEdit = null;
+                try
+                {
+                    dataEdit = hotelProperty.getReservationsObject();
+                } catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(frame, "Failed to get reservations: \n" + ex.getMessage());
+                    return;
+                }
 
                 DefaultTableModel modelEdit = new DefaultTableModel(dataEdit, columnsEdit);
 
@@ -540,12 +543,9 @@ public class Home
                 tableEdit.setRowSelectionAllowed(true);
                 tableEdit.setColumnSelectionAllowed(false);
 
-
                 JButton editEditButton = new JButton("Edit");
                 JButton checkoutEditButton = new JButton("Checkout");
                 JButton cancelEditButton = new JButton("Cancel");
-
-
 
                 cancelEditButton.addActionListener(new ActionListener()
                 {
@@ -567,6 +567,23 @@ public class Home
                     public void actionPerformed(ActionEvent e)
                     {
                         int rowtableEdit = tableEdit.getSelectedRow();
+                        // get rate -> calculate total price
+                        if (tableEdit.getValueAt(rowtableEdit, 8) == "Checked out")
+                        {
+                            JOptionPane.showMessageDialog(frame, "Already checked out!");
+                            return;
+                        }
+                        int reservationID = Integer.parseInt(String.valueOf(tableEdit.getValueAt(rowtableEdit, 0)));
+                        int totalPrice = 0;
+                        try
+                        {
+                            totalPrice = admin.calculateTotalPrice(reservationID);
+                        } catch (Exception ex)
+                        {
+                            JOptionPane.showMessageDialog(frame, "Failed to calculate total price.");
+                            return;
+                        }
+                        String totalPriceString = String.valueOf(totalPrice);
                         if (rowtableEdit == -1)
                         {
                             JOptionPane.showMessageDialog(null, "Please select 1 item");
@@ -575,11 +592,18 @@ public class Home
                         int result = JOptionPane.showConfirmDialog(frame,
                                 "Are you sure to checkout?" +
                                         "\nName: " + tableEdit.getValueAt(rowtableEdit, 1) + "\nRoom: "
-                                        + tableEdit.getValueAt(rowtableEdit, 5) + "\nTotal: 180000",
+                                        + tableEdit.getValueAt(rowtableEdit, 5) + "\nTotal: " + totalPriceString,
                                 "Check-out confirmation", JOptionPane.YES_NO_OPTION);
                         if (result == JOptionPane.YES_OPTION)
                         {
-
+                            try
+                            {
+                                admin.checkout(reservationID);
+                            } catch (Exception ex)
+                            {
+                                JOptionPane.showMessageDialog(frame, "Failed to checkout: " + ex.getMessage());
+                                return;
+                            }
                             JDialog subFrame_Checkout = new JDialog(frame, "Checkout", true);
 
                             JPanel contentPanel_checkOut = new JPanel(new BorderLayout());
@@ -747,7 +771,7 @@ public class Home
                             title_total.setFont(font);
                             total_checkout_left.add(title_total);
 
-                            JLabel title_number = new JLabel("180 000 VND");
+                            JLabel title_number = new JLabel(totalPriceString);
                             font = title_number.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích
                             // thước mới
                             // font = font.deriveFont(Collections.singletonMap(TextAttribute.WEIGHT,
@@ -771,8 +795,8 @@ public class Home
                             JPanel checkout_Footer_Panel_Left = new JPanel(new FlowLayout(FlowLayout.LEFT));
                             JPanel checkout_Footer_Panel_Right = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-                            JButton cancelButton = new JButton("Cancel");
-                            checkout_Footer_Panel_Left.add(cancelButton);
+                            JButton closeButton = new JButton("Close");
+                            checkout_Footer_Panel_Left.add(closeButton);
 
                             JButton printButton = new JButton("Print");
                             checkout_Footer_Panel_Right.add(printButton);
@@ -786,7 +810,7 @@ public class Home
                             contentPanel_checkOut.add(checkout_Main, BorderLayout.NORTH);
                             contentPanel_checkOut.add(checkout_Footer_Panel, BorderLayout.SOUTH);
 
-                            cancelButton.addActionListener(new ActionListener()
+                            closeButton.addActionListener(new ActionListener()
                             {
                                 @Override
                                 public void actionPerformed(ActionEvent e)
@@ -844,7 +868,15 @@ public class Home
                             subFrame_Checkout.setLocationRelativeTo(null);
                             subFrame_Checkout.setResizable(false);
                             subFrame_Checkout.setVisible(true);
-                            Object[][] newdataCheckout = prCtrl.getReservationsObject();
+                            Object[][] newdataCheckout = null;
+                            try
+                            {
+                                newdataCheckout = hotelProperty.getReservationsObject();
+                            } catch (Exception ex)
+                            {
+                                JOptionPane.showMessageDialog(frame, "Failed to get reservations: \n" + ex.getMessage());
+                                return;
+                            }
                             DefaultTableModel checkoutTableModel = new DefaultTableModel(newdataCheckout,
                                     columnsEdit);
                             tableEdit.setModel(checkoutTableModel);
@@ -858,6 +890,11 @@ public class Home
                     public void actionPerformed(ActionEvent e)
                     {
                         int rowtableEdit = tableEdit.getSelectedRow();
+                        if (tableEdit.getValueAt(rowtableEdit, 8) == "Checked out")
+                        {
+                            JOptionPane.showMessageDialog(frame, "Already checked out!");
+                            return;
+                        }
                         if (rowtableEdit == -1)
                         {
                             JOptionPane.showMessageDialog(null, "Please select 1 item");
@@ -914,7 +951,7 @@ public class Home
 
                         JTextField phoneNumberField = new JTextField(20);
                         // Phần lấy số đth từ BE
-                        phoneNumberField.setText("Số điện thoại");
+                        phoneNumberField.setText(modelEdit.getValueAt(rowtableEdit, 2).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 3;
                         bookPanel_left_top.add(phoneNumberField, constraints);
@@ -923,16 +960,18 @@ public class Home
                         constraints.gridy = 4;
                         bookPanel_left_top.add(new JLabel("Card Number"), constraints);
 
-                        JTextField cardNumber = new JTextField(20);
+                        JTextField cardNumberField = new JTextField(20);
+                        cardNumberField.setText(modelEdit.getValueAt(rowtableEdit, 4).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 4;
-                        bookPanel_left_top.add(cardNumber, constraints);
+                        bookPanel_left_top.add(cardNumberField, constraints);
 
                         constraints.gridx = 0;
                         constraints.gridy = 5;
                         bookPanel_left_top.add(new JLabel("Room"), constraints);
 
                         JTextField roomField = new JTextField(20);
+                        roomField.setText(modelEdit.getValueAt(rowtableEdit, 5).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 5;
                         bookPanel_left_top.add(roomField, constraints);
@@ -952,6 +991,7 @@ public class Home
                         bookPanel_left_top.add(new JLabel("Duration "), constraints);
 
                         JTextField durationField = new JTextField(20);
+                        durationField.setText(modelEdit.getValueAt(rowtableEdit, 6).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 7;
                         bookPanel_left_top.add(durationField, constraints);
@@ -1104,9 +1144,16 @@ public class Home
                         roomAlbLabel.setFont(new Font("Arial", Font.BOLD, 16));
                         bookPanel_right.add(roomAlbLabel, BorderLayout.NORTH);
 
-                        PropertyController prCtrl = new PropertyController();
                         Object[] columnNames_dataRoomAlb = {"Room no.", "Type", "Price"};
-                        Object[][] dataRoomAlb = prCtrl.getAvailableRoomsObject();
+                        Object[][] dataRoomAlb = null;
+                        try
+                        {
+                            dataRoomAlb = hotelProperty.getAvailableRoomsObject();
+                        } catch (Exception ex)
+                        {
+                            JOptionPane.showMessageDialog(frame, "Failed to get available rooms: \n" + ex.getMessage());
+                            return;
+                        }
 
                         DefaultTableModel model_dataRoomAlb = new DefaultTableModel(dataRoomAlb,
                                 columnNames_dataRoomAlb);
@@ -1154,15 +1201,13 @@ public class Home
                                 // Lấy dữ liệu ở đây
                                 String customerName = customerNameField.getText();
                                 String phoneNumber = phoneNumberField.getText();
-                                String ID = cardNumber.getText();
+                                String cardNumber = cardNumberField.getText();
                                 String room = roomField.getText();
-                                if (customerName.isEmpty() || phoneNumber.isEmpty() || ID.isEmpty() ||
+                                if (customerName.isEmpty() || phoneNumber.isEmpty() || cardNumber.isEmpty() ||
                                         room.isEmpty())
                                 {
                                     JOptionPane.showMessageDialog(frame, "Please fill in all fields!");
                                     return;
-                                } else
-                                {
                                 }
                                 JOptionPane.showMessageDialog(frame, "Customer edit successfully!");
                                 contentPanel.remove(SOUTHpanel);
@@ -1198,10 +1243,16 @@ public class Home
                 frame.repaint();
             }
         });
-
-        propertyButton.addActionListener(new ActionListener() {
+        propertyButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
+                bookButton.setStatus(false);
+                reservationsButton.setStatus(false);
+                propertyButton.setStatus(true);
+                logButton.setStatus(false);
+                searchButton.setStatus(false);
                 frame.getContentPane().removeAll();
                 contentPanel.remove(SOUTHpanel);
                 SOUTHpanel.removeAll();
@@ -1209,10 +1260,8 @@ public class Home
                 JPanel propertyPanel = new JPanel(new BorderLayout());
                 JPanel propertyPanel_Top = new JPanel(new FlowLayout());
                 JLabel propertyJLabel = new JLabel("Type:");
-                String[] options_Type_property = {"Room", "Extras"};
-                JComboBox<String> dropdown_Type_property = new JComboBox<>(options_Type_property);
+                String[] options_Type_property = {"Rooms", "Extras"};
                 propertyPanel_Top.add(propertyJLabel);
-                propertyPanel_Top.add(dropdown_Type_property);
 
                 JPanel NORTHpropertyPanel = new JPanel(new BorderLayout());
                 JPanel SOUTHpropertyPanel = new JPanel(new GridLayout(1, 2));
@@ -1221,83 +1270,248 @@ public class Home
                 JPanel SOUTH_left_propertyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JPanel SOUTH_right_propertyPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-                PropertyController prCtrl = new PropertyController();
-                Object[] columnsproperty = {"ID", "Name", "Phone number", "Payment method", "Card no.", "Room",
-                        "Duration", "Time booked", "Status"};
-                Object[][] dataproperty = prCtrl.getReservationsObject();
+                JComboBox<String> dropdown_Type_property = new JComboBox<>();
+                propertyPanel_Top.add(dropdown_Type_property);
+                String NOT_SELECTABLE_OPTION = "- Please select an option -";
+                dropdown_Type_property.setModel(new DefaultComboBoxModel<String>()
+                {
+                    private static final long serialVersionUID = 1L;
+                    boolean selectionAllowed = true;
 
-                DefaultTableModel modelproperty = new DefaultTableModel(dataproperty, columnsproperty);
+                    @Override
+                    public void setSelectedItem(Object anObject)
+                    {
+                        if (!NOT_SELECTABLE_OPTION.equals(anObject))
+                        {
+                            super.setSelectedItem(anObject);
+                        } else if (selectionAllowed)
+                        {
+                            // Allow this just once
+                            selectionAllowed = false;
+                            super.setSelectedItem(anObject);
+                        }
+                    }
+                });
+                dropdown_Type_property.addItem(NOT_SELECTABLE_OPTION);
+                dropdown_Type_property.addItem(options_Type_property[0]);
+                dropdown_Type_property.addItem(options_Type_property[1]);
 
-                JTable tableproperty = new JTable(modelproperty);
+                JTable tableproperty = new JTable();
                 tableproperty.setDefaultEditor(Object.class, null);
                 tableproperty.getTableHeader().setReorderingAllowed(false);
                 tableproperty.setRowSelectionAllowed(true);
                 tableproperty.setColumnSelectionAllowed(false);
 
-
                 JButton deleteButton = new JButton("Delete");
                 JButton addButton = new JButton("Add");
                 JButton cancelpropertyButton = new JButton("Cancel");
 
-
-                dropdown_Type_property.addItemListener(new ItemListener() {
+                dropdown_Type_property.addItemListener(new ItemListener()
+                {
                     @Override
-                    public void itemStateChanged(ItemEvent e) {
-                        if (e.getStateChange() == ItemEvent.SELECTED) {
+                    public void itemStateChanged(ItemEvent e)
+                    {
+                        if (e.getStateChange() == ItemEvent.SELECTED)
+                        {
                             String selectedOption = (String) e.getItem();
-                            if (selectedOption == "Room") {
-                                Object[] columnsproperty = {"Rooommmm", "Name", "Phone number", "Payment method", "Card no.", "Room",
-                                        "Duration", "Time booked", "Status"};
-                                Object[][] dataproperty = prCtrl.getReservationsObject();
+                            if (selectedOption == "Rooms")
+                            {
+                                Object[] columnsproperty = {"ID", "Type", "Price", "Status"};
+                                Object[][] dataproperty = null;
+                                try
+                                {
+                                    dataproperty = hotelProperty.getAllRoomsObject();
+                                } catch (Exception ex)
+                                {
+                                    JOptionPane.showMessageDialog(frame, "Failed to get rooms: \n" + ex.getMessage());
+                                    return;
+                                }
 
                                 DefaultTableModel modelproperty = new DefaultTableModel(dataproperty, columnsproperty);
-
                                 tableproperty.setModel(modelproperty);
                             }
-                            else {
-                                Object[] columnsproperty = {"Extrasssss", "Name", "Phone number", "Payment method", "Card no.", "Room",
-                                        "Duration", "Time booked", "Status"};
-                                Object[][] dataproperty = prCtrl.getReservationsObject();
-
+                            if (selectedOption == "Extras")
+                            {
+                                Object[] columnsproperty = {"ID", "Type", "Name", "Price"};
+                                Object[][] dataproperty = null;
+                                try
+                                {
+                                    dataproperty = hotelProperty.getExtrasObject();
+                                } catch (Exception ex)
+                                {
+                                    JOptionPane.showMessageDialog(frame, "Failed to get extras: \n" + ex.getMessage());
+                                    return;
+                                }
                                 DefaultTableModel modelproperty = new DefaultTableModel(dataproperty, columnsproperty);
-
                                 tableproperty.setModel(modelproperty);
                             }
                         }
                     }
                 });
-                deleteButton.addActionListener(new ActionListener() {
+                deleteButton.addActionListener(new ActionListener()
+                {
                     @Override
-                    public void actionPerformed(ActionEvent e) {
-                        //cập nhật ở đây
-                        // nhớ get cột cần xóa là cột nào nha
-                        if ((String) dropdown_Type_property.getSelectedItem() == "Room") {
-                            Object[] columnsproperty = {" cập nhật Room", "Name", "Phone number", "Payment method", "Card no.", "Room",
-                                    "Duration", "Time booked", "Status"};
-                            Object[][] dataproperty = prCtrl.getReservationsObject();
-
-                            DefaultTableModel modelproperty = new DefaultTableModel(dataproperty, columnsproperty);
-
-                            tableproperty.setModel(modelproperty);
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        int rowtableEdit = tableproperty.getSelectedRow();
+                        // get id
+                        int id = Integer.parseInt(String.valueOf(tableproperty.getValueAt(rowtableEdit, 0)));
+                        if (dropdown_Type_property.getSelectedItem() == "Rooms")
+                        {
+                            try
+                            {
+                                hotelProperty.deleteRoom(id);
+                            } catch (Exception ex)
+                            {
+                                JOptionPane.showMessageDialog(frame, "Failed to delete room!\n " + ex.getMessage());
+                                return;
+                            }
+                            JOptionPane.showMessageDialog(frame, "Room deleted successfully!");
                         }
-                        else {
-                            Object[] columnsproperty = {"cập nhật Extras", "Name", "Phone number", "Payment method", "Card no.", "Room",
-                                    "Duration", "Time booked", "Status"};
-                            Object[][] dataproperty = prCtrl.getReservationsObject();
-
-                            DefaultTableModel modelproperty = new DefaultTableModel(dataproperty, columnsproperty);
-
-                            tableproperty.setModel(modelproperty);
+                        if (dropdown_Type_property.getSelectedItem() == "Extras")
+                        {
+                            try
+                            {
+                                hotelProperty.deleteExtra(id);
+                            } catch (Exception ex)
+                            {
+                                JOptionPane.showMessageDialog(frame, "Failed to delete extra!\n " + ex.getMessage());
+                                return;
+                            }
+                            JOptionPane.showMessageDialog(frame, "Extra deleted successfully!");
                         }
                     }
                 });
-                addButton.addActionListener(new ActionListener() {
+                addButton.addActionListener(new ActionListener()
+                {
                     @Override
-                    public void actionPerformed(ActionEvent e) {
+                    public void actionPerformed(ActionEvent e)
+                    {
                         //cập nhật ở đây
+                        if (dropdown_Type_property.getSelectedItem() == "Rooms")
+                        {
+                            JDialog subFrame_addRoom = new JDialog(frame, "Add Room", true);
+                            subFrame_addRoom.setSize(300, 300);
+                            subFrame_addRoom.setLocationRelativeTo(null);
 
-                        if ((String) dropdown_Type_property.getSelectedItem() == "Extras") {
+                            JPanel contentPanel_addRoom = new JPanel(new BorderLayout());
 
+                            JPanel contentPanel_addRoom_Main = new JPanel(new GridLayout(0, 2));
+                            GridBagConstraints constraints = new GridBagConstraints();
+
+                            constraints.gridx = 0;
+                            constraints.gridy = 0;
+                            constraints.fill = GridBagConstraints.HORIZONTAL;
+                            JLabel Type_addRoom = new JLabel("Type:");
+                            contentPanel_addRoom_Main.add(Type_addRoom, constraints);
+
+                            constraints.gridx = 0;
+                            constraints.gridy = 1;
+                            String[] options_Type_addRoom = {"Single", "Double", "Family"};
+                            JComboBox<String> dropdown_Type_addRoom = new JComboBox<>(options_Type_addRoom);
+
+                            contentPanel_addRoom_Main.add(dropdown_Type_addRoom, constraints);
+
+                            constraints.gridx = 0;
+                            constraints.gridy = 2;
+                            contentPanel_addRoom_Main.add(new Label(), constraints);
+                            constraints.gridx = 0;
+                            constraints.gridy = 3;
+                            contentPanel_addRoom_Main.add(new Label(), constraints);
+
+                            constraints.gridx = 0;
+                            constraints.gridy = 4;
+                            JLabel roomNumber_addRoom = new JLabel("Room number:");
+                            contentPanel_addRoom_Main.add(roomNumber_addRoom, constraints);
+
+                            constraints.gridx = 1;
+                            constraints.gridy = 4;
+                            JTextField roomNumber_addRoomField = new JTextField(10);
+                            contentPanel_addRoom_Main.add(roomNumber_addRoomField, constraints);
+
+                            constraints.gridx = 0;
+                            constraints.gridy = 5;
+                            JLabel price_addRoom = new JLabel("Price:");
+                            contentPanel_addRoom_Main.add(price_addRoom, constraints);
+
+                            constraints.gridx = 1;
+                            constraints.gridy = 5;
+                            JTextField price_addRoomField = new JTextField(10);
+                            contentPanel_addRoom_Main.add(price_addRoomField, constraints);
+
+
+                            JPanel contentPanel_addRoom_Footer = new JPanel(new GridLayout(1, 2));
+                            contentPanel_addRoom_Footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
+
+                            JPanel contentPanel_addRoom_Footer_Left = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+                            JButton cancel_contentPanel_addRoomButton = new JButton("Cancel");
+                            contentPanel_addRoom_Footer_Left.add(cancel_contentPanel_addRoomButton);
+                            contentPanel_addRoom_Footer.add(contentPanel_addRoom_Footer_Left);
+
+                            cancel_contentPanel_addRoomButton.addActionListener(new ActionListener()
+                            {
+                                @Override
+                                public void actionPerformed(ActionEvent e)
+                                {
+                                    subFrame_addRoom.setVisible(false);
+                                }
+                            });
+
+                            JButton finish_contentPanel_addRoomButton = new JButton("Finish");
+                            finish_contentPanel_addRoomButton.addActionListener(new ActionListener()
+                            {
+                                @Override
+                                public void actionPerformed(ActionEvent e)
+                                {
+                                    if (price_addRoomField.getText().isEmpty() || roomNumber_addRoomField.getText().isEmpty())
+                                    {
+                                        JOptionPane.showMessageDialog(frame, "Fields cannot be empty!");
+                                        return;
+                                    }
+                                    ;
+                                    int roomID, roomPrice;
+                                    try
+                                    {
+                                        roomID = Integer.parseInt(roomNumber_addRoomField.getText());
+                                        roomPrice = Integer.parseInt(price_addRoomField.getText());
+                                    } catch (Exception ex)
+                                    {
+                                        JOptionPane.showMessageDialog(frame, "Please enter valid numbers!");
+                                        return;
+                                    }
+                                    try
+                                    {
+                                        hotelProperty.addRoom(roomID, dropdown_Type_addRoom.getSelectedItem().toString(), roomPrice);
+                                    } catch (Exception ex)
+                                    {
+                                        JOptionPane.showMessageDialog(frame, "Failed to add room: \n" + ex.getMessage());
+                                        return;
+                                    }
+                                    // Cập nhật dữ liệu tại đây
+                                    JOptionPane.showMessageDialog(frame, "Room added successfully!");
+                                    subFrame_addRoom.setVisible(false);
+                                    frame.revalidate(); // Cập nhật lại giao diện
+                                    frame.repaint();
+                                }
+                            });
+
+                            JPanel contentPanel_addRoom_Footer_Right = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+                            contentPanel_addRoom_Footer_Right.add(finish_contentPanel_addRoomButton);
+                            contentPanel_addRoom_Footer.add(contentPanel_addRoom_Footer_Right);
+
+                            contentPanel_addRoom.add(contentPanel_addRoom_Main, BorderLayout.NORTH);
+                            contentPanel_addRoom.add(contentPanel_addRoom_Footer, BorderLayout.SOUTH);
+
+                            subFrame_addRoom.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                            subFrame_addRoom.getContentPane().add(contentPanel_addRoom);
+                            subFrame_addRoom.setVisible(true);
+
+                            frame.revalidate(); // Cập nhật lại giao diện
+                            frame.repaint();
+                        }
+                        if (dropdown_Type_property.getSelectedItem() == "Extras")
+                        {
                             JDialog subFrame_addExtras = new JDialog(frame, "Add Extras", true);
                             subFrame_addExtras.setSize(300, 300);
                             subFrame_addExtras.setLocationRelativeTo(null);
@@ -1339,13 +1553,13 @@ public class Home
 
                             constraints.gridx = 0;
                             constraints.gridy = 5;
-                            JLabel quantity_addExtras = new JLabel("Price:");
-                            contentPanel_addExtras_Main.add(quantity_addExtras, constraints);
+                            JLabel price_addExtras = new JLabel("Price:");
+                            contentPanel_addExtras_Main.add(price_addExtras, constraints);
 
                             constraints.gridx = 1;
                             constraints.gridy = 5;
-                            JTextField quantity_addExtrasField = new JTextField(10);
-                            contentPanel_addExtras_Main.add(quantity_addExtrasField, constraints);
+                            JTextField price_addExtrasField = new JTextField(10);
+                            contentPanel_addExtras_Main.add(price_addExtrasField, constraints);
 
 
                             JPanel contentPanel_addExtras_Footer = new JPanel(new GridLayout(1, 2));
@@ -1372,15 +1586,35 @@ public class Home
                                 @Override
                                 public void actionPerformed(ActionEvent e)
                                 {
-//                                    if (quantity_addRoomField.getText().isEmpty())
-//                                    {
-//                                        JOptionPane.showMessageDialog(frame, "Please enter a quantity");
-//                                        return;
-//                                    };
-
+                                    if (price_addExtrasField.getText().isEmpty() || name_addExtrasField.getText().isEmpty())
+                                    {
+                                        JOptionPane.showMessageDialog(frame, "Fields cannot be empty!");
+                                        return;
+                                    }
+                                    ;
+                                    int extraPrice;
+                                    try
+                                    {
+                                        extraPrice = Integer.parseInt(price_addExtrasField.getText());
+                                    } catch (Exception ex)
+                                    {
+                                        JOptionPane.showMessageDialog(frame, "Please enter valid numbers!");
+                                        return;
+                                    }
+                                    try
+                                    {
+                                        hotelProperty.addExtra(name_addExtrasField.toString(),
+                                                dropdown_Type_addExtras.getSelectedItem().toString(), extraPrice);
+                                    } catch (Exception ex)
+                                    {
+                                        JOptionPane.showMessageDialog(frame, "Failed to add extra: \n" + ex.getMessage());
+                                        return;
+                                    }
                                     // Cập nhật dữ liệu tại đây
-                                    JOptionPane.showMessageDialog(frame, "Extras added successfully!");
+                                    JOptionPane.showMessageDialog(frame, "Extra added successfully!");
                                     subFrame_addExtras.setVisible(false);
+                                    frame.revalidate(); // Cập nhật lại giao diện
+                                    frame.repaint();
                                 }
                             });
 
@@ -1394,121 +1628,6 @@ public class Home
                             subFrame_addExtras.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                             subFrame_addExtras.getContentPane().add(contentPanel_addExtras);
                             subFrame_addExtras.setVisible(true);
-
-                            Object[] columnsproperty = {" cập nhật Room", "Name", "Phone number", "Payment method", "Card no.", "Room",
-                                    "Duration", "Time booked", "Status"};
-                            Object[][] dataproperty = prCtrl.getReservationsObject();
-
-                            DefaultTableModel modelproperty = new DefaultTableModel(dataproperty, columnsproperty);
-
-                            tableproperty.setModel(modelproperty);
-                        }
-                        else {
-
-                            JDialog subFrame_addRoom = new JDialog(frame, "Add Room", true);
-                            subFrame_addRoom.setSize(300, 300);
-                            subFrame_addRoom.setLocationRelativeTo(null);
-
-                            JPanel contentPanel_addRoom = new JPanel(new BorderLayout());
-
-                            JPanel contentPanel_addRoom_Main = new JPanel(new GridLayout(0, 2));
-                            GridBagConstraints constraints = new GridBagConstraints();
-
-                            constraints.gridx = 0;
-                            constraints.gridy = 0;
-                            constraints.fill = GridBagConstraints.HORIZONTAL;
-                            JLabel Type_addRoom = new JLabel("Type:");
-                            contentPanel_addRoom_Main.add(Type_addRoom, constraints);
-
-                            constraints.gridx = 0;
-                            constraints.gridy = 1;
-                            String[] options_Type_addRoom = {"Single", "Double","Family"};
-                            JComboBox<String> dropdown_Type_addRoom = new JComboBox<>(options_Type_addRoom);
-
-                            contentPanel_addRoom_Main.add(dropdown_Type_addRoom, constraints);
-
-                            constraints.gridx = 0;
-                            constraints.gridy = 2;
-                            contentPanel_addRoom_Main.add(new Label(), constraints);
-                            constraints.gridx = 0;
-                            constraints.gridy = 3;
-                            contentPanel_addRoom_Main.add(new Label(), constraints);
-
-                            constraints.gridx = 0;
-                            constraints.gridy = 4;
-                            JLabel name_addRoom = new JLabel("Name:");
-                            contentPanel_addRoom_Main.add(name_addRoom, constraints);
-
-                            constraints.gridx = 1;
-                            constraints.gridy = 4;
-                            JTextField name_addRoomField = new JTextField(10);
-                            contentPanel_addRoom_Main.add(name_addRoomField, constraints);
-
-                            constraints.gridx = 0;
-                            constraints.gridy = 5;
-                            JLabel quantity_addRoom = new JLabel("Price:");
-                            contentPanel_addRoom_Main.add(quantity_addRoom, constraints);
-
-                            constraints.gridx = 1;
-                            constraints.gridy = 5;
-                            JTextField quantity_addRoomField = new JTextField(10);
-                            contentPanel_addRoom_Main.add(quantity_addRoomField, constraints);
-
-
-                            JPanel contentPanel_addRoom_Footer = new JPanel(new GridLayout(1, 2));
-                            contentPanel_addRoom_Footer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
-
-                            JPanel contentPanel_addRoom_Footer_Left = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-                            JButton cancel_contentPanel_addRoomButton = new JButton("Cancel");
-                            contentPanel_addRoom_Footer_Left.add(cancel_contentPanel_addRoomButton);
-                            contentPanel_addRoom_Footer.add(contentPanel_addRoom_Footer_Left);
-
-                            cancel_contentPanel_addRoomButton.addActionListener(new ActionListener()
-                            {
-                                @Override
-                                public void actionPerformed(ActionEvent e)
-                                {
-                                    subFrame_addRoom.setVisible(false);
-                                }
-                            });
-
-                            JButton finish_contentPanel_addRoomButton = new JButton("Finish");
-                            finish_contentPanel_addRoomButton.addActionListener(new ActionListener()
-                            {
-                                @Override
-                                public void actionPerformed(ActionEvent e)
-                                {
-//                                    if (quantity_addRoomField.getText().isEmpty())
-//                                    {
-//                                        JOptionPane.showMessageDialog(frame, "Please enter a quantity");
-//                                        return;
-//                                    };
-
-                                    // Cập nhật dữ liệu tại đây
-                                    JOptionPane.showMessageDialog(frame, "Room added successfully!");
-                                    subFrame_addRoom.setVisible(false);
-                                }
-                            });
-
-                            JPanel contentPanel_addRoom_Footer_Right = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-                            contentPanel_addRoom_Footer_Right.add(finish_contentPanel_addRoomButton);
-                            contentPanel_addRoom_Footer.add(contentPanel_addRoom_Footer_Right);
-
-                            contentPanel_addRoom.add(contentPanel_addRoom_Main, BorderLayout.NORTH);
-                            contentPanel_addRoom.add(contentPanel_addRoom_Footer, BorderLayout.SOUTH);
-
-                            subFrame_addRoom.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                            subFrame_addRoom.getContentPane().add(contentPanel_addRoom);
-                            subFrame_addRoom.setVisible(true);
-
-                            Object[] columnsproperty = {"cập nhật Extras", "Name", "Phone number", "Payment method", "Card no.", "Room",
-                                    "Duration", "Time booked", "Status"};
-                            Object[][] dataproperty = prCtrl.getReservationsObject();
-
-                            DefaultTableModel modelproperty = new DefaultTableModel(dataproperty, columnsproperty);
-
-                            tableproperty.setModel(modelproperty);
                         }
                     }
                 });
@@ -1534,7 +1653,7 @@ public class Home
                 SOUTH_left_propertyPanel.add(cancelpropertyButton);
                 SOUTHpropertyPanel.add(SOUTH_left_propertyPanel);
                 SOUTHpropertyPanel.add(SOUTH_right_propertyPanel);
-                propertyPanel.add(propertyPanel_Top,BorderLayout.NORTH);
+                propertyPanel.add(propertyPanel_Top, BorderLayout.NORTH);
                 propertyPanel.add(NORTHpropertyPanel, BorderLayout.CENTER);
                 propertyPanel.add(SOUTHpropertyPanel, BorderLayout.SOUTH);
                 SOUTHpanel.add(propertyPanel, BorderLayout.CENTER);
@@ -1544,12 +1663,16 @@ public class Home
                 frame.repaint();
             }
         });
-
         searchButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                bookButton.setStatus(false);
+                reservationsButton.setStatus(false);
+                propertyButton.setStatus(false);
+                logButton.setStatus(false);
+                searchButton.setStatus(true);
                 frame.getContentPane().removeAll();
                 contentPanel.remove(SOUTHpanel);
                 SOUTHpanel.removeAll();
@@ -1596,8 +1719,16 @@ public class Home
                             JOptionPane.showMessageDialog(frame, "Please enter what you want to search");
                             return;
                         }
-                        PropertyController prCtrl = new PropertyController();
-                        Object[][] searchData = prCtrl.getAvailableRoomsObject();
+
+                        Object[][] searchData = null;
+                        try
+                        {
+                            searchData = hotelProperty.getAvailableRoomsObject();
+                        } catch (Exception ex)
+                        {
+                            JOptionPane.showMessageDialog(frame, "Failed to get available rooms: \n" + ex.getMessage());
+                            return;
+                        }
                         Object[][] newSearchData = new Object[1][3];
                         newSearchData[0][0] = searchData[0][0];
                         newSearchData[0][1] = searchData[0][1];
@@ -1660,6 +1791,11 @@ public class Home
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                bookButton.setStatus(false);
+                reservationsButton.setStatus(false);
+                propertyButton.setStatus(false);
+                logButton.setStatus(true);
+                searchButton.setStatus(false);
                 frame.getContentPane().removeAll();
                 contentPanel.remove(SOUTHpanel);
                 SOUTHpanel.removeAll();
@@ -1672,9 +1808,16 @@ public class Home
                 JPanel SOUTH_left_logPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JPanel SOUTH_right_logPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-                PropertyController prCtrl = new PropertyController();
                 String[] columnslog = {"ID", "Description", "Date"};
-                Object[][] datalog = prCtrl.getLogsObject(); //hello
+                Object[][] datalog = null; //hello
+                try
+                {
+                    datalog = hotelProperty.getLogsObject();
+                } catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(frame, "Failed to get logs: \n" + ex.getMessage());
+                    return;
+                }
                 DefaultTableModel modellog = new DefaultTableModel(datalog, columnslog);
 
                 JTable tablelog = new JTable(modellog);
@@ -1741,12 +1884,12 @@ public class Home
         }
     }
 
-    public boolean refresh()
+    public void refresh()
     {
-        return close();
+        close();
     }
 
-    public boolean close()
+    public void close()
     {
         frame.addWindowListener(new WindowAdapter()
         {
@@ -1755,17 +1898,14 @@ public class Home
             {
                 // xử lý sự kiện khi đóng cửa sổ
                 int result = JOptionPane.showConfirmDialog(frame, "Are you sure you want to close the app?",
-                        "Confirm to close the application", JOptionPane.YES_NO_OPTION);
+                        "Exit application", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION)
                 {
                     // giải phóng các tài nguyên của cửa sổ
                     System.exit(0);
                     // kết thúc ứng dụng
-                } else
-                    flagClose = false;
+                }
             }
         });
-        return flagClose;
     }
-
 }

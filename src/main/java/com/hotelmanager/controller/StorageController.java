@@ -7,7 +7,7 @@ import static com.hotelmanager.util.Storage.*;
 
 public class StorageController
 {
-    public StorageController()
+    public StorageController() throws Exception
     {
         System.out.println("Checking if database exists...");
         if (!checkDatabase())
@@ -26,7 +26,7 @@ public class StorageController
         return database.isFile();
     }
 
-    public void createDatabase()
+    public void createDatabase() throws Exception
     {
         createNewDatabase();
         ArrayList<String> sqlBatch = new ArrayList<>();
@@ -45,7 +45,7 @@ public class StorageController
                 "        PRIMARY KEY(\"id\")\n" +
                 ");");
         sqlBatch.add("CREATE TABLE IF NOT EXISTS \"logs\" (\n" +
-                "        \"eventID\"       INTEGER PRIMARY KEY,\n" +
+                "        \"id\"       INTEGER PRIMARY KEY,\n" +
                 "        \"details\"       TEXT NOT NULL,\n" +
                 "        \"time\"          INT NOT NULL,\n" +
                 "        \"fileName\"      TEXT\n" +

@@ -47,7 +47,7 @@ public final class Storage
     }
 
     /* Create -----------------------------------------------------------------------*/
-    public static void createNewDatabase()
+    public static void createNewDatabase() throws Exception
     {
         try (Connection conn = connectDatabase())
         {
@@ -61,6 +61,7 @@ public final class Storage
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
 
@@ -78,7 +79,7 @@ public final class Storage
         }
     }
 
-    public static void createNewTableBatch(ArrayList<String> sqlBatch)
+    public static void createNewTableBatch(ArrayList<String> sqlBatch) throws Exception
     {
         // SQLite connection string
         try (Connection conn = connectDatabase();
@@ -93,49 +94,41 @@ public final class Storage
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
 
     /* Delete -----------------------------------------------------------------------*/
-
-    public static void deleteFromTable_Single(String tableName, int toDel)
+    public static void deleteFromRooms(int id) throws Exception
     {
-        String sql = "DELETE FROM ? WHERE id = ?";
-
+        String sql = "DELETE FROM rooms WHERE id = ?";
         try (Connection conn = connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
-            // set the corresponding param
-            pstmt.setString(1, tableName);
-            pstmt.setInt(2, toDel);
-            // execute the delete statement
+            pstmt.setInt(1, id);
             pstmt.executeUpdate();
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
-
-    public static void deleteFromTable_Single(String tableName, String toDel)
+    public static void deleteFromExtras(int id) throws Exception
     {
-        String sql = "DELETE FROM ? WHERE id = ?";
-
+        String sql = "DELETE FROM extras WHERE id = ?";
         try (Connection conn = connectDatabase();
              PreparedStatement pstmt = conn.prepareStatement(sql))
         {
-            // set the corresponding param
-            pstmt.setString(1, tableName);
-            pstmt.setString(2, toDel);
-            // execute the delete statement
+            pstmt.setInt(1, id);
             pstmt.executeUpdate();
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
-
     /* Insert -----------------------------------------------------------------------*/
-    public static void insertToRooms(int id, String type, int price)
+    public static void insertToRooms(int id, String type, int price) throws Exception
     {
         String sql = "INSERT INTO rooms (id, type, price) VALUES(?,?,?)";
         try (Connection conn = connectDatabase();
@@ -148,10 +141,11 @@ public final class Storage
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
 
-    public static void insertToExtras(String type, String name, int price)
+    public static void insertToExtras(String type, String name, int price) throws Exception
     {
         String sql = "INSERT INTO extras (type, name, price) VALUES(?,?,?)";
         try (Connection conn = connectDatabase();
@@ -164,6 +158,7 @@ public final class Storage
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
 
@@ -409,7 +404,7 @@ public final class Storage
     }
 
     /* Update -----------------------------------------------------------------------*/
-    public static void updateRoomsStatus(int roomID, int newValue)
+    public static void updateRoomsStatus(int roomID, int newValue) throws Exception
     {
         String sql = "UPDATE rooms SET status = ? WHERE id = ?";
         try (Connection conn = connectDatabase();
@@ -423,10 +418,11 @@ public final class Storage
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
 
-    public static void updateReservationsStatus(int reservationID, int newValue)
+    public static void updateReservationsStatus(int reservationID, int newValue) throws Exception
     {
         String sql = "UPDATE reservations SET status = ? WHERE id = ?";
         try (Connection conn = connectDatabase();
@@ -440,6 +436,7 @@ public final class Storage
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
     public static void updateExtras()
