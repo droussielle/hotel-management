@@ -1033,7 +1033,7 @@ public class Home
 
                                 constraints.gridx = 0;
                                 constraints.gridy = 1;
-                                String[] options_Type_addMore = {"Option 1", "Option 2", "Option 3"};
+                                String[] options_Type_addMore = {"Food", "Drink"};
                                 JComboBox<String> dropdown_Type_addMore = new JComboBox<>(options_Type_addMore);
 
                                 contentPanel_addMore_Main.add(dropdown_Type_addMore, constraints);
@@ -1296,11 +1296,22 @@ public class Home
                 dropdown_Type_property.addItem(options_Type_property[0]);
                 dropdown_Type_property.addItem(options_Type_property[1]);
 
-                JTable tableproperty = new JTable();
+                String[] columnsPro = {"Room", "Customers", "Extras"};
+                Object[][] dataPro = {
+                        // { 1, "John", 25, "11" },
+                        // { 2, "Sarah", 30, "12" },
+                        // { 3, "Tom", 20, "13" }
+                };
+                DefaultTableModel modelSrch = new DefaultTableModel(dataPro, columnsPro);
+
+                JTable tableproperty = new JTable(modelSrch);
                 tableproperty.setDefaultEditor(Object.class, null);
                 tableproperty.getTableHeader().setReorderingAllowed(false);
                 tableproperty.setRowSelectionAllowed(true);
                 tableproperty.setColumnSelectionAllowed(false);
+
+                JScrollPane scrollPaneEdit = new JScrollPane(tableproperty);
+                scrollPaneEdit.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
                 JButton deleteButton = new JButton("Delete");
                 JButton addButton = new JButton("Add");
@@ -1353,31 +1364,42 @@ public class Home
                     @Override
                     public void actionPerformed(ActionEvent e)
                     {
+
                         int rowtableEdit = tableproperty.getSelectedRow();
                         // get id
                         int id = Integer.parseInt(String.valueOf(tableproperty.getValueAt(rowtableEdit, 0)));
                         if (dropdown_Type_property.getSelectedItem() == "Rooms")
                         {
+                            Object[] columnsproperty = {"ID", "Type", "Price", "Status"};
+                            Object[][] dataproperty = null;
                             try
                             {
                                 hotelProperty.deleteRoom(id);
+                                dataproperty = hotelProperty.getAllRoomsObject();
                             } catch (Exception ex)
                             {
                                 JOptionPane.showMessageDialog(frame, "Failed to delete room!\n " + ex.getMessage());
                                 return;
                             }
+                            DefaultTableModel modelproperty = new DefaultTableModel(dataproperty, columnsproperty);
+                            tableproperty.setModel(modelproperty);
                             JOptionPane.showMessageDialog(frame, "Room deleted successfully!");
                         }
                         if (dropdown_Type_property.getSelectedItem() == "Extras")
                         {
+                            Object[] columnsproperty = {"ID", "Type", "Price", "Status"};
+                            Object[][] dataproperty = null;
                             try
                             {
                                 hotelProperty.deleteExtra(id);
+                                dataproperty = hotelProperty.getExtrasObject();
                             } catch (Exception ex)
                             {
                                 JOptionPane.showMessageDialog(frame, "Failed to delete extra!\n " + ex.getMessage());
                                 return;
                             }
+                            DefaultTableModel modelproperty = new DefaultTableModel(dataproperty, columnsproperty);
+                            tableproperty.setModel(modelproperty);
                             JOptionPane.showMessageDialog(frame, "Extra deleted successfully!");
                         }
                     }
@@ -1390,6 +1412,8 @@ public class Home
                         //cập nhật ở đây
                         if (dropdown_Type_property.getSelectedItem() == "Rooms")
                         {
+
+
                             JDialog subFrame_addRoom = new JDialog(frame, "Add Room", true);
                             subFrame_addRoom.setSize(300, 300);
                             subFrame_addRoom.setLocationRelativeTo(null);
@@ -1464,12 +1488,15 @@ public class Home
                                 @Override
                                 public void actionPerformed(ActionEvent e)
                                 {
+                                    Object[] columnsproperty = {"ID", "Type", "Price", "Status"};
+                                    Object[][] dataproperty = null;
                                     if (price_addRoomField.getText().isEmpty() || roomNumber_addRoomField.getText().isEmpty())
                                     {
                                         JOptionPane.showMessageDialog(frame, "Fields cannot be empty!");
                                         return;
                                     }
                                     ;
+
                                     int roomID, roomPrice;
                                     try
                                     {
@@ -1483,12 +1510,17 @@ public class Home
                                     try
                                     {
                                         hotelProperty.addRoom(roomID, dropdown_Type_addRoom.getSelectedItem().toString(), roomPrice);
+                                        dataproperty = hotelProperty.getAllRoomsObject();
                                     } catch (Exception ex)
                                     {
                                         JOptionPane.showMessageDialog(frame, "Failed to add room: \n" + ex.getMessage());
                                         return;
                                     }
                                     // Cập nhật dữ liệu tại đây
+
+                                    DefaultTableModel modelproperty = new DefaultTableModel(dataproperty, columnsproperty);
+                                    tableproperty.setModel(modelproperty);
+
                                     JOptionPane.showMessageDialog(frame, "Room added successfully!");
                                     subFrame_addRoom.setVisible(false);
                                     frame.revalidate(); // Cập nhật lại giao diện
@@ -1586,6 +1618,8 @@ public class Home
                                 @Override
                                 public void actionPerformed(ActionEvent e)
                                 {
+                                    Object[] columnsproperty = {"ID", "Type", "Price", "Status"};
+                                    Object[][] dataproperty = null;
                                     if (price_addExtrasField.getText().isEmpty() || name_addExtrasField.getText().isEmpty())
                                     {
                                         JOptionPane.showMessageDialog(frame, "Fields cannot be empty!");
@@ -1605,12 +1639,17 @@ public class Home
                                     {
                                         hotelProperty.addExtra(name_addExtrasField.toString(),
                                                 dropdown_Type_addExtras.getSelectedItem().toString(), extraPrice);
+                                        dataproperty = hotelProperty.getAllRoomsObject();
                                     } catch (Exception ex)
                                     {
                                         JOptionPane.showMessageDialog(frame, "Failed to add extra: \n" + ex.getMessage());
                                         return;
                                     }
                                     // Cập nhật dữ liệu tại đây
+
+                                    DefaultTableModel modelproperty = new DefaultTableModel(dataproperty, columnsproperty);
+                                    tableproperty.setModel(modelproperty);
+
                                     JOptionPane.showMessageDialog(frame, "Extra added successfully!");
                                     subFrame_addExtras.setVisible(false);
                                     frame.revalidate(); // Cập nhật lại giao diện
@@ -1645,8 +1684,7 @@ public class Home
 
                     }
                 });
-                JScrollPane scrollPaneEdit = new JScrollPane(tableproperty);
-                scrollPaneEdit.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
                 NORTHpropertyPanel.add(scrollPaneEdit, BorderLayout.NORTH);
                 SOUTH_right_propertyPanel.add(deleteButton);
                 SOUTH_right_propertyPanel.add(addButton);
