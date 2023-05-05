@@ -135,6 +135,22 @@ public class Reservation
         System.out.println(getId() + "\t" + getName() + "\t" + getPhoneNumber() + "\t" + getPaymentMethod()
                 + "\t" + getCardNumber() + "\t" + getRoomID() + "\t" + getDuration() + "\t" + getTimeString() + "\t" + getStatus());
     }
+
+    public boolean equals(Reservation rs) throws Exception
+    {
+        boolean ret = false;
+        try
+        {
+            ret = getName().equals(rs.getName()) && getPhoneNumber().equals(rs.getPhoneNumber()) &&
+                    getPaymentMethod().equals(rs.getPaymentMethod()) && getCardNumber().equals(rs.getCardNumber()) &&
+                    getRoomID() == rs.getRoomID() && getDuration() == rs.getDuration();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.getMessage());
+        }
+        return ret;
+    }
 //    public int getRecreiptId() {
 //        return receiptId;
 //    }

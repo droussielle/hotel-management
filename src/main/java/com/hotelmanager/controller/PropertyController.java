@@ -95,28 +95,11 @@ public class PropertyController
         return availableRooms;
     }
 
-    public ArrayList<Integer> getAvailableRoomsListFromObject(Object[][] availableRoomsObject) throws Exception
-    {
-        ArrayList<Integer> availableRooms = new ArrayList<>();
-        for (Object[] objects : availableRoomsObject)
-        {
-            availableRooms.add((Integer) objects[0]);
-        }
-        return availableRooms;
-    }
-
-    public boolean validateRoom(int roomID, Object[][] availableRoomsObject) throws Exception
-    {
-        ArrayList<Integer> availableRooms = getAvailableRoomsListFromObject(availableRoomsObject);
-        return availableRooms.contains(roomID);
-    }
-
     /* Delete --------------------------------------------------------------------------*/
     public void deleteRoom(int id) throws Exception
     {
         deleteFromRooms(id);
     }
-
     public void deleteExtra(int id) throws Exception
     {
         deleteFromExtras(id);
@@ -130,5 +113,20 @@ public class PropertyController
     public void addExtra(String name, String type, int price) throws Exception
     {
         insertToExtras(type, name, price);
+    }
+
+    /* Edit --------------------------------------------------------------------------*/
+    public void editReservation(int reservationID, String name, String phoneNumber, String paymentMethod,
+                                String cardNumber, int newRoomID, int duration, int oldRoomID) throws Exception
+    {
+        updateSingleReservation(reservationID, name, phoneNumber, paymentMethod, cardNumber, newRoomID, duration);
+        updateRoomsStatus(oldRoomID, 1);
+        updateRoomsStatus(newRoomID, 0);
+    }
+    /* Utils --------------------------------------------------------------------------*/
+    public boolean validateRoom(int roomID) throws Exception
+    {
+        ArrayList<Integer> availableRooms = getAvailableRoomsList();
+        return availableRooms.contains(roomID);
     }
 }

@@ -24,3 +24,6 @@ hs_err_pid*
 /.idea/
 /ant/
 /.vscode/
+
+# editor-specific project files
+*.project

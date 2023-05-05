@@ -1,6 +1,8 @@
 package com.hotelmanager.controller;
 
 import java.io.File;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 import static com.hotelmanager.util.Storage.*;
@@ -10,25 +12,47 @@ public class StorageController
     public StorageController() throws Exception
     {
         System.out.println("Checking if database exists...");
-        if (!checkDatabase())
+        String path = null;
+        try
         {
-            System.out.println("Database isn't available, creating new database...");
-            createDatabase();
-        } else
+            path = checkDatabase();
+        } catch (Exception e)
         {
-            System.out.println("Database found at fileDirectory/hotel.db.");
+            throw new Exception(e.getMessage());
         }
+        System.out.println("Database found at " + path);
     }
 
-    public boolean checkDatabase()
+    public String checkDatabase() throws Exception
     {
-        File database = new File("./hotel.db");
-        return database.isFile();
+        File database = new File("hotel.db");
+        String path = null;
+        try
+        {
+            path = database.getAbsolutePath();
+        } catch (Exception e)
+        {
+            throw new Exception(e.getMessage());
+        }
+        if (!database.exists())
+        {
+            System.out.println("Database not found! Creating new database...");
+            createDatabase();
+        }
+        return path;
     }
 
     public void createDatabase() throws Exception
     {
-        createNewDatabase();
+        File database = new File("hotel.db");
+        try
+        {
+            createNewDatabase();
+        } catch (Exception e)
+        {
+            throw new Exception(e.getMessage());
+        }
+        System.out.println("A new database has been created at " + database.getAbsolutePath());
         ArrayList<String> sqlBatch = new ArrayList<>();
         sqlBatch.add("CREATE TABLE IF NOT EXISTS \"rooms\" (\n" +
                 "        \"id\"    INTEGER,\n" +

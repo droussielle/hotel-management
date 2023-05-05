@@ -5,7 +5,6 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -18,6 +17,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 
 import com.hotelmanager.controller.*;
+import com.hotelmanager.model.*;
+
+import static com.hotelmanager.util.Storage.*;
 
 public class Home {
     private JFrame frame;
@@ -369,12 +371,13 @@ public class Home {
 
                 JPanel bookPanel_right = new JPanel(new BorderLayout());
 
-                JLabel roomAlbLabel = new JLabel("Available Room");
+                JLabel roomAlbLabel = new JLabel("Available Rooms");
                 roomAlbLabel.setFont(new Font("Arial", Font.BOLD, 16));
+                roomAlbLabel.setBorder(new EmptyBorder(22, 20, 15, 0));
                 bookPanel_right.add(roomAlbLabel, BorderLayout.NORTH);
 
                 Object[] columnNames_dataRoomAlb = { "Room no.", "Type", "Price" };
-                Object[][] dataRoomAlb = null;
+                Object[][] dataRoomAlb;
                 try {
                     dataRoomAlb = hotelProperty.getAvailableRoomsObject();
                 } catch (Exception ex) {
@@ -384,6 +387,8 @@ public class Home {
 
                 DefaultTableModel model_dataRoomAlb = new DefaultTableModel(dataRoomAlb, columnNames_dataRoomAlb);
                 JTable table_dataRoomAlb = new JTable(model_dataRoomAlb);
+                table_dataRoomAlb.getColumnModel().getColumn(0).setPreferredWidth(10);
+                table_dataRoomAlb.setRowHeight(18);
                 table_dataRoomAlb.setEnabled(false);
                 table_dataRoomAlb.setFillsViewportHeight(true);
 
@@ -413,7 +418,6 @@ public class Home {
                         contentPanel.repaint();
                     }
                 });
-                Object[][] finalDataRoomAlb = dataRoomAlb;
                 finishBookPanelButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -434,7 +438,7 @@ public class Home {
                             return;
                         }
                         try {
-                            if (!hotelProperty.validateRoom(roomID, finalDataRoomAlb)) {
+                            if (!hotelProperty.validateRoom(roomID)) {
                                 JOptionPane.showMessageDialog(frame, "Please fill in a valid available room!");
                                 return;
                             }
@@ -442,7 +446,7 @@ public class Home {
                             JOptionPane.showMessageDialog(frame, "Failed to validate room: \n" + ex.getMessage());
                             return;
                         }
-                        if (customerName.isEmpty() || phoneNumberString.isEmpty() || roomString.isEmpty() ||
+                        if (customerName.isEmpty() || phoneNumberString.isEmpty() || roomString.isEmpty() || durationString.isEmpty() ||
                                 (paymentMethod == "Credit card" && cardNumberString.isEmpty())) {
                             JOptionPane.showMessageDialog(frame, "Please fill in all fields!");
                             return;
@@ -491,9 +495,9 @@ public class Home {
                 JPanel SOUTH_left_editPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JPanel SOUTH_right_editPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-                Object[] columnsEdit = { "ID", "Name", "Phone number", "Payment method", "Card no.", "Room",
+                Object[] columnsEdit = { "ID", "Name", "Phone number", "Payment", "Card no.", "Room",
                         "Duration", "Time booked", "Status" };
-                Object[][] dataEdit = null;
+                Object[][] dataEdit;
                 try {
                     dataEdit = hotelProperty.getReservationsObject();
                 } catch (Exception ex) {
@@ -508,6 +512,12 @@ public class Home {
                 tableEdit.getTableHeader().setReorderingAllowed(false);
                 tableEdit.setRowSelectionAllowed(true);
                 tableEdit.setColumnSelectionAllowed(false);
+                tableEdit.setRowHeight(18);
+                tableEdit.getColumnModel().getColumn(0).setPreferredWidth(10);
+                tableEdit.getColumnModel().getColumn(3).setPreferredWidth(20);
+                tableEdit.getColumnModel().getColumn(5).setPreferredWidth(10);
+                tableEdit.getColumnModel().getColumn(6).setPreferredWidth(8);
+                tableEdit.getColumnModel().getColumn(8).setPreferredWidth(20);
 
                 JButton editEditButton = new JButton("Edit");
                 JButton checkoutEditButton = new JButton("Checkout");
@@ -535,7 +545,7 @@ public class Home {
                             return;
                         }
                         int reservationID = Integer.parseInt(String.valueOf(tableEdit.getValueAt(rowtableEdit, 0)));
-                        int totalPrice = 0;
+                        int totalPrice;
                         try {
                             totalPrice = admin.calculateTotalPrice(reservationID);
                         } catch (Exception ex) {
@@ -667,47 +677,45 @@ public class Home {
                             // Tôi nghĩ nên
                             // else thì không làm gì cả
 
-                            if (true) {
-                                JPanel extras_checkout = new JPanel(new GridLayout(1, 3));
-                                // for (mảng extras) {
-                                JLabel nameExtras = new JLabel("Tên món ");
-                                font = nameExtras.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích
-                                // thước mới
-                                font = font.deriveFont(
-                                        Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm
-                                // độ
-                                // đậm
-                                // của
-                                // chữ
-                                nameExtras.setFont(font);
-                                extras_checkout.add(nameExtras);
+                            JPanel extras_checkout = new JPanel(new GridLayout(1, 3));
+                            // for (mảng extras) {
+                            JLabel nameExtras = new JLabel("Tên món ");
+                            font = nameExtras.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích
+                            // thước mới
+                            font = font.deriveFont(
+                                    Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm
+                            // độ
+                            // đậm
+                            // của
+                            // chữ
+                            nameExtras.setFont(font);
+                            extras_checkout.add(nameExtras);
 
-                                JLabel quantity = new JLabel("Số lượng ");
-                                font = quantity.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích
-                                // thước mới
-                                font = font.deriveFont(
-                                        Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm
-                                // độ
-                                // đậm
-                                // của
-                                // chữ
-                                quantity.setFont(font);
-                                extras_checkout.add(quantity);
+                            JLabel quantity = new JLabel("Số lượng ");
+                            font = quantity.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích
+                            // thước mới
+                            font = font.deriveFont(
+                                    Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm
+                            // độ
+                            // đậm
+                            // của
+                            // chữ
+                            quantity.setFont(font);
+                            extras_checkout.add(quantity);
 
-                                JLabel total_extra = new JLabel("Tổng tiền ");
-                                font = total_extra.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích
-                                // thước mới
-                                font = font.deriveFont(
-                                        Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm
-                                // độ
-                                // đậm
-                                // của
-                                // chữ
-                                total_extra.setFont(font);
-                                extras_checkout.add(total_extra);
-                                // }
-                                checkout_Main_top_content.add(extras_checkout);
-                            }
+                            JLabel total_extra = new JLabel("Tổng tiền ");
+                            font = total_extra.getFont().deriveFont(Font.BOLD, 16f); // Thiết lập kiểu chữ và kích
+                            // thước mới
+                            font = font.deriveFont(
+                                    Collections.singletonMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT)); // Giảm
+                            // độ
+                            // đậm
+                            // của
+                            // chữ
+                            total_extra.setFont(font);
+                            extras_checkout.add(total_extra);
+                            // }
+                            checkout_Main_top_content.add(extras_checkout);
 
                             JPanel total_checkout = new JPanel(new GridLayout(1, 2));
                             total_checkout.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
@@ -812,7 +820,7 @@ public class Home {
                             subFrame_Checkout.setLocationRelativeTo(null);
                             subFrame_Checkout.setResizable(false);
                             subFrame_Checkout.setVisible(true);
-                            Object[][] newdataCheckout = null;
+                            Object[][] newdataCheckout;
                             try {
                                 newdataCheckout = hotelProperty.getReservationsObject();
                             } catch (Exception ex) {
@@ -827,18 +835,21 @@ public class Home {
                         }
                     }
                 });
+                DefaultTableModel finalModelEdit = modelEdit;
                 editEditButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         int rowtableEdit = tableEdit.getSelectedRow();
+                        if (rowtableEdit == -1) {
+                            JOptionPane.showMessageDialog(null, "Please select an item!");
+                            return;
+                        }
                         if (tableEdit.getValueAt(rowtableEdit, 8) == "Checked out") {
                             JOptionPane.showMessageDialog(frame, "Already checked out!");
                             return;
                         }
-                        if (rowtableEdit == -1) {
-                            JOptionPane.showMessageDialog(null, "Please select 1 item");
-                            return;
-                        }
+                        int reservationID = (Integer)tableEdit.getValueAt(rowtableEdit, 0);
+                        Reservation reservationPreEdit = getSingleReservation(reservationID);
 
                         frame.getContentPane().removeAll();
                         contentPanel.remove(SOUTHpanel);
@@ -879,7 +890,7 @@ public class Home {
                         bookPanel_left_top.add(new JLabel("Name"), constraints);
 
                         JTextField customerNameField = new JTextField(20);
-                        customerNameField.setText(modelEdit.getValueAt(rowtableEdit, 1).toString());
+                        customerNameField.setText(finalModelEdit.getValueAt(rowtableEdit, 1).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 2;
                         bookPanel_left_top.add(customerNameField, constraints);
@@ -890,7 +901,7 @@ public class Home {
 
                         JTextField phoneNumberField = new JTextField(20);
                         // Phần lấy số đth từ BE
-                        phoneNumberField.setText(modelEdit.getValueAt(rowtableEdit, 2).toString());
+                        phoneNumberField.setText(finalModelEdit.getValueAt(rowtableEdit, 2).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 3;
                         bookPanel_left_top.add(phoneNumberField, constraints);
@@ -900,7 +911,7 @@ public class Home {
                         bookPanel_left_top.add(new JLabel("Card Number"), constraints);
 
                         JTextField cardNumberField = new JTextField(20);
-                        cardNumberField.setText(modelEdit.getValueAt(rowtableEdit, 4).toString());
+                        cardNumberField.setText(finalModelEdit.getValueAt(rowtableEdit, 4).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 4;
                         bookPanel_left_top.add(cardNumberField, constraints);
@@ -910,7 +921,7 @@ public class Home {
                         bookPanel_left_top.add(new JLabel("Room"), constraints);
 
                         JTextField roomField = new JTextField(20);
-                        roomField.setText(modelEdit.getValueAt(rowtableEdit, 5).toString());
+                        roomField.setText(finalModelEdit.getValueAt(rowtableEdit, 5).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 5;
                         bookPanel_left_top.add(roomField, constraints);
@@ -930,7 +941,7 @@ public class Home {
                         bookPanel_left_top.add(new JLabel("Duration "), constraints);
 
                         JTextField durationField = new JTextField(20);
-                        durationField.setText(modelEdit.getValueAt(rowtableEdit, 6).toString());
+                        durationField.setText(finalModelEdit.getValueAt(rowtableEdit, 6).toString());
                         constraints.gridx = 1;
                         constraints.gridy = 7;
                         bookPanel_left_top.add(durationField, constraints);
@@ -1073,12 +1084,13 @@ public class Home {
 
                         JPanel bookPanel_right = new JPanel(new BorderLayout());
 
-                        JLabel roomAlbLabel = new JLabel("Available Room");
+                        JLabel roomAlbLabel = new JLabel("Available Rooms");
                         roomAlbLabel.setFont(new Font("Arial", Font.BOLD, 16));
+                        roomAlbLabel.setBorder(new EmptyBorder(22, 20, 15, 0));
                         bookPanel_right.add(roomAlbLabel, BorderLayout.NORTH);
 
                         Object[] columnNames_dataRoomAlb = { "Room no.", "Type", "Price" };
-                        Object[][] dataRoomAlb = null;
+                        Object[][] dataRoomAlb;
                         try {
                             dataRoomAlb = hotelProperty.getAvailableRoomsObject();
                         } catch (Exception ex) {
@@ -1091,6 +1103,8 @@ public class Home {
                         JTable table_dataRoomAlb = new JTable(model_dataRoomAlb);
                         table_dataRoomAlb.setEnabled(false);
                         table_dataRoomAlb.setFillsViewportHeight(true);
+                        table_dataRoomAlb.getColumnModel().getColumn(0).setPreferredWidth(10);
+                        table_dataRoomAlb.setRowHeight(18);
 
                         JScrollPane tableroomAlbScrollPane = new JScrollPane(table_dataRoomAlb);
                         bookPanel_right.add(tableroomAlbScrollPane, BorderLayout.CENTER);
@@ -1127,15 +1141,53 @@ public class Home {
                             public void actionPerformed(ActionEvent e) {
                                 // Lấy dữ liệu ở đây
                                 String customerName = customerNameField.getText();
-                                String phoneNumber = phoneNumberField.getText();
-                                String cardNumber = cardNumberField.getText();
-                                String room = roomField.getText();
-                                if (customerName.isEmpty() || phoneNumber.isEmpty() || cardNumber.isEmpty() ||
-                                        room.isEmpty()) {
+                                String phoneNumberString = phoneNumberField.getText();
+                                String cardNumberString = cardNumberField.getText();
+                                String roomString = roomField.getText();
+                                String paymentMethod = (String) dropdown_paymentMethod.getSelectedItem();
+                                String durationString = durationField.getText();
+
+                                int roomID, duration;
+                                try {
+                                    roomID = Integer.parseInt(roomString);
+                                    duration = Integer.parseInt(durationString);
+                                } catch (NumberFormatException exception) {
+                                    JOptionPane.showMessageDialog(frame, "Non-number characters in field: \n" +
+                                            exception.getMessage());
+                                    return;
+                                }
+                                if (customerName.isEmpty() || phoneNumberString.isEmpty() || roomString.isEmpty() || durationString.isEmpty() ||
+                                        (paymentMethod == "Credit card" && cardNumberString.isEmpty())) {
                                     JOptionPane.showMessageDialog(frame, "Please fill in all fields!");
                                     return;
                                 }
-                                JOptionPane.showMessageDialog(frame, "Customer edit successfully!");
+                                if (paymentMethod == "Cash" && !cardNumberString.isEmpty()) {
+                                    JOptionPane.showMessageDialog(frame, "Please clear credit card number!");
+                                    return;
+                                }
+                                try {
+                                    if (!hotelProperty.validateRoom(roomID) && roomID != reservationPreEdit.getRoomID()) {
+                                        JOptionPane.showMessageDialog(frame, "Please fill in a valid available room!");
+                                        return;
+                                    }
+                                } catch (Exception ex) {
+                                    JOptionPane.showMessageDialog(frame, "Failed to validate room: \n" + ex.getMessage());
+                                    return;
+                                }
+                                Reservation reservationAfterEdit = new Reservation(reservationID, customerName, phoneNumberString,
+                                        paymentMethod, cardNumberString, roomID, duration, 1,1);
+                                try {
+                                    if (!reservationPreEdit.equals(reservationAfterEdit))
+                                    {
+                                        hotelProperty.editReservation(reservationID, customerName, phoneNumberString,
+                                                paymentMethod, cardNumberString, roomID, duration, reservationPreEdit.getRoomID());
+                                        JOptionPane.showMessageDialog(frame, "Reservation edit successfully!");
+                                    }
+                                } catch (Exception javaex) {
+                                    JOptionPane.showMessageDialog(frame, javaex.getMessage());
+                                    return;
+                                }
+
                                 contentPanel.remove(SOUTHpanel);
                                 SOUTHpanel.removeAll();
                                 SOUTHpanel.add(editPanel);
@@ -1145,13 +1197,19 @@ public class Home {
                                 contentPanel.repaint();
                             }
                         });
-
                         frame.add(contentPanel, BorderLayout.CENTER);
                         frame.revalidate(); // Cập nhật lại giao diện
                         frame.repaint();
                     }
                 });
-
+//                try {
+//                    dataEdit = hotelProperty.getReservationsObject();
+//                } catch (Exception ex) {
+//                    JOptionPane.showMessageDialog(frame, "Failed to get reservations: \n" + ex.getMessage());
+//                    return;
+//                }
+//                modelEdit = new DefaultTableModel(dataEdit, columnsEdit);
+//                tableEdit.setModel(modelEdit);
                 JScrollPane scrollPaneEdit = new JScrollPane(tableEdit);
                 scrollPaneEdit.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
                 NORTHdeitPanel.add(scrollPaneEdit, BorderLayout.NORTH);
@@ -1244,7 +1302,7 @@ public class Home {
                             String selectedOption = (String) e.getItem();
                             if (selectedOption == "Rooms") {
                                 Object[] columnsproperty = { "ID", "Type", "Price", "Status" };
-                                Object[][] dataproperty = null;
+                                Object[][] dataproperty;
                                 try {
                                     dataproperty = hotelProperty.getAllRoomsObject();
                                 } catch (Exception ex) {
@@ -1257,7 +1315,7 @@ public class Home {
                             }
                             if (selectedOption == "Extras") {
                                 Object[] columnsproperty = { "ID", "Type", "Name", "Price" };
-                                Object[][] dataproperty = null;
+                                Object[][] dataproperty;
                                 try {
                                     dataproperty = hotelProperty.getExtrasObject();
                                 } catch (Exception ex) {
@@ -1279,7 +1337,7 @@ public class Home {
                         int id = Integer.parseInt(String.valueOf(tableproperty.getValueAt(rowtableEdit, 0)));
                         if (dropdown_Type_property.getSelectedItem() == "Rooms") {
                             Object[] columnsproperty = { "ID", "Type", "Price", "Status" };
-                            Object[][] dataproperty = null;
+                            Object[][] dataproperty;
                             try {
                                 hotelProperty.deleteRoom(id);
                                 dataproperty = hotelProperty.getAllRoomsObject();
@@ -1293,7 +1351,7 @@ public class Home {
                         }
                         if (dropdown_Type_property.getSelectedItem() == "Extras") {
                             Object[] columnsproperty = { "ID", "Type", "Price", "Status" };
-                            Object[][] dataproperty = null;
+                            Object[][] dataproperty;
                             try {
                                 hotelProperty.deleteExtra(id);
                                 dataproperty = hotelProperty.getExtrasObject();
@@ -1384,13 +1442,12 @@ public class Home {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     Object[] columnsproperty = { "ID", "Type", "Price", "Status" };
-                                    Object[][] dataproperty = null;
+                                    Object[][] dataproperty;
                                     if (price_addRoomField.getText().isEmpty()
                                             || roomNumber_addRoomField.getText().isEmpty()) {
                                         JOptionPane.showMessageDialog(frame, "Fields cannot be empty!");
                                         return;
                                     }
-                                    ;
 
                                     int roomID, roomPrice;
                                     try {
@@ -1406,7 +1463,7 @@ public class Home {
                                         dataproperty = hotelProperty.getAllRoomsObject();
                                     } catch (Exception ex) {
                                         JOptionPane.showMessageDialog(frame,
-                                                "Failed to add room: \n" + ex.getMessage());
+                                                "Failed to add room! Maybe room already exists?\n" + ex.getMessage());
                                         return;
                                     }
                                     // Cập nhật dữ liệu tại đây
@@ -1507,14 +1564,19 @@ public class Home {
                             finish_contentPanel_addExtrasButton.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    Object[] columnsproperty = { "ID", "Type", "Price", "Status" };
-                                    Object[][] dataproperty = null;
+                                    Object[] columnsproperty = { "ID", "Type", "Name", "Price" };
+                                    Object[][] dataproperty;
+                                    try {
+                                        dataproperty = hotelProperty.getExtrasObject();
+                                    } catch (Exception ex) {
+                                        JOptionPane.showMessageDialog(frame, "Failed to get extras: \n" + ex.getMessage());
+                                        return;
+                                    }
                                     if (price_addExtrasField.getText().isEmpty()
                                             || name_addExtrasField.getText().isEmpty()) {
                                         JOptionPane.showMessageDialog(frame, "Fields cannot be empty!");
                                         return;
                                     }
-                                    ;
                                     int extraPrice;
                                     try {
                                         extraPrice = Integer.parseInt(price_addExtrasField.getText());
@@ -1523,9 +1585,9 @@ public class Home {
                                         return;
                                     }
                                     try {
-                                        hotelProperty.addExtra(name_addExtrasField.toString(),
+                                        hotelProperty.addExtra(name_addExtrasField.getText(),
                                                 dropdown_Type_addExtras.getSelectedItem().toString(), extraPrice);
-                                        dataproperty = hotelProperty.getAllRoomsObject();
+                                        dataproperty = hotelProperty.getExtrasObject();
                                     } catch (Exception ex) {
                                         JOptionPane.showMessageDialog(frame,
                                                 "Failed to add extra: \n" + ex.getMessage());
@@ -1639,7 +1701,7 @@ public class Home {
                             return;
                         }
 
-                        Object[][] searchData = null;
+                        Object[][] searchData;
                         try {
                             searchData = hotelProperty.getAvailableRoomsObject();
                         } catch (Exception ex) {
@@ -1657,18 +1719,22 @@ public class Home {
                             try {
                                 int j = 0;
                                 Object[][] x = hotelProperty.getAllRoomsObject();
-                                for (int i = 0; i < x.length; i++) {
-                                    if (x[i][0].toString().equals(query) || x[i][1].toString().equals(query)
-                                            || x[i][2].toString().equals(query) || x[i][3].toString().equals(query)) {
+                                for (Object[] objects : x)
+                                {
+                                    if (objects[0].toString().equals(query) || objects[1].toString().equals(query)
+                                            || objects[2].toString().equals(query) || objects[3].toString().equals(query))
+                                    {
                                         j++;
                                     }
                                 }
                                 newSearchData = new Object[j][4];
                                 j = 0;
-                                for (int i = 0; i < x.length; i++) {
-                                    if (x[i][0].toString().equals(query) || x[i][1].toString().equals(query)
-                                            || x[i][2].toString().equals(query) || x[i][3].toString().equals(query)) {
-                                        newSearchData[j] = x[i];
+                                for (Object[] objects : x)
+                                {
+                                    if (objects[0].toString().equals(query) || objects[1].toString().equals(query)
+                                            || objects[2].toString().equals(query) || objects[3].toString().equals(query))
+                                    {
+                                        newSearchData[j] = objects;
                                         j++;
                                     }
                                 }
@@ -1684,21 +1750,25 @@ public class Home {
                             try {
                                 int j = 0;
                                 Object[][] x = hotelProperty.getReservationsObject();
-                                for (int i = 0; i < x.length; i++) {
-                                    if (x[i][1].toString().equals(query) || x[i][2].toString().equals(query)
-                                            || x[i][3].toString().equals(query) || x[i][4].toString().equals(query)) {
+                                for (Object[] objects : x)
+                                {
+                                    if (objects[1].toString().equals(query) || objects[2].toString().equals(query)
+                                            || objects[3].toString().equals(query) || objects[4].toString().equals(query))
+                                    {
                                         j++;
                                     }
                                 }
                                 newSearchData = new Object[j][4];
                                 j = 0;
-                                for (int i = 0; i < x.length; i++) {
-                                    if (x[i][1].toString().equals(query) || x[i][2].toString().equals(query)
-                                            || x[i][3].toString().equals(query) || x[i][4].toString().equals(query)) {
-                                        newSearchData[j][0] = x[i][1];
-                                        newSearchData[j][1] = x[i][2];
-                                        newSearchData[j][2] = x[i][3];
-                                        newSearchData[j][3] = x[i][4];
+                                for (Object[] objects : x)
+                                {
+                                    if (objects[1].toString().equals(query) || objects[2].toString().equals(query)
+                                            || objects[3].toString().equals(query) || objects[4].toString().equals(query))
+                                    {
+                                        newSearchData[j][0] = objects[1];
+                                        newSearchData[j][1] = objects[2];
+                                        newSearchData[j][2] = objects[3];
+                                        newSearchData[j][3] = objects[4];
                                         j++;
                                     }
                                 }
@@ -1714,18 +1784,22 @@ public class Home {
                             try {
                                 int j = 0;
                                 Object[][] x = hotelProperty.getExtrasObject();
-                                for (int i = 0; i < x.length; i++) {
-                                    if (x[i][0].toString().equals(query) || x[i][1].toString().equals(query)
-                                            || x[i][2].toString().equals(query) || x[i][3].toString().equals(query)) {
+                                for (Object[] objects : x)
+                                {
+                                    if (objects[0].toString().equals(query) || objects[1].toString().equals(query)
+                                            || objects[2].toString().equals(query) || objects[3].toString().equals(query))
+                                    {
                                         j++;
                                     }
                                 }
                                 newSearchData = new Object[j][4];
                                 j = 0;
-                                for (int i = 0; i < x.length; i++) {
-                                    if (x[i][0].toString().equals(query) || x[i][1].toString().equals(query)
-                                            || x[i][2].toString().equals(query) || x[i][3].toString().equals(query)) {
-                                        newSearchData[j] = x[i];
+                                for (Object[] objects : x)
+                                {
+                                    if (objects[0].toString().equals(query) || objects[1].toString().equals(query)
+                                            || objects[2].toString().equals(query) || objects[3].toString().equals(query))
+                                    {
+                                        newSearchData[j] = objects;
                                         j++;
                                     }
                                 }
@@ -1797,7 +1871,7 @@ public class Home {
                 JPanel SOUTH_right_logPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
                 String[] columnslog = { "ID", "Description", "Date" };
-                Object[][] datalog = null; // hello
+                Object[][] datalog; // hello
                 try {
                     datalog = hotelProperty.getLogsObject();
                 } catch (Exception ex) {
@@ -1811,7 +1885,11 @@ public class Home {
                 tablelog.getTableHeader().setReorderingAllowed(false);
                 tablelog.setRowSelectionAllowed(true);
                 tablelog.setColumnSelectionAllowed(false);
-
+                tablelog.setRowHeight(18);
+                tablelog.getColumnModel().getColumn(0).setPreferredWidth(100);
+                tablelog.getColumnModel().getColumn(0).setMaxWidth(100);
+                tablelog.getColumnModel().getColumn(2).setPreferredWidth(300);
+                tablelog.getColumnModel().getColumn(2).setMaxWidth(300);
                 JScrollPane scrollPanelog = new JScrollPane(tablelog);
                 scrollPanelog.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 

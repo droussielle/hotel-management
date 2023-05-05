@@ -55,7 +55,6 @@ public final class Storage
             {
                 DatabaseMetaData meta = conn.getMetaData();
                 System.out.println("The driver name is " + meta.getDriverName());
-                System.out.println("A new database has been created at fileDirectory/" + fileName);
             }
 
         } catch (SQLException e)
@@ -449,8 +448,28 @@ public final class Storage
 
     }
 
-    public static void updateReservations()
+    public static void updateSingleReservation(int reservationID, String name, String phoneNumber, String paymentMethod,
+                                               String cardNumber, int roomID, int duration) throws Exception
     {
-
+        String sql = "UPDATE reservations SET (name, phoneNumber, paymentMethod, cardNumber, roomID, duration)" +
+                     " = (?,?,?,?,?,?) WHERE id = ?";
+        try (Connection conn = connectDatabase();
+             PreparedStatement pstmt = conn.prepareStatement(sql))
+        {
+            // set the corresponding param
+            pstmt.setString(1, name);
+            pstmt.setString(2, phoneNumber);
+            pstmt.setString(3, paymentMethod);
+            pstmt.setString(4, cardNumber);
+            pstmt.setInt(5, roomID);
+            pstmt.setInt(6, duration);
+            pstmt.setInt(7, reservationID);
+            // update
+            pstmt.executeUpdate();
+        } catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
     }
 }

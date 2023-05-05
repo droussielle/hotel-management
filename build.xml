@@ -20,7 +20,13 @@
     <target name="compile" depends="init"
             description="compile the source">
         <!-- Compile the Java code from ${src} into ${build} -->
-        <javac srcdir="${src}" destdir="${build}" classpath="lib/sqlite-jdbc-3.41.2.1.jar"/>
+        <javac srcdir="${src}" destdir="${build}"
+               source="1.8" target="1.8">
+            <classpath>
+                <pathelement location="lib/sqlite-jdbc-3.41.2.1.jar"/>
+                <pathelement location="/"/>
+            </classpath>
+        </javac>
     </target>
 
     <target name="dist" depends="compile"
