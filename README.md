@@ -28,11 +28,11 @@ For bugs and known issues please refer to https://github.com/droussielle/hotel-m
 
 ## Build
 
-Ant build scripts can be found at https://github.com/droussielle/hotel-management/issues
+Manual scripts and documentation can be found at https://github.com/droussielle/hotel-management/wiki
 
 ## Screenshots
 
-https://github.com/droussielle/hotel-management/issues
+https://github.com/droussielle/hotel-management/wiki/Screenshots
 
 ## Releases can be found here:
 
