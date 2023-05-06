@@ -9,8 +9,8 @@ import java.awt.*;
 
 public class MyButton extends JToggleButton
 {
-    private Color hoverBackgroundColor = new Color(222, 222, 222);
-    private Color pressedBackgroundColor = Color.CYAN;
+    private Color hoverBackgroundColor = Color.CYAN;
+    private Color pressedBackgroundColor = Color.RED;
     private Color buttonBackgroundColor = Color.LIGHT_GRAY;
 
     public MyButton(String text, Icon icon)
@@ -21,7 +21,7 @@ public class MyButton extends JToggleButton
         setIcon(icon);
         setBackground(buttonBackgroundColor);
         setRolloverEnabled(true);
-//        setOpaque(true);
+        setOpaque(true);
         addChangeListener(new ChangeListener()
         {
             @Override
@@ -30,6 +30,7 @@ public class MyButton extends JToggleButton
                 if (getModel().isSelected())
                 {
                     setBackground(pressedBackgroundColor);
+
                 } else if (getModel().isRollover())
                 {
                     setBackground(hoverBackgroundColor);
@@ -92,6 +93,14 @@ public class MyButton extends JToggleButton
     public void setStatus(boolean b)
     {
         this.setSelected(b);
+        if (b)
+        {
+            setBackground(pressedBackgroundColor);
+        } else
+        {
+            setBackground(buttonBackgroundColor);
+
+        }
     }
 
     public boolean getStatus()

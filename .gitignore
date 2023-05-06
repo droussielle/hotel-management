@@ -28,3 +28,4 @@ hs_err_pid*
 # editor-specific project files
 *.project
 *.iml
+/resources_images/
