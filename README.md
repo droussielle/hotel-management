@@ -10,7 +10,7 @@ A basic hotel management application written in Java
 - Book/edit/checkout reservations
 - Add/delete rooms/extras
 - List all reservations/rooms/extras by status (available/occupied)
-- Print reservation receipt
+- Print reservation invoice
 - Activity log (new reservation, add room, delete room, etc.)
 
 ## Requirements
@@ -19,8 +19,8 @@ A basic hotel management application written in Java
 
 ## Compatibility
 
-Can run anywhere a JVM is available as long as it's not a potato (looking at you, Symbian). Should be able to run on 
-latest versions of Windows/macOS/Linux. 
+Anywhere a JVM is available as long as it's not a potato (looking at you, Symbian). 
+Should be able to run on latest versions of Windows/macOS/Linux. 
 
 Tested on Windows 11 22H2, macOS Big Sur 11.7.6, Ubuntu 22.04
 
